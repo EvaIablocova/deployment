@@ -1,0 +1,64 @@
+networks:
+  my_custom_microservices_network:   # define your own network
+    external: true     # assumes you already created it with `docker network create my_custom_microservices_network`
+
+services:
+  dbmicroservice:
+    build: C:\Users\evaia\Documents\GitHub\Database_microservice
+    container_name: dbmicroservice
+    restart: always
+    ports:
+        - "9009:9009"
+        - "5002:5002"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://my_mysql:3306/HouseMateMicroservicesDB?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: housemate_microservices_user
+      SPRING_DATASOURCE_PASSWORD: MySrt0ngP@ssw0rd!123
+    networks:
+      - my_custom_microservices_network
+  mysql:
+    image: mysql:8.0
+    container_name: my_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: MySrt0ngP@ssw0rd!123
+      MYSQL_DATABASE: HouseMateMicroservicesDB
+      MYSQL_USER: housemate_microservices_user
+      MYSQL_PASSWORD: MySrt0ngP@ssw0rd!123
+    ports:
+      - "3336:3306"   # expose MySQL to host
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - my_custom_microservices_network
+  taskmicroservice:
+    build: C:\Users\evaia\Documents\GitHub\Task_microservice
+    container_name: taskmicroservice
+    restart: always
+    ports:
+      - "9010:9010"
+      - "5007:5007"
+    networks:
+      - my_custom_microservices_network
+  apigateway:
+    build: C:\Users\evaia\Documents\GitHub\API_Gateway
+    container_name: apigateway
+    restart: always
+    ports:
+      - "8099:8099"
+      - "5006:5006"
+    networks:
+      - my_custom_microservices_network
+  competitionmicroservice:
+    build: C:\Users\evaia\Documents\GitHub\Competition_microservice
+    container_name: competitionmicroservice
+    restart: always
+    ports:
+      - "9011:9011"
+      - "5008:5008"
+    networks:
+      - my_custom_microservices_network
+
+
+volumes:
+  mysql_data:
