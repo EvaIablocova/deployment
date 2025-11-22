@@ -58,7 +58,33 @@ services:
       - "5008:5008"
     networks:
       - my_custom_microservices_network
-
+  listmicroservice:
+    build: C:\Users\evaia\Documents\GitHub\List_microservice
+    container_name: listmicroservice
+    restart: always
+    ports:
+      - "9014:9014"
+      - "5009:5009"
+    networks:
+      - my_custom_microservices_network
+  usermicroservice:
+    build: C:\Users\evaia\Documents\GitHub\User_microservice
+    container_name: usermicroservice
+    restart: always
+    ports:
+      - "9015:9015"
+      - "5010:5010"
+    networks:
+      - my_custom_microservices_network
+  feedbackmicroservice:
+    build: C:\Users\evaia\Documents\GitHub\Feedback_microservice
+    container_name: feedbackmicroservice
+    restart: always
+    ports:
+      - "9016:9016"
+      - "5011:5011"
+    networks:
+      - my_custom_microservices_network
 
 volumes:
   mysql_data:
