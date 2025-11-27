@@ -33,6 +33,7 @@ services:
       - my_custom_microservices_network
   taskmicroservice:
     build: C:\Users\evaia\Documents\GitHub\Task_microservice
+    command: ./mvnw test
     container_name: taskmicroservice
     restart: always
     ports:
@@ -51,6 +52,7 @@ services:
       - my_custom_microservices_network
   competitionmicroservice:
     build: C:\Users\evaia\Documents\GitHub\Competition_microservice
+    command: ./mvnw test
     container_name: competitionmicroservice
     restart: always
     ports:
@@ -60,6 +62,7 @@ services:
       - my_custom_microservices_network
   listmicroservice:
     build: C:\Users\evaia\Documents\GitHub\List_microservice
+    command: ./mvnw test
     container_name: listmicroservice
     restart: always
     ports:
@@ -69,6 +72,7 @@ services:
       - my_custom_microservices_network
   usermicroservice:
     build: C:\Users\evaia\Documents\GitHub\User_microservice
+    command: ./mvnw test
     container_name: usermicroservice
     restart: always
     ports:
@@ -78,11 +82,22 @@ services:
       - my_custom_microservices_network
   feedbackmicroservice:
     build: C:\Users\evaia\Documents\GitHub\Feedback_microservice
+    command: ./mvnw test
     container_name: feedbackmicroservice
     restart: always
     ports:
       - "9016:9016"
       - "5011:5011"
+    networks:
+      - my_custom_microservices_network
+  reportingmicroservice:
+    build: C:\Users\evaia\Documents\GitHub\Reporting_microservice
+    command: ./mvnw test
+    container_name: reportingmicroservice
+    restart: always
+    ports:
+      - "9017:9017"
+      - "5012:5012"
     networks:
       - my_custom_microservices_network
 
