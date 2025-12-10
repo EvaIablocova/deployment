@@ -57,7 +57,7 @@ jobs:
           mvn -f Reporting_microservice/pom.xml test -Dsurefire.printSummary=true
           mvn -f Feedback_microservice/pom.xml test -Dsurefire.printSummary=true
 #          mvn -f Competition_microservice/pom.xml test -Dsurefire.printSummary=true
-#          mvn -f Database_microservice/pom.xml test -Dsurefire.printSummary=true
-#          mvn -f API_Gateway/pom.xml test -Dsurefire.printSummary=true
+          mvn -f Database_microservice/pom.xml test -Dsurefire.printSummary=true
+          mvn -f API_Gateway/pom.xml test -Dsurefire.printSummary=true
     
     
