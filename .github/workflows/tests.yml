@@ -52,10 +52,10 @@ jobs:
       - name: Run unit tests in all microservices
         run: |
           mvn -f User_microservice/pom.xml test -Dsurefire.printSummary=true
-#          mvn -f Task_microservice/pom.xml test -Dsurefire.printSummary=true
-#          mvn -f List_microservice/pom.xml test -Dsurefire.printSummary=true
-#          mvn -f Reporting_microservice/pom.xml test -Dsurefire.printSummary=true
-#          mvn -f Feedback_microservice/pom.xml test -Dsurefire.printSummary=true
+          mvn -f Task_microservice/pom.xml test -Dsurefire.printSummary=true
+          mvn -f List_microservice/pom.xml test -Dsurefire.printSummary=true
+          mvn -f Reporting_microservice/pom.xml test -Dsurefire.printSummary=true
+          mvn -f Feedback_microservice/pom.xml test -Dsurefire.printSummary=true
 #          mvn -f Competition_microservice/pom.xml test -Dsurefire.printSummary=true
 #          mvn -f Database_microservice/pom.xml test -Dsurefire.printSummary=true
 #          mvn -f API_Gateway/pom.xml test -Dsurefire.printSummary=true
