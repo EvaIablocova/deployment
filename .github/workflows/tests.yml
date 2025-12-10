@@ -14,6 +14,18 @@ jobs:
       - name: Checkout deployment repo
         uses: actions/checkout@v3
 
+      - name: Make mvnw executable
+        run: |
+          chmod +x ./User_microservice/mvnw
+          chmod +x ./Task_microservice/mvnw
+          chmod +x ./List_microservice/mvnw
+          chmod +x ./Reporting_microservice/mvnw
+          chmod +x ./Feedback_microservice/mvnw
+          chmod +x ./Competition_microservice/mvnw
+          chmod +x ./Database_microservice/mvnw
+          chmod +x ./API_Gateway/mvnw
+          
+
       - name: Build all microservices
         run: |
               ./User_microservice/mvnw clean package -DskipTests
