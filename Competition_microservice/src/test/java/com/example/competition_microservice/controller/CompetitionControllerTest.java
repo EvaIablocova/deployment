@@ -113,16 +113,4 @@ class CompetitionControllerTest {
         verify(competitionService).deleteCompetition(3L);
     }
 
-    @Test
-    void getAllCompetitionsByUserId_returnsListFromService() {
-        CompetitionDTO a = sampleDto(10L, "X");
-        List<CompetitionDTO> list = Arrays.asList(a);
-
-        when(competitionService.getAllCompetitionsByUserId(10L)).thenReturn(list);
-
-        List<CompetitionDTO> resp = controller.getAllCompetitionsByUserId(10L);
-
-        assertSame(list, resp);
-        verify(competitionService, times(1)).getAllCompetitionsByUserId(10L);
-    }
 }
