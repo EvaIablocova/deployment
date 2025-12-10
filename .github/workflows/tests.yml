@@ -70,5 +70,3 @@ jobs:
             Reporting_microservice/target/surefire-reports
             Feedback_microservice/target/surefire-reports
             Competition_microservice/target/surefire-reports
-            Database_microservice/target/surefire-reports
-            API_Gateway/target/surefire-reports
