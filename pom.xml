@@ -51,4 +51,16 @@
 		</plugins>
 	</build>
 
+    <modules>
+        <module>User_microservice</module>
+        <module>Task_microservice</module>
+        <module>List_microservice</module>
+        <module>Reporting_microservice</module>
+        <module>Feedback_microservice</module>
+        <module>Competition_microservice</module>
+        <module>Database_microservice</module>
+        <module>API_Gateway</module>
+    </modules>
+
+
 </project>
