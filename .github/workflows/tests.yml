@@ -51,12 +51,13 @@ jobs:
 
       - name: Run unit tests in all microservices
         run: |
-          ./User_microservice/mvnw test
-          ./Task_microservice/mvnw test
-          ./List_microservice/mvnw test
-          ./Reporting_microservice/mvnw test
-          ./Feedback_microservice/mvnw test
-          ./Competition_microservice/mvnw test
-          ./Database_microservice/mvnw test
-          ./API_Gateway/mvnw test
-
+          mvn -f User_microservice/pom.xml test -Dsurefire.printSummary=true
+          mvn -f Task_microservice/pom.xml test -Dsurefire.printSummary=true
+          mvn -f List_microservice/pom.xml test -Dsurefire.printSummary=true
+          mvn -f Reporting_microservice/pom.xml test -Dsurefire.printSummary=true
+          mvn -f Feedback_microservice/pom.xml test -Dsurefire.printSummary=true
+          mvn -f Competition_microservice/pom.xml test -Dsurefire.printSummary=true
+          mvn -f Database_microservice/pom.xml test -Dsurefire.printSummary=true
+          mvn -f API_Gateway/pom.xml test -Dsurefire.printSummary=true
+    
+    
