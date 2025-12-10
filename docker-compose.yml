@@ -4,7 +4,7 @@ networks:
 
 services:
   dbmicroservice:
-    build: C:\Users\evaia\Documents\GitHub\Database_microservice
+    build: ./Database_microservice
     container_name: dbmicroservice
     restart: always
     ports:
@@ -32,7 +32,7 @@ services:
     networks:
       - my_custom_microservices_network
   taskmicroservice:
-    build: C:\Users\evaia\Documents\GitHub\Task_microservice
+    build: ./Task_microservice
     command: ./mvnw test
     container_name: taskmicroservice
     restart: always
@@ -42,7 +42,7 @@ services:
     networks:
       - my_custom_microservices_network
   apigateway:
-    build: C:\Users\evaia\Documents\GitHub\API_Gateway
+    build: ./API_Gateway
     container_name: apigateway
     restart: always
     ports:
@@ -51,7 +51,7 @@ services:
     networks:
       - my_custom_microservices_network
   competitionmicroservice:
-    build: C:\Users\evaia\Documents\GitHub\Competition_microservice
+    build: ./Competition_microservice
     command: ./mvnw test
     container_name: competitionmicroservice
     restart: always
@@ -61,7 +61,7 @@ services:
     networks:
       - my_custom_microservices_network
   listmicroservice:
-    build: C:\Users\evaia\Documents\GitHub\List_microservice
+    build: ./List_microservice
     command: ./mvnw test
     container_name: listmicroservice
     restart: always
@@ -71,7 +71,7 @@ services:
     networks:
       - my_custom_microservices_network
   usermicroservice:
-    build: C:\Users\evaia\Documents\GitHub\User_microservice
+    build: ./User_microservice
     command: ./mvnw test
     container_name: usermicroservice
     restart: always
@@ -81,7 +81,7 @@ services:
     networks:
       - my_custom_microservices_network
   feedbackmicroservice:
-    build: C:\Users\evaia\Documents\GitHub\Feedback_microservice
+    build: ./Feedback_microservice
     command: ./mvnw test
     container_name: feedbackmicroservice
     restart: always
@@ -91,7 +91,7 @@ services:
     networks:
       - my_custom_microservices_network
   reportingmicroservice:
-    build: C:\Users\evaia\Documents\GitHub\Reporting_microservice
+    build: ./Reporting_microservice
     command: ./mvnw test
     container_name: reportingmicroservice
     restart: always
