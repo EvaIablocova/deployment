@@ -21,6 +21,9 @@ jobs:
           java-version: '21'
           cache: 'maven'
 
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
       - name: Make mvnw executable
         run: |
           chmod +x ./User_microservice/mvnw
@@ -44,24 +47,16 @@ jobs:
               ./API_Gateway/mvnw clean package -DskipTests
 
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v2
-
-      - name: Run all microservice tests
-        run: ./mvnw test -Dsurefire.printSummary=true
 
 
-      - name: Upload test reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: |
-            ./User_microservice/target/surefire-reports
-            ./Task_microservice/target/surefire-reports
-            ./List_microservice/target/surefire-reports
-            ./Reporting_microservice/target/surefire-reports
-            ./Feedback_microservice/target/surefire-reports
-            ./Competition_microservice/target/surefire-reports
-            ./Database_microservice/target/surefire-reports
-            ./API_Gateway/target/surefire-reports
+      - name: Run unit tests in all microservices
+        run: |
+          ./User_microservice/mvnw test
+          ./Task_microservice/mvnw test
+          ./List_microservice/mvnw test
+          ./Reporting_microservice/mvnw test
+          ./Feedback_microservice/mvnw test
+          ./Competition_microservice/mvnw test
+          ./Database_microservice/mvnw test
+          ./API_Gateway/mvnw test
 
