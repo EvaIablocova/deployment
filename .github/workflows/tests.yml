@@ -47,31 +47,8 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
-      - name: Run unit tests in all microservices
-        run: |
-          echo "Running User_microservice tests"
-          ./User_microservice/mvnw test -Dsurefire.printSummary=true
-          
-          echo "Running Task_microservice tests"
-          ./Task_microservice/mvnw test -Dsurefire.printSummary=true
-          
-          echo "Running List_microservice tests"
-          ./List_microservice/mvnw test -Dsurefire.printSummary=true
-          
-          echo "Running Reporting_microservice tests"
-          ./Reporting_microservice/mvnw test -Dsurefire.printSummary=true
-          
-          echo "Running Feedback_microservice tests"
-          ./Feedback_microservice/mvnw test -Dsurefire.printSummary=true
-          
-          echo "Running Competition_microservice tests"
-          ./Competition_microservice/mvnw test -Dsurefire.printSummary=true
-          
-          echo "Running Database_microservice tests"
-          ./Database_microservice/mvnw test -Dsurefire.printSummary=true
-          
-          echo "Running API_Gateway tests"
-          ./API_Gateway/mvnw test -Dsurefire.printSummary=true
+      - name: Run all microservice tests
+        run: ./mvnw test -Dsurefire.printSummary=true
 
 
       - name: Upload test reports
