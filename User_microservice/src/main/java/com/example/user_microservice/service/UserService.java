@@ -12,6 +12,8 @@ import com.example.user_microservice.repository.UserRepository;
 @Service
 public class UserService {
 
+    //test changes
+
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
