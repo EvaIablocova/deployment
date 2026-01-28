@@ -3,6 +3,7 @@ package com.example.database_microservice.model;
 import com.example.database_microservice.DTOs.TaskDTO;
 import jakarta.persistence.*;
 import lombok.Data;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -18,6 +19,9 @@ public class Task {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "date_to_execute")
+    private LocalDateTime dateToExecute;
+
     @ManyToOne
     @JoinColumn(name = "assigned_to")
     private User assignedTo;
@@ -28,6 +32,7 @@ public class Task {
         this.id = taskDTO.getId();
         this.title = taskDTO.getTitle();
         this.description = taskDTO.getDescription();
+        this.dateToExecute = taskDTO.getDateToExecute();
     }
 
 }

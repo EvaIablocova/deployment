@@ -1,6 +1,7 @@
 package com.example.task_microservice.DTOs;
 
 import lombok.Data;
+import java.time.LocalDateTime;
 @Data
 public class TaskDTO {
 
@@ -8,6 +9,7 @@ public class TaskDTO {
 
     private String title;
     private String description;
+    private LocalDateTime dateToExecute;
 
     private Long userId;
 

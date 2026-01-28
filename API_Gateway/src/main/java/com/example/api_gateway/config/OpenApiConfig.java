@@ -14,7 +14,7 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("House_Mate_Monolith API Gateway")
+                        .title("House_Mate_Microservices API Gateway")
                         .version("3.0")
                         .description("API documentation for HouseMate project"));
     }

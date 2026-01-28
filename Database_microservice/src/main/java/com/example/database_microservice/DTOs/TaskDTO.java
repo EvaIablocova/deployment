@@ -3,6 +3,7 @@ package com.example.database_microservice.DTOs;
 import com.example.database_microservice.model.Task;
 import jakarta.persistence.*;
 import lombok.Data;
+import java.time.LocalDateTime;
 
 @Data
 public class TaskDTO {
@@ -10,6 +11,7 @@ public class TaskDTO {
 
     private String title;
     private String description;
+    private LocalDateTime dateToExecute;
 
     private Long userId;
 
@@ -20,6 +22,7 @@ public class TaskDTO {
         this.id = task.getId();
         this.title = task.getTitle();
         this.description = task.getDescription();
+        this.dateToExecute = task.getDateToExecute();
         if(task.getAssignedTo() != null){
             this.userId = task.getAssignedTo().getId();
         }

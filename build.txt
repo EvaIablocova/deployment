@@ -1,0 +1,16 @@
+cd ..
+
+cd API_Gateway
+
+cd Database_microservice
+
+cd Competition_microservice
+cd Feedback_microservice
+cd List_microservice
+cd Reporting_microservice
+cd Task_microservice
+cd User_microservice
+
+
+.\mvnw.cmd clean package
+.\mvnw.cmd clean package -DskipTests
