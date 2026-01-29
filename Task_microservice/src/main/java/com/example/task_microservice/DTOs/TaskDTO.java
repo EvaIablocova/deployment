@@ -11,6 +11,7 @@ public class TaskDTO {
     private String description;
     private LocalDateTime dateToExecute;
     private boolean done;
+    private int pointsForCompletion;
 
     private Long userId;
 

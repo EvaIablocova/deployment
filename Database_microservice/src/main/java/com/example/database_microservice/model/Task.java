@@ -25,6 +25,9 @@ public class Task {
     @Column(name = "done", nullable = false)
     private boolean done = false;
 
+    @Column(name = "points_for_completion", nullable = false)
+    private int pointsForCompletion = 0;
+
     @ManyToOne
     @JoinColumn(name = "assigned_to")
     private User assignedTo;
@@ -37,6 +40,7 @@ public class Task {
         this.description = taskDTO.getDescription();
         this.dateToExecute = taskDTO.getDateToExecute();
         this.done = taskDTO.isDone();
+        this.pointsForCompletion = taskDTO.getPointsForCompletion();
     }
 
 }

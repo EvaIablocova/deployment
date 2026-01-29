@@ -44,6 +44,7 @@ public class TaskService {
             task.setDescription(updatedTask.getDescription());
             task.setDateToExecute(updatedTask.getDateToExecute());
             task.setDone(updatedTask.isDone());
+            task.setPointsForCompletion(updatedTask.getPointsForCompletion());
             return toDTO(taskRepository.save(task));
         });
     }
