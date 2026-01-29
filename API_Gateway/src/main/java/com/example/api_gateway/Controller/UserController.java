@@ -34,6 +34,20 @@ public class UserController {
         }
     }
 
+    @GetMapping("/username/{id}")
+    public Optional<String> getUsernameById(@PathVariable Long id) {
+        try {
+            ResponseEntity<UserDTO> response =
+                    restTemplate.getForEntity(externalBase + "/" + id, UserDTO.class);
+
+            return Optional.ofNullable(response.getBody())
+                    .map(UserDTO::getUsername);
+
+        } catch (RestClientException e) {
+            return Optional.empty();
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         try {

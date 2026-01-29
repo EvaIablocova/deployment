@@ -1,6 +1,7 @@
 package com.example.api_gateway.Controller;
 
 import com.example.api_gateway.DTOs.TaskDTO;
+import com.example.api_gateway.DTOs.TaskDTOfrom;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping("/api_gateway/tasks")
 public class TaskController {
@@ -18,8 +21,15 @@ public class TaskController {
     private final RestTemplate restTemplate;
     private final String externalBase = "http://taskmicroservice:9010/api/tasks";
 
-    public TaskController(RestTemplateBuilder builder) {
+    private final UserController userController;
+
+    public TaskController(RestTemplateBuilder builder, UserController userController) {
+        this.userController = userController;
         this.restTemplate = builder.build();
+    }
+
+    private String getUsernameById(Long id) {
+        return userController.getUsernameById(id).orElse("Unknown User");
     }
 
     // --- CRUD ---
@@ -27,9 +37,20 @@ public class TaskController {
     @GetMapping
     public List<TaskDTO> getAllTasks() {
         try {
-            ResponseEntity<TaskDTO[]> response = restTemplate.getForEntity(externalBase, TaskDTO[].class);
-            TaskDTO[] body = response.getBody();
-            return Arrays.asList(Optional.ofNullable(body).orElse(new TaskDTO[0]));
+            ResponseEntity<TaskDTOfrom[]> response = restTemplate.getForEntity(externalBase, TaskDTOfrom[].class);
+            TaskDTOfrom[] body = response.getBody();
+
+            if (body == null) {
+                return List.of();
+            }
+
+            List<TaskDTO> newBody = new ArrayList<>();
+            for (TaskDTOfrom taskFrom : body) {
+                String username = getUsernameById(taskFrom.getUserId());
+                newBody.add(new TaskDTO(taskFrom, username));
+            }
+
+            return newBody;
         } catch (RestClientException e) {
             return List.of();
         }
@@ -38,35 +59,43 @@ public class TaskController {
     @GetMapping("/{id}")
     public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
         try {
-            ResponseEntity<TaskDTO> response =
-                    restTemplate.getForEntity(externalBase + "/" + id, TaskDTO.class);
-            return ResponseEntity.ok(response.getBody());
+            ResponseEntity<TaskDTOfrom> response =
+                    restTemplate.getForEntity(externalBase + "/" + id, TaskDTOfrom.class);
+
+            return Optional.ofNullable(response.getBody())
+                    .map(body -> {
+                        String username = getUsernameById(body.getUserId());
+                        return new TaskDTO(body, username);
+                    })
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+
         } catch (RestClientException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @PostMapping
-    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
-        try {
-            ResponseEntity<TaskDTO> response =
-                    restTemplate.postForEntity(externalBase, taskDTO, TaskDTO.class);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response.getBody());
-        } catch (RestClientException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO updatedTaskDTO) {
-        try {
-            restTemplate.put(externalBase + "/" + id, updatedTaskDTO);
-            return ResponseEntity.ok(updatedTaskDTO);
-        } catch (RestClientException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
+//    @PostMapping
+//    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
+//        try {
+//            ResponseEntity<TaskDTO> response =
+//                    restTemplate.postForEntity(externalBase, taskDTO, TaskDTO.class);
+//            return ResponseEntity.status(HttpStatus.CREATED).body(response.getBody());
+//        } catch (RestClientException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//    }
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO updatedTaskDTO) {
+//        try {
+//            restTemplate.put(externalBase + "/" + id, updatedTaskDTO);
+//            return ResponseEntity.ok(updatedTaskDTO);
+//        } catch (RestClientException e) {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+//
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         try {

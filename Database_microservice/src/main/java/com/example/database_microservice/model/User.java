@@ -19,12 +19,15 @@ public class User {
     @Column(nullable = false, length = 150)
     private String password;
 
+    private Long points;
+
     public User(){}
 
     public User(UserDTO userDTO){
         this.id = userDTO.getId();
         this.username = userDTO.getUsername();
         this.password = userDTO.getPassword();
+        this.points = userDTO.getPoints();
     }
 
 }

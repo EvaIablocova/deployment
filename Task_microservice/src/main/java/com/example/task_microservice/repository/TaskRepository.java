@@ -46,10 +46,10 @@ public class TaskRepository {
     }
 
 
-    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO TaskDTO) {
         try {
             ResponseEntity<TaskDTO> response =
-                    restTemplate.postForEntity(externalBase, taskDTO, TaskDTO.class);
+                    restTemplate.postForEntity(externalBase, TaskDTO, TaskDTO.class);
             return ResponseEntity.status(HttpStatus.CREATED).body(response.getBody());
         } catch (RestClientException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

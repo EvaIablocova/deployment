@@ -1,0 +1,19 @@
+package com.example.api_gateway.DTOs;
+
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+public class TaskDTOfrom {
+    private Long id;
+
+    private String title;
+    private String description;
+    private LocalDateTime dateToExecute;
+    private boolean done;
+    private int pointsForCompletion;
+
+    private Long userId;
+
+}

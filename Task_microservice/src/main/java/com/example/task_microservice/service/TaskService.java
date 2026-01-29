@@ -20,6 +20,7 @@ public class TaskService {
     }
 
     public List<TaskDTO> getAllTasks() {
+
         return taskRepository.getAllTasks();
     }
 

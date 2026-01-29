@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import com.example.database_microservice.DTOs.TaskDTO;
 import com.example.database_microservice.model.Task;
 import com.example.database_microservice.repository.TaskRepository;
+import com.example.database_microservice.model.User;
+import com.example.database_microservice.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,9 +13,11 @@ import java.util.Optional;
 @Service
 public class TaskService {
     private final TaskRepository taskRepository;
+    private final UserService userService;
 
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository, UserService userService) {
         this.taskRepository = taskRepository;
+        this.userService = userService;
     }
 
     // --- Mapping ---
@@ -34,8 +38,15 @@ public class TaskService {
 
     public TaskDTO createTask(TaskDTO taskDTO) {
         Task task = new Task(taskDTO);
+
+        if (taskDTO.getUserId() != null) {
+            User user = new User(userService.getUserById(taskDTO.getUserId()).orElseThrow());
+            task.setAssignedTo(user);
+        }
+
         return toDTO(taskRepository.save(task));
     }
+
 
     public Optional<TaskDTO> updateTask(Long id, TaskDTO updatedTaskDTO) {
         Task updatedTask = new Task(updatedTaskDTO);
@@ -45,6 +56,8 @@ public class TaskService {
             task.setDateToExecute(updatedTask.getDateToExecute());
             task.setDone(updatedTask.isDone());
             task.setPointsForCompletion(updatedTask.getPointsForCompletion());
+            task.setAssignedTo(updatedTask.getAssignedTo());
+
             return toDTO(taskRepository.save(task));
         });
     }
