@@ -12,6 +12,7 @@ public class TaskDTO {
     private String title;
     private String description;
     private LocalDateTime dateToExecute;
+    private boolean done;
 
     private Long userId;
 
@@ -23,6 +24,7 @@ public class TaskDTO {
         this.title = task.getTitle();
         this.description = task.getDescription();
         this.dateToExecute = task.getDateToExecute();
+        this.done = task.isDone();
         if(task.getAssignedTo() != null){
             this.userId = task.getAssignedTo().getId();
         }

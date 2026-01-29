@@ -22,6 +22,9 @@ public class Task {
     @Column(name = "date_to_execute")
     private LocalDateTime dateToExecute;
 
+    @Column(name = "done", nullable = false)
+    private boolean done = false;
+
     @ManyToOne
     @JoinColumn(name = "assigned_to")
     private User assignedTo;
@@ -33,6 +36,7 @@ public class Task {
         this.title = taskDTO.getTitle();
         this.description = taskDTO.getDescription();
         this.dateToExecute = taskDTO.getDateToExecute();
+        this.done = taskDTO.isDone();
     }
 
 }

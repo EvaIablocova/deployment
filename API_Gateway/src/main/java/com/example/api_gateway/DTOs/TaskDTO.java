@@ -10,5 +10,6 @@ public class TaskDTO {
     private String title;
     private String description;
     private LocalDateTime dateToExecute;
+    private boolean done;
 
 }

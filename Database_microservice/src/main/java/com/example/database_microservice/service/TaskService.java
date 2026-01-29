@@ -42,6 +42,8 @@ public class TaskService {
         return taskRepository.findById(id).map(task -> {
             task.setTitle(updatedTask.getTitle());
             task.setDescription(updatedTask.getDescription());
+            task.setDateToExecute(updatedTask.getDateToExecute());
+            task.setDone(updatedTask.isDone());
             return toDTO(taskRepository.save(task));
         });
     }
