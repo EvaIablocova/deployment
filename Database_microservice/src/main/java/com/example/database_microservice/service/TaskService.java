@@ -49,16 +49,24 @@ public class TaskService {
 
 
     public Optional<TaskDTO> updateTask(Long id, TaskDTO updatedTaskDTO) {
-        Task updatedTask = new Task(updatedTaskDTO);
-        return taskRepository.findById(id).map(task -> {
-            task.setTitle(updatedTask.getTitle());
-            task.setDescription(updatedTask.getDescription());
-            task.setDateToExecute(updatedTask.getDateToExecute());
-            task.setDone(updatedTask.isDone());
-            task.setPointsForCompletion(updatedTask.getPointsForCompletion());
-            task.setAssignedTo(updatedTask.getAssignedTo());
 
-            return toDTO(taskRepository.save(task));
+            return taskRepository.findById(id).map(task -> {
+                // Update fields directly from DTO
+                task.setTitle(updatedTaskDTO.getTitle());
+                task.setDescription(updatedTaskDTO.getDescription());
+                task.setDateToExecute(updatedTaskDTO.getDateToExecute());
+                task.setDone(updatedTaskDTO.isDone());
+                task.setPointsForCompletion(updatedTaskDTO.getPointsForCompletion());
+
+                if (updatedTaskDTO.getUserId() != null) {
+                    User user = userService.getUserEntityById(updatedTaskDTO.getUserId())
+                            .orElseThrow(() -> new RuntimeException("User not found with id: " + updatedTaskDTO.getUserId()));
+                    task.setAssignedTo(user);
+                } else {
+                    task.setAssignedTo(null);
+                }
+
+                return toDTO(taskRepository.save(task));
         });
     }
 

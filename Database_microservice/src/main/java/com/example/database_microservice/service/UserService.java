@@ -32,6 +32,10 @@ public class UserService {
         return userRepository.findById(id).map(this::toDTO);
     }
 
+    public Optional<User> getUserEntityById(Long id) {
+        return userRepository.findById(id);
+    }
+
     public UserDTO createUser(UserDTO UserDTO) {
         User user = new User(UserDTO);
         return toDTO(userRepository.save(user));

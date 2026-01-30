@@ -1,10 +1,12 @@
 package com.example.api_gateway.DTOs;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 public class TaskDTOfrom {
     private Long id;
 
@@ -15,5 +17,15 @@ public class TaskDTOfrom {
     private int pointsForCompletion;
 
     private Long userId;
+
+    public TaskDTOfrom(TaskDTO taskDTO) {
+        this.id = taskDTO.getId();
+        this.title = taskDTO.getTitle();
+        this.description = taskDTO.getDescription();
+        this.dateToExecute = taskDTO.getDateToExecute();
+        this.done = taskDTO.isDone();
+        this.pointsForCompletion = taskDTO.getPointsForCompletion();
+        this.userId = taskDTO.getUserId();
+    }
 
 }

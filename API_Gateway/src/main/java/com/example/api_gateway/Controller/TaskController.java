@@ -75,27 +75,32 @@ public class TaskController {
         }
     }
 
-//    @PostMapping
-//    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
-//        try {
-//            ResponseEntity<TaskDTO> response =
-//                    restTemplate.postForEntity(externalBase, taskDTO, TaskDTO.class);
-//            return ResponseEntity.status(HttpStatus.CREATED).body(response.getBody());
-//        } catch (RestClientException e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//    }
-//
-//    @PutMapping("/{id}")
-//    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO updatedTaskDTO) {
-//        try {
-//            restTemplate.put(externalBase + "/" + id, updatedTaskDTO);
-//            return ResponseEntity.ok(updatedTaskDTO);
-//        } catch (RestClientException e) {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-//
+    @PostMapping
+    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
+        try {
+            TaskDTOfrom taskDTOfrom = new TaskDTOfrom(taskDTO);
+            ResponseEntity<TaskDTOfrom> response =
+                    restTemplate.postForEntity(externalBase, taskDTOfrom, TaskDTOfrom.class);
+            ResponseEntity<TaskDTO> resultResponse = ResponseEntity.status(HttpStatus.CREATED).body(
+                    new TaskDTO(response.getBody(), getUsernameById(response.getBody().getUserId()))
+            );
+            return resultResponse;
+        } catch (RestClientException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO updatedTaskDTO) {
+        try {
+            TaskDTOfrom updatedTaskDTOfrom = new TaskDTOfrom(updatedTaskDTO);
+            restTemplate.put(externalBase + "/" + id, updatedTaskDTOfrom);
+            return ResponseEntity.ok(updatedTaskDTO);
+        } catch (RestClientException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         try {
