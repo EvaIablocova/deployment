@@ -70,6 +70,17 @@ public class UserController {
         }
     }
 
+    public boolean recalculateUserPointsScore(Long userId, int points, boolean isDone) {
+        try {
+            String url = externalBase + "/recalculateUserPointsScore/" + userId + "/" + points + "/" + isDone;
+            restTemplate.put(url, null); // null because no request body needed
+            return true;
+        } catch (RestClientException e) {
+            return false;
+        }
+
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO updatedUserDTO) {
         try {

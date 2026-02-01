@@ -34,6 +34,13 @@ public class UserController {
         return userService.createUser(UserDTO);
     }
 
+    @PutMapping("/recalculateUserPointsScore/{userId}/{points}/{isDone}")
+    public ResponseEntity<Void> recalculateUserPointsScore(@PathVariable Long userId, @PathVariable int points, @PathVariable boolean isDone) {
+        return userService.recalculateUserPointsScore(userId, points, isDone)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO updatedUserDTO) {
         return userService.updateUser(id, updatedUserDTO);

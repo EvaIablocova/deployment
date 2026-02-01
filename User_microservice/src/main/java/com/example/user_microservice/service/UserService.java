@@ -34,6 +34,10 @@ public class UserService {
         return userRepository.createUser(UserDTO).getBody();
     }
 
+    public boolean recalculateUserPointsScore(Long userId, int points, boolean isDone) {
+        return userRepository.recalculateUserPointsScore(userId, points, isDone);
+    }
+
     public ResponseEntity<UserDTO> updateUser(Long id, UserDTO updatedUserDTO) {
         return userRepository.updateUser(id, updatedUserDTO);
     }

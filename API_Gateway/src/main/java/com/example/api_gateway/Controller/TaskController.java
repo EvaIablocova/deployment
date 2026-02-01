@@ -1,6 +1,7 @@
 package com.example.api_gateway.Controller;
 
 import com.example.api_gateway.DTOs.TaskDTO;
+import com.example.api_gateway.DTOs.UserDTO;
 import com.example.api_gateway.DTOs.TaskDTOfrom;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
@@ -11,7 +12,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import java.util.ArrayList;
 
 @RestController
@@ -90,11 +90,44 @@ public class TaskController {
         }
     }
 
+    private boolean hasDoneStatusChangedById(Long id, boolean statusDoneNow) {
+        try {
+            ResponseEntity<TaskDTOfrom> response =
+                    restTemplate.getForEntity(externalBase + "/" + id, TaskDTOfrom.class);
+
+            TaskDTOfrom taskDTOfrom = response.getBody();
+            if (taskDTOfrom == null) {
+                return false;
+            }
+
+            return taskDTOfrom.isDone() != statusDoneNow;
+
+        } catch (RestClientException e) {
+            return false;
+        }
+    }
+
+    private boolean userExists(Long userId) {
+        ResponseEntity<UserDTO> response = userController.getUserById(userId);
+        return response.getStatusCode().is2xxSuccessful() && response.getBody() != null;
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO updatedTaskDTO) {
         try {
+            if (userExists(updatedTaskDTO.getUserId())) {
+                if (hasDoneStatusChangedById(id, updatedTaskDTO.isDone())) {
+                    userController.recalculateUserPointsScore(
+                            updatedTaskDTO.getUserId(),
+                            updatedTaskDTO.getPointsForCompletion(),
+                            updatedTaskDTO.isDone()
+                    );
+                }
+            }
+
             TaskDTOfrom updatedTaskDTOfrom = new TaskDTOfrom(updatedTaskDTO);
             restTemplate.put(externalBase + "/" + id, updatedTaskDTOfrom);
+
             return ResponseEntity.ok(updatedTaskDTO);
         } catch (RestClientException e) {
             return ResponseEntity.notFound().build();
@@ -110,6 +143,4 @@ public class TaskController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
 }

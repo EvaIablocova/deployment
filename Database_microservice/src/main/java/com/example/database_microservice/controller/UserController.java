@@ -41,6 +41,13 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/recalculateUserPointsScore/{userId}/{points}/{isDone}")
+    public ResponseEntity<Void> recalculateUserPointsScore(@PathVariable Long userId, @PathVariable int points, @PathVariable boolean isDone) {
+        return userService.recalculateUserPointsScore(userId, points, isDone)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         return userService.deleteUser(id)

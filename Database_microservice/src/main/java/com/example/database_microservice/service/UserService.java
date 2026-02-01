@@ -50,6 +50,30 @@ public class UserService {
         });
     }
 
+    public boolean recalculateUserPointsScore(Long userId, int points, boolean isDone) {
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        if (userOptional.isEmpty()) {
+            return false;
+        }
+
+        User user = userOptional.get();
+        int currentPoints = user.getPointsScore() != 0 ? user.getPointsScore() : 0;
+
+        if (isDone) {
+            currentPoints += points;
+        } else {
+            currentPoints -= points;
+            if (currentPoints < 0) {
+                currentPoints = 0;
+            }
+        }
+
+        user.setPointsScore(currentPoints);
+        userRepository.save(user);
+        return true;
+    }
+
     public boolean deleteUser(Long id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);

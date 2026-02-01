@@ -10,7 +10,7 @@ public class UserDTO {
     private String username;
     private String password;
 
-    private Long points;
+    private int pointsScore;
 
     public UserDTO() { }
 
@@ -18,7 +18,7 @@ public class UserDTO {
         this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
-        this.points = user.getPoints();
+        this.pointsScore = user.getPointsScore();
     }
 
 }

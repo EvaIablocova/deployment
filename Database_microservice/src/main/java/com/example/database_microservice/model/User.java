@@ -19,7 +19,8 @@ public class User {
     @Column(nullable = false, length = 150)
     private String password;
 
-    private Long points;
+    @Column(name = "points_score", nullable = false)
+    private int pointsScore = 0;
 
     public User(){}
 
@@ -27,7 +28,7 @@ public class User {
         this.id = userDTO.getId();
         this.username = userDTO.getUsername();
         this.password = userDTO.getPassword();
-        this.points = userDTO.getPoints();
+        this.pointsScore = userDTO.getPointsScore();
     }
 
 }
