@@ -1,11 +1,11 @@
 package com.example.database_microservice.repository;
 
-import com.example.database_microservice.model.Lists;
+import com.example.database_microservice.model.ListItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ListRepository extends JpaRepository<Lists, Long> {
+public interface ListItemRepository extends JpaRepository<ListItem, Long> {
 
 }
 

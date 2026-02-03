@@ -3,6 +3,8 @@ package com.example.database_microservice.model;
 import com.example.database_microservice.DTOs.TaskDTO;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import java.time.LocalDateTime;
 
 @Data
@@ -32,6 +34,12 @@ public class Task {
     @JoinColumn(name = "assigned_to")
     private User assignedTo;
 
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Project project;
+
     public Task(){}
 
     public Task(TaskDTO taskDTO){
@@ -42,6 +50,7 @@ public class Task {
         this.done = taskDTO.isDone();
         this.pointsForCompletion = taskDTO.getPointsForCompletion();
     }
+
 
 }
 

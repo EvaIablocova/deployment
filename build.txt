@@ -14,3 +14,14 @@ cd User_microservice
 
 .\mvnw.cmd clean package
 .\mvnw.cmd clean package -DskipTests
+
+
+cd Database_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d
+cd API_Gateway ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d
+cd Competition_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d
+cd Feedback_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d
+cd List_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d
+cd Reporting_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d
+cd Task_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d
+cd User_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d
+

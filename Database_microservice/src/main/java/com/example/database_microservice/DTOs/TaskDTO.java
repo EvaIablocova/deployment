@@ -16,6 +16,7 @@ public class TaskDTO {
     private int pointsForCompletion;
 
     private Long userId;
+    private Long projectId;
 
 
     public TaskDTO() { }
@@ -29,6 +30,9 @@ public class TaskDTO {
         this.pointsForCompletion = task.getPointsForCompletion();
         if(task.getAssignedTo() != null){
             this.userId = task.getAssignedTo().getId();
+        }
+        if(task.getProject() != null){
+            this.projectId = task.getProject().getId();
         }
     }
 

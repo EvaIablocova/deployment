@@ -1,7 +1,6 @@
 package com.example.database_microservice.controller;
 
 import com.example.database_microservice.DTOs.ListDTO;
-import com.example.database_microservice.DTOs.ListDTO;
 import com.example.database_microservice.service.ListService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

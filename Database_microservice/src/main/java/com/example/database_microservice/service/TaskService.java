@@ -4,8 +4,9 @@ import org.springframework.stereotype.Service;
 import com.example.database_microservice.DTOs.TaskDTO;
 import com.example.database_microservice.model.Task;
 import com.example.database_microservice.repository.TaskRepository;
+import com.example.database_microservice.repository.ProjectRepository;
 import com.example.database_microservice.model.User;
-import com.example.database_microservice.service.UserService;
+import com.example.database_microservice.model.Project;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,10 +15,12 @@ import java.util.Optional;
 public class TaskService {
     private final TaskRepository taskRepository;
     private final UserService userService;
+    private final ProjectRepository projectRepository;
 
-    public TaskService(TaskRepository taskRepository, UserService userService) {
+    public TaskService(TaskRepository taskRepository, UserService userService, ProjectRepository projectRepository) {
         this.taskRepository = taskRepository;
         this.userService = userService;
+        this.projectRepository = projectRepository;
     }
 
     // --- Mapping ---
@@ -44,6 +47,12 @@ public class TaskService {
             task.setAssignedTo(user);
         }
 
+        if (taskDTO.getProjectId() != null) {
+            Project project = projectRepository.findById(taskDTO.getProjectId())
+                    .orElseThrow(() -> new RuntimeException("Project not found with id: " + taskDTO.getProjectId()));
+            task.setProject(project);
+        }
+
         return toDTO(taskRepository.save(task));
     }
 
@@ -64,6 +73,14 @@ public class TaskService {
                     task.setAssignedTo(user);
                 } else {
                     task.setAssignedTo(null);
+                }
+
+                if (updatedTaskDTO.getProjectId() != null) {
+                    Project project = projectRepository.findById(updatedTaskDTO.getProjectId())
+                            .orElseThrow(() -> new RuntimeException("Project not found with id: " + updatedTaskDTO.getProjectId()));
+                    task.setProject(project);
+                } else {
+                    task.setProject(null);
                 }
 
                 return toDTO(taskRepository.save(task));
