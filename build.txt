@@ -24,4 +24,5 @@ cd List_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; 
 cd Reporting_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d
 cd Task_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d
 cd User_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d
+cd Project_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d
 
