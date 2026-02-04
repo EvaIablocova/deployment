@@ -1,0 +1,604 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
+    min-height: 100vh;
+    color: #ffffff;
+    padding: 40px 20px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #4cc9f0, #7209b7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    text-align: center;
+    color: #888;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+}
+
+/* Architecture Wrapper */
+.architecture-wrapper {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 40px;
+}
+
+.architecture {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    align-items: center;
+}
+
+/* Layer Styles */
+.layer {
+    width: 100%;
+    max-width: 1200px;
+    padding: 25px;
+    border-radius: 16px;
+    position: relative;
+}
+
+.layer-label {
+    position: absolute;
+    top: -12px;
+    left: 30px;
+    background: #1b263b;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.layer-content {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Layer Colors */
+.client-layer {
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.1), rgba(67, 97, 238, 0.1));
+    border: 1px solid rgba(76, 201, 240, 0.3);
+}
+
+.client-layer .layer-label {
+    color: #4cc9f0;
+    border: 1px solid #4cc9f0;
+}
+
+.gateway-layer {
+    background: linear-gradient(135deg, rgba(247, 37, 133, 0.1), rgba(114, 9, 183, 0.1));
+    border: 1px solid rgba(247, 37, 133, 0.3);
+}
+
+.gateway-layer .layer-label {
+    color: #f72585;
+    border: 1px solid #f72585;
+}
+
+.microservices-layer {
+    background: linear-gradient(135deg, rgba(58, 134, 255, 0.1), rgba(131, 56, 236, 0.1));
+    border: 1px solid rgba(58, 134, 255, 0.3);
+}
+
+.microservices-layer .layer-label {
+    color: #3a86ff;
+    border: 1px solid #3a86ff;
+}
+
+.database-service-layer {
+    background: linear-gradient(135deg, rgba(255, 190, 11, 0.1), rgba(251, 86, 7, 0.1));
+    border: 1px solid rgba(255, 190, 11, 0.3);
+}
+
+.database-service-layer .layer-label {
+    color: #ffbe0b;
+    border: 1px solid #ffbe0b;
+}
+
+.database-layer {
+    background: linear-gradient(135deg, rgba(56, 176, 0, 0.1), rgba(0, 128, 0, 0.1));
+    border: 1px solid rgba(56, 176, 0, 0.3);
+}
+
+.database-layer .layer-label {
+    color: #38b000;
+    border: 1px solid #38b000;
+}
+
+/* Arrow Container */
+.arrow-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.arrow-line {
+    width: 3px;
+    height: 30px;
+    background: linear-gradient(to bottom, #4cc9f0, #7209b7);
+    border-radius: 2px;
+}
+
+.arrow-label {
+    font-size: 0.75rem;
+    color: #888;
+    padding: 4px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    margin: 5px 0;
+}
+
+.arrow-head {
+    color: #7209b7;
+    font-size: 1.2rem;
+}
+
+/* Service Card Styles */
+.service-card {
+    background: linear-gradient(145deg, #1e2a4a, #162038);
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 280px;
+    max-width: 400px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+}
+
+.service-card.client {
+    background: linear-gradient(145deg, #1a3a5c, #0d2137);
+    border: 1px solid rgba(76, 201, 240, 0.3);
+    box-shadow: 0 4px 20px rgba(76, 201, 240, 0.2);
+}
+
+.service-card.client:hover {
+    box-shadow: 0 8px 30px rgba(76, 201, 240, 0.3);
+}
+
+.service-card.gateway {
+    background: linear-gradient(145deg, #3d1a4a, #2a1035);
+    border: 1px solid rgba(247, 37, 133, 0.3);
+    box-shadow: 0 4px 20px rgba(247, 37, 133, 0.2);
+}
+
+.service-card.gateway:hover {
+    box-shadow: 0 8px 30px rgba(247, 37, 133, 0.3);
+}
+
+.service-card.microservice {
+    background: linear-gradient(145deg, #1a2a4a, #0d1a35);
+    border: 1px solid rgba(58, 134, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(58, 134, 255, 0.15);
+    min-width: 200px;
+    padding: 15px;
+}
+
+.service-card.microservice:hover {
+    box-shadow: 0 8px 25px rgba(58, 134, 255, 0.25);
+}
+
+.service-card.database-service {
+    background: linear-gradient(145deg, #3d3a1a, #2a2510);
+    border: 1px solid rgba(255, 190, 11, 0.3);
+    box-shadow: 0 4px 20px rgba(255, 190, 11, 0.2);
+    min-width: 500px;
+}
+
+.service-card.database-service:hover {
+    box-shadow: 0 8px 30px rgba(255, 190, 11, 0.3);
+}
+
+.service-card.database {
+    background: linear-gradient(145deg, #1a3d1a, #0d250d);
+    border: 1px solid rgba(56, 176, 0, 0.3);
+    box-shadow: 0 4px 20px rgba(56, 176, 0, 0.2);
+}
+
+.service-card.database:hover {
+    box-shadow: 0 8px 30px rgba(56, 176, 0, 0.3);
+}
+
+/* Service Card Content */
+.service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.microservice .service-icon {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+}
+
+.service-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.microservice .service-name {
+    font-size: 0.95rem;
+}
+
+.service-tech {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 4px;
+}
+
+.service-desc {
+    font-size: 0.85rem;
+    color: #aaa;
+}
+
+.service-details {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+}
+
+.detail-label {
+    color: #888;
+}
+
+.detail-value {
+    color: #4cc9f0;
+    font-family: 'Consolas', monospace;
+}
+
+.service-port {
+    font-size: 0.9rem;
+    color: #4cc9f0;
+    font-family: 'Consolas', monospace;
+    margin-top: 8px;
+}
+
+.service-endpoint {
+    font-size: 0.75rem;
+    color: #888;
+    font-family: 'Consolas', monospace;
+}
+
+/* Entities List */
+.entities-list {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.entity {
+    background: rgba(255, 190, 11, 0.2);
+    color: #ffbe0b;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Services Grid */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    width: 100%;
+}
+
+/* Technology Stack */
+.tech-stack, .port-reference, .data-flow {
+    background: linear-gradient(145deg, #1e2a4a, #162038);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tech-stack h3, .port-reference h3, .data-flow h3 {
+    color: #4cc9f0;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
+}
+
+.tech-item {
+    text-align: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.tech-item:hover {
+    transform: translateY(-3px);
+}
+
+.tech-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.tech-name {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.tech-desc {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+/* Port Table */
+.port-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.port-table th,
+.port-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.port-table th {
+    background: rgba(0, 0, 0, 0.3);
+    color: #4cc9f0;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.port-table td {
+    font-size: 0.9rem;
+    font-family: 'Consolas', monospace;
+}
+
+.port-table tr:hover {
+    background: rgba(76, 201, 240, 0.05);
+}
+
+.service-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.service-badge.gateway {
+    background: rgba(247, 37, 133, 0.2);
+    color: #f72585;
+}
+
+.service-badge.db-service {
+    background: rgba(255, 190, 11, 0.2);
+    color: #ffbe0b;
+}
+
+.service-badge.microservice {
+    background: rgba(58, 134, 255, 0.2);
+    color: #3a86ff;
+}
+
+.service-badge.database {
+    background: rgba(56, 176, 0, 0.2);
+    color: #38b000;
+}
+
+/* Data Flow */
+.flow-diagram {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 20px 0;
+}
+
+.flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 12px;
+    min-width: 180px;
+}
+
+.flow-number {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #4cc9f0, #7209b7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.flow-content {
+    flex: 1;
+}
+
+.flow-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.flow-desc {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.flow-content code {
+    display: block;
+    font-size: 0.7rem;
+    color: #4cc9f0;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px 8px;
+    border-radius: 4px;
+    word-break: break-all;
+}
+
+.flow-arrow {
+    font-size: 1.5rem;
+    color: #7209b7;
+    flex-shrink: 0;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+footer p {
+    color: #666;
+    font-size: 0.85rem;
+    margin: 4px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .services-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .tech-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .service-card.database-service {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 900px) {
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tech-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .flow-diagram {
+        flex-direction: column;
+    }
+
+    .flow-arrow {
+        transform: rotate(90deg);
+    }
+
+    .port-table {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tech-grid {
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .architecture-wrapper {
+        padding: 20px;
+    }
+
+    .layer {
+        padding: 15px;
+    }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.layer {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.client-layer { animation-delay: 0.1s; }
+.gateway-layer { animation-delay: 0.2s; }
+.microservices-layer { animation-delay: 0.3s; }
+.database-service-layer { animation-delay: 0.4s; }
+.database-layer { animation-delay: 0.5s; }
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1b263b;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4cc9f0;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3a9fc0;
+}

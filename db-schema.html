@@ -11,298 +11,321 @@
         <h1>HouseMate Database Schema</h1>
         <p class="subtitle">Entity Relationship Diagram</p>
 
-        <div class="schema-container">
-            <!-- User Table -->
-            <div class="table-card" id="user">
-                <div class="table-header">
-                    <span class="table-icon">👤</span>
-                    <span class="table-name">users</span>
+        <div class="diagram-wrapper">
+            <div class="diagram">
+                <!-- SVG for relationship lines -->
+                <svg class="relationships" id="relationshipsSvg">
+                    <!-- Task -> User (Many-to-One) -->
+                    <g class="relationship" data-from="task" data-to="user">
+                        <path class="relation-line" id="task-user-line"/>
+                        <polygon class="arrow-one" id="task-user-arrow"/>
+                        <text class="relation-label" id="task-user-label">N:1</text>
+                    </g>
+
+                    <!-- Task -> Project (Many-to-One) -->
+                    <g class="relationship" data-from="task" data-to="project">
+                        <path class="relation-line" id="task-project-line"/>
+                        <polygon class="arrow-one" id="task-project-arrow"/>
+                        <text class="relation-label" id="task-project-label">N:1</text>
+                    </g>
+
+                    <!-- Competition -> competition_participants -->
+                    <g class="relationship" data-from="competition" data-to="competition-participants">
+                        <path class="relation-line many" id="comp-participants-line"/>
+                        <text class="relation-label" id="comp-participants-label">1:N</text>
+                    </g>
+
+                    <!-- competition_participants -> User -->
+                    <g class="relationship" data-from="competition-participants" data-to="user">
+                        <path class="relation-line many" id="participants-user-line"/>
+                        <text class="relation-label" id="participants-user-label">N:1</text>
+                    </g>
+                </svg>
+
+                <!-- Row 1: User, Project, Competition -->
+                <div class="table-card" id="user" style="grid-area: user;">
+                    <div class="table-header">
+                        <span class="table-icon">👤</span>
+                        <span class="table-name">users</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">username</span>
+                            <span class="column-type">VARCHAR(150)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">password</span>
+                            <span class="column-type">VARCHAR(150)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">points_score</span>
+                            <span class="column-type">INT</span>
+                        </div>
+                    </div>
+                    <div class="connector connector-right" id="user-connector-right"></div>
+                    <div class="connector connector-bottom" id="user-connector-bottom"></div>
                 </div>
-                <div class="table-body">
-                    <div class="column pk">
-                        <span class="column-key">PK</span>
-                        <span class="column-name">id</span>
-                        <span class="column-type">BIGINT</span>
+
+                <div class="table-card" id="project" style="grid-area: project;">
+                    <div class="table-header">
+                        <span class="table-icon">📁</span>
+                        <span class="table-name">projects</span>
                     </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">username</span>
-                        <span class="column-type">VARCHAR(150)</span>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">project_name</span>
+                            <span class="column-type">VARCHAR(150)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">description</span>
+                            <span class="column-type">TEXT</span>
+                        </div>
                     </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">password</span>
-                        <span class="column-type">VARCHAR(150)</span>
+                    <div class="connector connector-bottom" id="project-connector-bottom"></div>
+                </div>
+
+                <div class="table-card" id="competition" style="grid-area: competition;">
+                    <div class="table-header">
+                        <span class="table-icon">🏆</span>
+                        <span class="table-name">competition</span>
                     </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">points_score</span>
-                        <span class="column-type">INT</span>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">goal</span>
+                            <span class="column-type">VARCHAR(255)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">type</span>
+                            <span class="column-type">VARCHAR(255)</span>
+                        </div>
+                    </div>
+                    <div class="connector connector-bottom" id="competition-connector-bottom"></div>
+                </div>
+
+                <!-- Row 2: Task, Competition Participants -->
+                <div class="table-card" id="task" style="grid-area: task;">
+                    <div class="table-header">
+                        <span class="table-icon">✅</span>
+                        <span class="table-name">task</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">title</span>
+                            <span class="column-type">VARCHAR(150)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">description</span>
+                            <span class="column-type">TEXT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">date_to_execute</span>
+                            <span class="column-type">DATETIME</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">done</span>
+                            <span class="column-type">BOOLEAN</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">points_for_completion</span>
+                            <span class="column-type">INT</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">assigned_to</span>
+                            <span class="column-type">BIGINT → users.id</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">project_id</span>
+                            <span class="column-type">BIGINT → projects.id</span>
+                        </div>
+                    </div>
+                    <div class="connector connector-top" id="task-connector-top"></div>
+                    <div class="connector connector-left" id="task-connector-left"></div>
+                </div>
+
+                <div class="table-card join-table" id="competition-participants" style="grid-area: join;">
+                    <div class="table-header">
+                        <span class="table-icon">🔗</span>
+                        <span class="table-name">competition_participants</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column fk">
+                            <span class="column-key">PK,FK</span>
+                            <span class="column-name">competition_id</span>
+                            <span class="column-type">BIGINT → competition.id</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">PK,FK</span>
+                            <span class="column-name">user_id</span>
+                            <span class="column-type">BIGINT → users.id</span>
+                        </div>
+                    </div>
+                    <div class="connector connector-top" id="join-connector-top"></div>
+                    <div class="connector connector-left" id="join-connector-left"></div>
+                </div>
+
+                <!-- Row 3: Lists, ListItem, Feedback, GroceryProduct -->
+                <div class="table-card standalone" id="lists" style="grid-area: lists;">
+                    <div class="table-header">
+                        <span class="table-icon">📋</span>
+                        <span class="table-name">lists</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">title</span>
+                            <span class="column-type">VARCHAR(150)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">description</span>
+                            <span class="column-type">TEXT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-card standalone" id="list-item" style="grid-area: listitem;">
+                    <div class="table-header">
+                        <span class="table-icon">📝</span>
+                        <span class="table-name">list_item</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">text_of_item</span>
+                            <span class="column-type">VARCHAR(150)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">done</span>
+                            <span class="column-type">BOOLEAN</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-card standalone" id="feedback" style="grid-area: feedback;">
+                    <div class="table-header">
+                        <span class="table-icon">💬</span>
+                        <span class="table-name">feedback</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">aspect</span>
+                            <span class="column-type">VARCHAR(150)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">suggestion</span>
+                            <span class="column-type">TEXT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-card standalone" id="grocery-product" style="grid-area: grocery;">
+                    <div class="table-header">
+                        <span class="table-icon">🛒</span>
+                        <span class="table-name">grocery_product</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">name_of_product</span>
+                            <span class="column-type">VARCHAR(150)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">description</span>
+                            <span class="column-type">TEXT</span>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Project Table -->
-            <div class="table-card" id="project">
-                <div class="table-header">
-                    <span class="table-icon">📁</span>
-                    <span class="table-name">projects</span>
-                </div>
-                <div class="table-body">
-                    <div class="column pk">
-                        <span class="column-key">PK</span>
-                        <span class="column-name">id</span>
-                        <span class="column-type">BIGINT</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">project_name</span>
-                        <span class="column-type">VARCHAR(150)</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">description</span>
-                        <span class="column-type">TEXT</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Task Table -->
-            <div class="table-card" id="task">
-                <div class="table-header">
-                    <span class="table-icon">✅</span>
-                    <span class="table-name">task</span>
-                </div>
-                <div class="table-body">
-                    <div class="column pk">
-                        <span class="column-key">PK</span>
-                        <span class="column-name">id</span>
-                        <span class="column-type">BIGINT</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">title</span>
-                        <span class="column-type">VARCHAR(150)</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">description</span>
-                        <span class="column-type">TEXT</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">date_to_execute</span>
-                        <span class="column-type">DATETIME</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">done</span>
-                        <span class="column-type">BOOLEAN</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">points_for_completion</span>
-                        <span class="column-type">INT</span>
-                    </div>
-                    <div class="column fk">
-                        <span class="column-key">FK</span>
-                        <span class="column-name">assigned_to</span>
-                        <span class="column-type">BIGINT</span>
-                    </div>
-                    <div class="column fk">
-                        <span class="column-key">FK</span>
-                        <span class="column-name">project_id</span>
-                        <span class="column-type">BIGINT</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Competition Table -->
-            <div class="table-card" id="competition">
-                <div class="table-header">
-                    <span class="table-icon">🏆</span>
-                    <span class="table-name">competition</span>
-                </div>
-                <div class="table-body">
-                    <div class="column pk">
-                        <span class="column-key">PK</span>
-                        <span class="column-name">id</span>
-                        <span class="column-type">BIGINT</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">goal</span>
-                        <span class="column-type">VARCHAR(255)</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">type</span>
-                        <span class="column-type">VARCHAR(255)</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Competition Participants (Join Table) -->
-            <div class="table-card join-table" id="competition-participants">
-                <div class="table-header">
-                    <span class="table-icon">🔗</span>
-                    <span class="table-name">competition_participants</span>
-                </div>
-                <div class="table-body">
-                    <div class="column fk">
-                        <span class="column-key">FK</span>
-                        <span class="column-name">competition_id</span>
-                        <span class="column-type">BIGINT</span>
-                    </div>
-                    <div class="column fk">
-                        <span class="column-key">FK</span>
-                        <span class="column-name">user_id</span>
-                        <span class="column-type">BIGINT</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Lists Table -->
-            <div class="table-card" id="lists">
-                <div class="table-header">
-                    <span class="table-icon">📋</span>
-                    <span class="table-name">lists</span>
-                </div>
-                <div class="table-body">
-                    <div class="column pk">
-                        <span class="column-key">PK</span>
-                        <span class="column-name">id</span>
-                        <span class="column-type">BIGINT</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">title</span>
-                        <span class="column-type">VARCHAR(150)</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">description</span>
-                        <span class="column-type">TEXT</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ListItem Table -->
-            <div class="table-card" id="list-item">
-                <div class="table-header">
-                    <span class="table-icon">📝</span>
-                    <span class="table-name">list_item</span>
-                </div>
-                <div class="table-body">
-                    <div class="column pk">
-                        <span class="column-key">PK</span>
-                        <span class="column-name">id</span>
-                        <span class="column-type">BIGINT</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">text_of_item</span>
-                        <span class="column-type">VARCHAR(150)</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">done</span>
-                        <span class="column-type">BOOLEAN</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Feedback Table -->
-            <div class="table-card" id="feedback">
-                <div class="table-header">
-                    <span class="table-icon">💬</span>
-                    <span class="table-name">feedback</span>
-                </div>
-                <div class="table-body">
-                    <div class="column pk">
-                        <span class="column-key">PK</span>
-                        <span class="column-name">id</span>
-                        <span class="column-type">BIGINT</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">aspect</span>
-                        <span class="column-type">VARCHAR(150)</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">suggestion</span>
-                        <span class="column-type">TEXT</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- GroceryProduct Table -->
-            <div class="table-card" id="grocery-product">
-                <div class="table-header">
-                    <span class="table-icon">🛒</span>
-                    <span class="table-name">grocery_product</span>
-                </div>
-                <div class="table-body">
-                    <div class="column pk">
-                        <span class="column-key">PK</span>
-                        <span class="column-name">id</span>
-                        <span class="column-type">BIGINT</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">name_of_product</span>
-                        <span class="column-type">VARCHAR(150)</span>
-                    </div>
-                    <div class="column">
-                        <span class="column-key"></span>
-                        <span class="column-name">description</span>
-                        <span class="column-type">TEXT</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Relationship Lines (SVG) -->
-            <svg class="relationships" viewBox="0 0 1200 800">
-                <!-- Task -> User (Many-to-One) -->
-                <line x1="350" y1="180" x2="150" y2="100" class="relation-line"/>
-                <text x="250" y="130" class="relation-label">N:1</text>
-
-                <!-- Task -> Project (Many-to-One) -->
-                <line x1="350" y1="150" x2="350" y2="50" class="relation-line"/>
-                <text x="360" y="100" class="relation-label">N:1</text>
-
-                <!-- Competition <-> User (Many-to-Many via join table) -->
-                <line x1="600" y1="80" x2="750" y2="80" class="relation-line"/>
-                <line x1="750" y1="80" x2="750" y2="180" class="relation-line"/>
-                <line x1="150" y1="130" x2="150" y2="180" class="relation-line"/>
-                <line x1="150" y1="180" x2="750" y2="180" class="relation-line"/>
-                <text x="450" y="70" class="relation-label">M:N</text>
-            </svg>
         </div>
 
-        <!-- Relationships Legend -->
+        <!-- Legend -->
         <div class="legend">
             <h3>Relationships</h3>
             <div class="legend-items">
                 <div class="legend-item">
-                    <div class="legend-line one-to-many"></div>
-                    <span><strong>Task</strong> → <strong>User</strong> (Many-to-One via assigned_to)</span>
+                    <svg width="80" height="30">
+                        <line x1="5" y1="15" x2="50" y2="15" stroke="#00d9ff" stroke-width="2"/>
+                        <polygon points="50,10 60,15 50,20" fill="#00d9ff"/>
+                        <text x="62" y="19" fill="#888" font-size="10">1</text>
+                        <line x1="5" y1="10" x2="5" y2="20" stroke="#00d9ff" stroke-width="2"/>
+                        <line x1="5" y1="10" x2="12" y2="15" stroke="#00d9ff" stroke-width="2"/>
+                        <line x1="5" y1="20" x2="12" y2="15" stroke="#00d9ff" stroke-width="2"/>
+                    </svg>
+                    <span>Many-to-One (N:1)</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-line one-to-many"></div>
-                    <span><strong>Task</strong> → <strong>Project</strong> (Many-to-One via project_id)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-line many-to-many"></div>
-                    <span><strong>Competition</strong> ↔ <strong>User</strong> (Many-to-Many via competition_participants)</span>
+                    <svg width="80" height="30">
+                        <line x1="5" y1="15" x2="55" y2="15" stroke="#9b59b6" stroke-width="2"/>
+                        <line x1="5" y1="10" x2="5" y2="20" stroke="#9b59b6" stroke-width="2"/>
+                        <line x1="5" y1="10" x2="12" y2="15" stroke="#9b59b6" stroke-width="2"/>
+                        <line x1="5" y1="20" x2="12" y2="15" stroke="#9b59b6" stroke-width="2"/>
+                        <line x1="55" y1="10" x2="55" y2="20" stroke="#9b59b6" stroke-width="2"/>
+                        <line x1="55" y1="10" x2="48" y2="15" stroke="#9b59b6" stroke-width="2"/>
+                        <line x1="55" y1="20" x2="48" y2="15" stroke="#9b59b6" stroke-width="2"/>
+                    </svg>
+                    <span>Many-to-Many (M:N)</span>
                 </div>
             </div>
-        </div>
 
-        <!-- Key Legend -->
-        <div class="key-legend">
-            <h3>Key Types</h3>
+            <h3 style="margin-top: 20px;">Key Types</h3>
             <div class="key-items">
                 <div class="key-item">
                     <span class="key-badge pk">PK</span>
@@ -312,6 +335,10 @@
                     <span class="key-badge fk">FK</span>
                     <span>Foreign Key</span>
                 </div>
+                <div class="key-item">
+                    <span class="key-badge pkfk">PK,FK</span>
+                    <span>Composite Key</span>
+                </div>
             </div>
         </div>
 
@@ -320,5 +347,91 @@
             <p>MySQL 8.0 | Spring Data JPA | Hibernate</p>
         </footer>
     </div>
+
+    <script>
+        // Draw relationship lines
+        function drawRelationships() {
+            const svg = document.getElementById('relationshipsSvg');
+            const diagram = document.querySelector('.diagram');
+
+            // Get bounding rect of diagram for offset calculation
+            const diagramRect = diagram.getBoundingClientRect();
+
+            // Helper function to get element center
+            function getElementPos(id, side) {
+                const el = document.getElementById(id);
+                if (!el) return null;
+                const rect = el.getBoundingClientRect();
+                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+                switch(side) {
+                    case 'top':
+                        return { x: rect.left + rect.width/2 - diagramRect.left, y: rect.top - diagramRect.top };
+                    case 'bottom':
+                        return { x: rect.left + rect.width/2 - diagramRect.left, y: rect.bottom - diagramRect.top };
+                    case 'left':
+                        return { x: rect.left - diagramRect.left, y: rect.top + rect.height/2 - diagramRect.top };
+                    case 'right':
+                        return { x: rect.right - diagramRect.left, y: rect.top + rect.height/2 - diagramRect.top };
+                    default:
+                        return { x: rect.left + rect.width/2 - diagramRect.left, y: rect.top + rect.height/2 - diagramRect.top };
+                }
+            }
+
+            // Draw Task -> User relationship
+            const taskPos = getElementPos('task', 'left');
+            const userPos = getElementPos('user', 'bottom');
+            if (taskPos && userPos) {
+                const path = document.getElementById('task-user-line');
+                const midY = (taskPos.y + userPos.y) / 2;
+                path.setAttribute('d', `M ${taskPos.x} ${taskPos.y} L ${userPos.x} ${taskPos.y} L ${userPos.x} ${userPos.y}`);
+
+                const label = document.getElementById('task-user-label');
+                label.setAttribute('x', userPos.x + 10);
+                label.setAttribute('y', midY);
+            }
+
+            // Draw Task -> Project relationship
+            const taskTopPos = getElementPos('task', 'top');
+            const projectPos = getElementPos('project', 'bottom');
+            if (taskTopPos && projectPos) {
+                const path = document.getElementById('task-project-line');
+                path.setAttribute('d', `M ${taskTopPos.x} ${taskTopPos.y} L ${taskTopPos.x} ${projectPos.y + 20} L ${projectPos.x} ${projectPos.y + 20} L ${projectPos.x} ${projectPos.y}`);
+
+                const label = document.getElementById('task-project-label');
+                label.setAttribute('x', (taskTopPos.x + projectPos.x) / 2);
+                label.setAttribute('y', projectPos.y + 15);
+            }
+
+            // Draw Competition -> competition_participants relationship
+            const compPos = getElementPos('competition', 'bottom');
+            const joinTopPos = getElementPos('competition-participants', 'top');
+            if (compPos && joinTopPos) {
+                const path = document.getElementById('comp-participants-line');
+                path.setAttribute('d', `M ${compPos.x} ${compPos.y} L ${compPos.x} ${joinTopPos.y - 20} L ${joinTopPos.x} ${joinTopPos.y - 20} L ${joinTopPos.x} ${joinTopPos.y}`);
+
+                const label = document.getElementById('comp-participants-label');
+                label.setAttribute('x', (compPos.x + joinTopPos.x) / 2);
+                label.setAttribute('y', joinTopPos.y - 25);
+            }
+
+            // Draw competition_participants -> User relationship
+            const joinLeftPos = getElementPos('competition-participants', 'left');
+            const userRightPos = getElementPos('user', 'right');
+            if (joinLeftPos && userRightPos) {
+                const path = document.getElementById('participants-user-line');
+                path.setAttribute('d', `M ${joinLeftPos.x} ${joinLeftPos.y} L ${userRightPos.x + 40} ${joinLeftPos.y} L ${userRightPos.x + 40} ${userRightPos.y} L ${userRightPos.x} ${userRightPos.y}`);
+
+                const label = document.getElementById('participants-user-label');
+                label.setAttribute('x', userRightPos.x + 45);
+                label.setAttribute('y', (joinLeftPos.y + userRightPos.y) / 2);
+            }
+        }
+
+        // Redraw on load and resize
+        window.addEventListener('load', drawRelationships);
+        window.addEventListener('resize', drawRelationships);
+    </script>
 </body>
 </html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HouseMate Architecture</title>
+    <link rel="stylesheet" href="architecture.css">
+</head>
+<body>
+    <div class="container">
+        <h1>HouseMate Microservices Architecture</h1>
+        <p class="subtitle">System Architecture Diagram</p>
+
+        <div class="architecture-wrapper">
+            <div class="architecture">
+                <!-- SVG for connection lines -->
+                <svg class="connections" id="connectionsSvg"></svg>
+
+                <!-- Layer 1: Client -->
+                <div class="layer client-layer">
+                    <div class="layer-label">Client Layer</div>
+                    <div class="layer-content">
+                        <div class="service-card client" id="flutter-app">
+                            <div class="service-icon">📱</div>
+                            <div class="service-info">
+                                <div class="service-name">Flutter Mobile App</div>
+                                <div class="service-tech">Dart / Flutter</div>
+                                <div class="service-desc">Cross-platform iOS & Android</div>
+                            </div>
+                            <div class="service-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Platform</span>
+                                    <span class="detail-value">iOS / Android</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Protocol</span>
+                                    <span class="detail-value">REST/HTTP</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="arrow-container">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-label">HTTP/REST</div>
+                    <div class="arrow-head">▼</div>
+                </div>
+
+                <!-- Layer 2: API Gateway -->
+                <div class="layer gateway-layer">
+                    <div class="layer-label">API Gateway Layer</div>
+                    <div class="layer-content">
+                        <div class="service-card gateway" id="api-gateway">
+                            <div class="service-icon">🚪</div>
+                            <div class="service-info">
+                                <div class="service-name">API Gateway</div>
+                                <div class="service-tech">Spring Boot 3</div>
+                                <div class="service-desc">Request routing & aggregation</div>
+                            </div>
+                            <div class="service-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Port</span>
+                                    <span class="detail-value">8099</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Container</span>
+                                    <span class="detail-value">apigateway</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Endpoint</span>
+                                    <span class="detail-value">/api_gateway/*</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="arrow-container">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-label">RestTemplate</div>
+                    <div class="arrow-head">▼</div>
+                </div>
+
+                <!-- Layer 3: Microservices -->
+                <div class="layer microservices-layer">
+                    <div class="layer-label">Microservices Layer</div>
+                    <div class="layer-content services-grid">
+                        <div class="service-card microservice" id="task-service">
+                            <div class="service-icon">✅</div>
+                            <div class="service-info">
+                                <div class="service-name">Task Service</div>
+                                <div class="service-tech">Spring Boot 3</div>
+                            </div>
+                            <div class="service-port">:9010</div>
+                            <div class="service-endpoint">/api/tasks</div>
+                        </div>
+
+                        <div class="service-card microservice" id="user-service">
+                            <div class="service-icon">👤</div>
+                            <div class="service-info">
+                                <div class="service-name">User Service</div>
+                                <div class="service-tech">Spring Boot 3</div>
+                            </div>
+                            <div class="service-port">:9015</div>
+                            <div class="service-endpoint">/api/users</div>
+                        </div>
+
+                        <div class="service-card microservice" id="project-service">
+                            <div class="service-icon">📁</div>
+                            <div class="service-info">
+                                <div class="service-name">Project Service</div>
+                                <div class="service-tech">Spring Boot 3</div>
+                            </div>
+                            <div class="service-port">:9018</div>
+                            <div class="service-endpoint">/api/projects</div>
+                        </div>
+
+                        <div class="service-card microservice" id="competition-service">
+                            <div class="service-icon">🏆</div>
+                            <div class="service-info">
+                                <div class="service-name">Competition Service</div>
+                                <div class="service-tech">Spring Boot 3</div>
+                            </div>
+                            <div class="service-port">:9011</div>
+                            <div class="service-endpoint">/api/competitions</div>
+                        </div>
+
+                        <div class="service-card microservice" id="list-service">
+                            <div class="service-icon">📋</div>
+                            <div class="service-info">
+                                <div class="service-name">List Service</div>
+                                <div class="service-tech">Spring Boot 3</div>
+                            </div>
+                            <div class="service-port">:9014</div>
+                            <div class="service-endpoint">/api/lists</div>
+                        </div>
+
+                        <div class="service-card microservice" id="product-service">
+                            <div class="service-icon">🛒</div>
+                            <div class="service-info">
+                                <div class="service-name">Product Service</div>
+                                <div class="service-tech">Spring Boot 3</div>
+                            </div>
+                            <div class="service-port">:9019</div>
+                            <div class="service-endpoint">/api/products</div>
+                        </div>
+
+                        <div class="service-card microservice" id="feedback-service">
+                            <div class="service-icon">💬</div>
+                            <div class="service-info">
+                                <div class="service-name">Feedback Service</div>
+                                <div class="service-tech">Spring Boot 3</div>
+                            </div>
+                            <div class="service-port">:9016</div>
+                            <div class="service-endpoint">/api/feedbacks</div>
+                        </div>
+
+                        <div class="service-card microservice" id="reporting-service">
+                            <div class="service-icon">📊</div>
+                            <div class="service-info">
+                                <div class="service-name">Reporting Service</div>
+                                <div class="service-tech">Spring Boot 3</div>
+                            </div>
+                            <div class="service-port">:9017</div>
+                            <div class="service-endpoint">/api/reports</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="arrow-container">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-label">RestTemplate</div>
+                    <div class="arrow-head">▼</div>
+                </div>
+
+                <!-- Layer 4: Database Microservice -->
+                <div class="layer database-service-layer">
+                    <div class="layer-label">Data Access Layer</div>
+                    <div class="layer-content">
+                        <div class="service-card database-service" id="db-microservice">
+                            <div class="service-icon">🗄️</div>
+                            <div class="service-info">
+                                <div class="service-name">Database Microservice</div>
+                                <div class="service-tech">Spring Boot 3 + JPA/Hibernate</div>
+                                <div class="service-desc">Centralized data access layer</div>
+                            </div>
+                            <div class="service-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Port</span>
+                                    <span class="detail-value">9009</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Container</span>
+                                    <span class="detail-value">dbmicroservice</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Endpoint</span>
+                                    <span class="detail-value">/db/*</span>
+                                </div>
+                            </div>
+                            <div class="entities-list">
+                                <span class="entity">Users</span>
+                                <span class="entity">Tasks</span>
+                                <span class="entity">Projects</span>
+                                <span class="entity">Competitions</span>
+                                <span class="entity">Lists</span>
+                                <span class="entity">Products</span>
+                                <span class="entity">Feedback</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="arrow-container">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-label">JDBC / JPA</div>
+                    <div class="arrow-head">▼</div>
+                </div>
+
+                <!-- Layer 5: Database -->
+                <div class="layer database-layer">
+                    <div class="layer-label">Persistence Layer</div>
+                    <div class="layer-content">
+                        <div class="service-card database" id="mysql-db">
+                            <div class="service-icon">🐬</div>
+                            <div class="service-info">
+                                <div class="service-name">MySQL Database</div>
+                                <div class="service-tech">MySQL 8.0</div>
+                                <div class="service-desc">Relational database</div>
+                            </div>
+                            <div class="service-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Port</span>
+                                    <span class="detail-value">3336 (host) / 3306 (container)</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Container</span>
+                                    <span class="detail-value">my_mysql</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Database</span>
+                                    <span class="detail-value">HouseMateMicroservicesDB</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technology Stack -->
+        <div class="tech-stack">
+            <h3>Technology Stack</h3>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <div class="tech-icon">📱</div>
+                    <div class="tech-name">Flutter</div>
+                    <div class="tech-desc">Mobile UI Framework</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">☕</div>
+                    <div class="tech-name">Java 21</div>
+                    <div class="tech-desc">Backend Language</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">🍃</div>
+                    <div class="tech-name">Spring Boot 3</div>
+                    <div class="tech-desc">Microservices Framework</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">🐬</div>
+                    <div class="tech-name">MySQL 8</div>
+                    <div class="tech-desc">Database</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">🐳</div>
+                    <div class="tech-name">Docker</div>
+                    <div class="tech-desc">Containerization</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">📝</div>
+                    <div class="tech-name">Swagger</div>
+                    <div class="tech-desc">API Documentation</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Port Reference -->
+        <div class="port-reference">
+            <h3>Service Port Reference</h3>
+            <table class="port-table">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>App Port</th>
+                        <th>Debug Port</th>
+                        <th>Container Name</th>
+                        <th>API Endpoint</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="service-badge gateway">API Gateway</span></td>
+                        <td>8099</td>
+                        <td>5006</td>
+                        <td>apigateway</td>
+                        <td>/api_gateway/*</td>
+                    </tr>
+                    <tr>
+                        <td><span class="service-badge db-service">Database Service</span></td>
+                        <td>9009</td>
+                        <td>5002</td>
+                        <td>dbmicroservice</td>
+                        <td>/db/*</td>
+                    </tr>
+                    <tr>
+                        <td><span class="service-badge microservice">Task Service</span></td>
+                        <td>9010</td>
+                        <td>5007</td>
+                        <td>taskmicroservice</td>
+                        <td>/api/tasks</td>
+                    </tr>
+                    <tr>
+                        <td><span class="service-badge microservice">Competition Service</span></td>
+                        <td>9011</td>
+                        <td>5008</td>
+                        <td>competitionmicroservice</td>
+                        <td>/api/competitions</td>
+                    </tr>
+                    <tr>
+                        <td><span class="service-badge microservice">List Service</span></td>
+                        <td>9014</td>
+                        <td>5009</td>
+                        <td>listmicroservice</td>
+                        <td>/api/lists</td>
+                    </tr>
+                    <tr>
+                        <td><span class="service-badge microservice">User Service</span></td>
+                        <td>9015</td>
+                        <td>5010</td>
+                        <td>usermicroservice</td>
+                        <td>/api/users</td>
+                    </tr>
+                    <tr>
+                        <td><span class="service-badge microservice">Feedback Service</span></td>
+                        <td>9016</td>
+                        <td>5011</td>
+                        <td>feedbackmicroservice</td>
+                        <td>/api/feedbacks</td>
+                    </tr>
+                    <tr>
+                        <td><span class="service-badge microservice">Reporting Service</span></td>
+                        <td>9017</td>
+                        <td>5012</td>
+                        <td>reportingmicroservice</td>
+                        <td>/api/reports</td>
+                    </tr>
+                    <tr>
+                        <td><span class="service-badge microservice">Project Service</span></td>
+                        <td>9018</td>
+                        <td>5013</td>
+                        <td>projectmicroservice</td>
+                        <td>/api/projects</td>
+                    </tr>
+                    <tr>
+                        <td><span class="service-badge microservice">Product Service</span></td>
+                        <td>9019</td>
+                        <td>5014</td>
+                        <td>productmicroservice</td>
+                        <td>/api/products</td>
+                    </tr>
+                    <tr>
+                        <td><span class="service-badge database">MySQL</span></td>
+                        <td>3336</td>
+                        <td>-</td>
+                        <td>my_mysql</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Data Flow -->
+        <div class="data-flow">
+            <h3>Request Flow Example</h3>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-number">1</div>
+                    <div class="flow-content">
+                        <div class="flow-title">Flutter App</div>
+                        <div class="flow-desc">User creates a task</div>
+                        <code>POST /api_gateway/tasks</code>
+                    </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-number">2</div>
+                    <div class="flow-content">
+                        <div class="flow-title">API Gateway</div>
+                        <div class="flow-desc">Routes to Task Service</div>
+                        <code>POST taskmicroservice:9010/api/tasks</code>
+                    </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-number">3</div>
+                    <div class="flow-content">
+                        <div class="flow-title">Task Service</div>
+                        <div class="flow-desc">Processes & forwards to DB</div>
+                        <code>POST dbmicroservice:9009/db/tasks</code>
+                    </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-number">4</div>
+                    <div class="flow-content">
+                        <div class="flow-title">Database Service</div>
+                        <div class="flow-desc">Persists via JPA</div>
+                        <code>INSERT INTO task ...</code>
+                    </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-number">5</div>
+                    <div class="flow-content">
+                        <div class="flow-title">MySQL</div>
+                        <div class="flow-desc">Stores data</div>
+                        <code>HouseMateMicroservicesDB</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>HouseMate Microservices - System Architecture</p>
+            <p>Docker Compose | Spring Boot 3 | Java 21 | Flutter</p>
+        </footer>
+    </div>
+</body>
+</html>
