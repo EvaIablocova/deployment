@@ -112,6 +112,15 @@ services:
       - "5014:5014"
     networks:
       - my_custom_microservices_network
+  authmicroservice:
+    build: ./Auth_microservice
+    container_name: authmicroservice
+    restart: always
+    ports:
+      - "9020:9020"
+      - "5015:5015"
+    networks:
+      - my_custom_microservices_network
 
 volumes:
   mysql_data:

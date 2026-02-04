@@ -48,16 +48,16 @@
                     <div class="arrow-head">▼</div>
                 </div>
 
-                <!-- Layer 2: API Gateway -->
+                <!-- Layer 2: API Gateway & Auth -->
                 <div class="layer gateway-layer">
-                    <div class="layer-label">API Gateway Layer</div>
-                    <div class="layer-content">
+                    <div class="layer-label">API Gateway & Security Layer</div>
+                    <div class="layer-content" style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                         <div class="service-card gateway" id="api-gateway">
                             <div class="service-icon">🚪</div>
                             <div class="service-info">
                                 <div class="service-name">API Gateway</div>
-                                <div class="service-tech">Spring Boot 3</div>
-                                <div class="service-desc">Request routing & aggregation</div>
+                                <div class="service-tech">Spring Boot 3 + Security</div>
+                                <div class="service-desc">Request routing, JWT validation</div>
                             </div>
                             <div class="service-details">
                                 <div class="detail-item">
@@ -71,6 +71,28 @@
                                 <div class="detail-item">
                                     <span class="detail-label">Endpoint</span>
                                     <span class="detail-value">/api_gateway/*</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="service-card auth" id="auth-service" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                            <div class="service-icon">🔐</div>
+                            <div class="service-info">
+                                <div class="service-name">Auth Service</div>
+                                <div class="service-tech">Spring Boot 3 + JWT</div>
+                                <div class="service-desc">Authentication & Authorization</div>
+                            </div>
+                            <div class="service-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Port</span>
+                                    <span class="detail-value">9020</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Container</span>
+                                    <span class="detail-value">authmicroservice</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Endpoint</span>
+                                    <span class="detail-value">/api/auth/*</span>
                                 </div>
                             </div>
                         </div>
@@ -287,6 +309,16 @@
                     <div class="tech-name">Swagger</div>
                     <div class="tech-desc">API Documentation</div>
                 </div>
+                <div class="tech-item">
+                    <div class="tech-icon">🔐</div>
+                    <div class="tech-name">JWT + BCrypt</div>
+                    <div class="tech-desc">Authentication</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">🛡️</div>
+                    <div class="tech-name">Spring Security</div>
+                    <div class="tech-desc">Authorization</div>
+                </div>
             </div>
         </div>
 
@@ -310,6 +342,13 @@
                         <td>5006</td>
                         <td>apigateway</td>
                         <td>/api_gateway/*</td>
+                    </tr>
+                    <tr>
+                        <td><span class="service-badge auth" style="background: #dc3545;">Auth Service</span></td>
+                        <td>9020</td>
+                        <td>5015</td>
+                        <td>authmicroservice</td>
+                        <td>/api/auth/*</td>
                     </tr>
                     <tr>
                         <td><span class="service-badge db-service">Database Service</span></td>
@@ -385,9 +424,93 @@
             </table>
         </div>
 
+        <!-- Authentication Flow -->
+        <div class="data-flow">
+            <h3>Authentication Flow</h3>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-number">1</div>
+                    <div class="flow-content">
+                        <div class="flow-title">Flutter App</div>
+                        <div class="flow-desc">User logs in</div>
+                        <code>POST /api_gateway/auth/login</code>
+                    </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-number">2</div>
+                    <div class="flow-content">
+                        <div class="flow-title">API Gateway</div>
+                        <div class="flow-desc">Proxies to Auth Service</div>
+                        <code>POST authmicroservice:9020/api/auth/login</code>
+                    </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-number">3</div>
+                    <div class="flow-content">
+                        <div class="flow-title">Auth Service</div>
+                        <div class="flow-desc">Validates credentials via DB</div>
+                        <code>BCrypt verify + JWT generate</code>
+                    </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-number">4</div>
+                    <div class="flow-content">
+                        <div class="flow-title">Flutter App</div>
+                        <div class="flow-desc">Receives JWT token</div>
+                        <code>{"token": "eyJ...", "userId": 1}</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Protected Request Flow -->
+        <div class="data-flow">
+            <h3>Protected Request Flow</h3>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-number">1</div>
+                    <div class="flow-content">
+                        <div class="flow-title">Flutter App</div>
+                        <div class="flow-desc">Request with JWT</div>
+                        <code>Authorization: Bearer eyJ...</code>
+                    </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-number">2</div>
+                    <div class="flow-content">
+                        <div class="flow-title">API Gateway</div>
+                        <div class="flow-desc">JWT Filter validates token</div>
+                        <code>JwtAuthenticationFilter</code>
+                    </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-number">3</div>
+                    <div class="flow-content">
+                        <div class="flow-title">Microservice</div>
+                        <div class="flow-desc">Trusted internal request</div>
+                        <code>No auth required</code>
+                    </div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-number">4</div>
+                    <div class="flow-content">
+                        <div class="flow-title">Response</div>
+                        <div class="flow-desc">Data returned</div>
+                        <code>200 OK</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Data Flow -->
         <div class="data-flow">
-            <h3>Request Flow Example</h3>
+            <h3>Data Request Flow Example</h3>
             <div class="flow-diagram">
                 <div class="flow-step">
                     <div class="flow-number">1</div>
@@ -438,7 +561,7 @@
 
         <footer>
             <p>HouseMate Microservices - System Architecture</p>
-            <p>Docker Compose | Spring Boot 3 | Java 21 | Flutter</p>
+            <p>Docker Compose | Spring Boot 3 | Java 21 | Flutter | JWT Authentication</p>
         </footer>
     </div>
 </body>

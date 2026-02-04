@@ -1,0 +1,546 @@
+================================================================================
+                    PRODUCT DEVELOPMENT PLAN & USER STORIES
+                    Family Task Management & Gamification App
+================================================================================
+                    Date: 2026-02-04
+                    Role: Product Manager / Solution Architect
+================================================================================
+
+IMPORTANT: I could not read the .docx files (Курсовая.docx, Design others.docx) as they
+are binary format. Please provide key information from these documents to refine this plan.
+
+================================================================================
+SECTION 1: CURRENT STATE ANALYSIS
+================================================================================
+
+1.1 BACKEND ARCHITECTURE (Implemented)
+--------------------------------------
+Microservices on Spring Boot 3 / Java 21:
+
+| Service                | Port | Status      | Description                    |
+|------------------------|------|-------------|--------------------------------|
+| API_Gateway            | 8099 | Done        | Routes requests + JWT filter   |
+| Auth_microservice      | 9020 | Done        | JWT auth, BCrypt passwords     |
+| Database_microservice  | 9009 | Done        | Central DB access layer        |
+| Task_microservice      | 9010 | Done        | Task CRUD operations           |
+| Competition_microservice| 9011| Done        | Competition management         |
+| List_microservice      | 9014 | Done        | Shopping/grocery lists         |
+| User_microservice      | 9015 | Done        | User CRUD operations           |
+| Feedback_microservice  | 9016 | Done        | User feedback collection       |
+| Reporting_microservice | 9017 | Partial     | Analytics & reports            |
+| Project_microservice   | 9018 | Done        | Project management             |
+| Product_microservice   | 9019 | Done        | Grocery products catalog       |
+
+1.2 AUTHENTICATION ARCHITECTURE (Implemented 2026-02-04)
+--------------------------------------------------------
+Gateway-only authentication pattern:
+- API Gateway validates JWT tokens via JwtAuthenticationFilter
+- Internal microservices trust the gateway (no auth required)
+- Auth_microservice handles registration, login, token refresh
+
+JWT Token Structure:
+{
+  "sub": "username",
+  "userId": 123,
+  "iat": 1234567890,
+  "exp": 1234571490  // 1 hour for access token
+}
+
+Security Stack:
+- Spring Security 6.x
+- JWT: jjwt 0.12.6 (io.jsonwebtoken)
+- Password: BCrypt (strength 10)
+
+1.3 DATABASE ENTITIES (Implemented)
+-----------------------------------
+| Entity          | Fields                                          | Relations              |
+|-----------------|-------------------------------------------------|------------------------|
+| User            | id, username, password (BCrypt hash), pointsScore| -                     |
+| Task            | id, title, description, dateToExecute, done,    | ManyToOne: User,       |
+|                 | pointsForCompletion                             | ManyToOne: Project     |
+| Project         | id, projectName, description                    | OneToMany: Tasks       |
+| Competition     | id, goal, type                                  | ManyToMany: Users      |
+| Lists           | id, title, description                          | -                      |
+| ListItem        | id, name, quantity, isChecked, listId           | ManyToOne: Lists       |
+| Feedback        | id, aspect, suggestion                          | -                      |
+| GroceryProduct  | id, nameOfProduct, description                  | -                      |
+
+1.4 FLUTTER FRONTEND (Implemented)
+----------------------------------
+- Architecture: Feature-based modular structure
+- State Management: Riverpod
+- Models: Freezed with JSON serialization
+- Error Handling: fpdart (Either pattern)
+
+Main Navigation Tabs:
+1. Home - Dashboard/overview
+2. Tasks - Task list and management
+3. Rank - Competition/leaderboard
+4. Projects - Project management
+5. Profiles - User profiles
+
+Features with Models/Services/Screens:
+- task, user, project, product, competition, feedback, lists, reporting
+
+================================================================================
+SECTION 2: GAPS & MISSING FUNCTIONALITY
+================================================================================
+
+2.1 CRITICAL GAPS (Must Have)
+-----------------------------
+[X] Authentication & Authorization (COMPLETED 2026-02-04)
+    - Login/registration flow implemented
+    - JWT token management (1h access, 7d refresh)
+    - BCrypt password hashing (strength 10)
+    - Stateless session management via JWT
+    - Auth_microservice on port 9020
+    - API Gateway JWT filter for protected endpoints
+
+[ ] User-Task Assignment Flow
+    - Backend has assignedTo field
+    - Frontend needs UI to assign tasks to family members
+
+[ ] Competition Full Implementation
+    - status, startDate, endDate are commented out in backend
+    - No winner determination logic
+    - No real-time leaderboard updates
+
+2.2 MEDIUM PRIORITY GAPS
+------------------------
+[ ] Lists-ListItem-GroceryProduct Integration
+    - ListItem exists but not fully connected
+    - GroceryProduct catalog not linked to shopping lists
+
+[ ] Push Notifications
+    - No notification service
+    - Task reminders not implemented
+
+[ ] Family/Household Management
+    - No concept of "family" or "household" grouping users
+
+[ ] Task Recurrence
+    - No recurring task support (daily, weekly chores)
+
+2.3 LOW PRIORITY / NICE TO HAVE
+-------------------------------
+[ ] User avatars/profile pictures
+[ ] Task categories/tags
+[ ] Achievement badges
+[ ] Dark mode support
+[ ] Offline mode with sync
+
+================================================================================
+SECTION 3: USER STORIES (Prioritized Backlog)
+================================================================================
+
+EPIC 1: AUTHENTICATION & SECURITY [BACKEND COMPLETE]
+-----------------------------------------------------
+US-1.1: User Registration [DONE - Backend]
+  As a new user
+  I want to register with email and password
+  So that I can create my family account
+
+  Acceptance Criteria:
+  - [X] Unique username check
+  - [X] BCrypt password hashing
+  - [X] JWT token returned on registration
+  - [ ] Email validation (frontend)
+  - [ ] Password strength requirements (frontend)
+  - [ ] Confirmation email (optional/future)
+
+  Implementation:
+  - POST /api_gateway/auth/register
+  - Auth_microservice validates & creates user
+  - Returns: token, refreshToken, username, userId
+
+US-1.2: User Login [DONE - Backend]
+  As a registered user
+  I want to login with my credentials
+  So that I can access my tasks and family data
+
+  Acceptance Criteria:
+  - [X] JWT token generation (1h expiry)
+  - [X] Refresh token mechanism (7d expiry)
+  - [X] Error handling for invalid credentials
+  - [ ] Remember me option (frontend)
+
+  Implementation:
+  - POST /api_gateway/auth/login
+  - POST /api_gateway/auth/refresh
+  - BCrypt password verification
+
+US-1.3: Password Reset [NOT STARTED]
+  As a user who forgot password
+  I want to reset my password via email
+  So that I can regain access to my account
+
+US-1.4: Logout [PARTIAL - Stateless]
+  As a logged-in user
+  I want to logout from the app
+  So that my session is terminated securely
+
+  Note: JWT is stateless - logout handled client-side by
+  deleting token. Token blacklist not implemented.
+
+--------------------------------------------------------------------------------
+
+EPIC 2: FAMILY/HOUSEHOLD MANAGEMENT
+-----------------------------------
+US-2.1: Create Family Group
+  As a parent/admin
+  I want to create a family group
+  So that I can invite my family members
+
+US-2.2: Invite Family Members
+  As a family admin
+  I want to invite members via email or code
+  So that they can join my family group
+
+US-2.3: Assign Roles
+  As a family admin
+  I want to assign roles (Parent/Child/Admin)
+  So that permissions are properly managed
+
+US-2.4: View Family Members
+  As a family member
+  I want to see all members of my family
+  So that I know who is part of my household
+
+--------------------------------------------------------------------------------
+
+EPIC 3: TASK MANAGEMENT ENHANCEMENTS
+------------------------------------
+US-3.1: Assign Task to Family Member
+  As a parent
+  I want to assign a task to a specific child
+  So that they know their responsibilities
+
+  Acceptance Criteria:
+  - Select assignee from family members dropdown
+  - Notification sent to assignee
+  - Task appears in assignee's task list
+
+US-3.2: Task Due Date Reminders
+  As a task assignee
+  I want to receive reminders before task deadline
+  So that I don't forget to complete it
+
+  Acceptance Criteria:
+  - Push notification 1 day before
+  - Push notification 1 hour before
+  - In-app badge/indicator
+
+US-3.3: Mark Task Complete & Earn Points
+  As a family member
+  I want to mark my task as done
+  So that I earn points for completion
+
+  Acceptance Criteria:
+  - Toggle done status
+  - Points added to user's score
+  - Visual feedback (animation/sound)
+
+US-3.4: Create Recurring Tasks
+  As a parent
+  I want to create recurring tasks (daily/weekly)
+  So that regular chores are automated
+
+  Acceptance Criteria:
+  - Recurrence options: Daily, Weekly, Monthly
+  - Select days of week
+  - Auto-create new task instances
+
+US-3.5: Task Priority Levels
+  As a user
+  I want to set task priority (High/Medium/Low)
+  So that important tasks are highlighted
+
+--------------------------------------------------------------------------------
+
+EPIC 4: GAMIFICATION & COMPETITION
+----------------------------------
+US-4.1: View Leaderboard
+  As a family member
+  I want to see a leaderboard with points
+  So that I can see my ranking in the family
+
+  Acceptance Criteria:
+  - Display all family members sorted by points
+  - Show current user's position highlighted
+  - Weekly/Monthly/All-time filters
+
+US-4.2: Create Competition
+  As a parent
+  I want to create a competition with goal and deadline
+  So that family members can compete
+
+  Acceptance Criteria:
+  - Set competition goal (e.g., "Most tasks completed")
+  - Set start and end date
+  - Select participants
+  - Competition type: Individual or Team
+
+US-4.3: Join Competition
+  As a family member
+  I want to join available competitions
+  So that I can participate and win
+
+US-4.4: View Competition Progress
+  As a participant
+  I want to see competition standings
+  So that I know how I'm performing
+
+US-4.5: Competition Winner Announcement
+  As a family member
+  I want to see who won when competition ends
+  So that achievements are celebrated
+
+US-4.6: Achievement Badges
+  As a user
+  I want to earn badges for achievements
+  So that I feel motivated to complete tasks
+
+  Examples:
+  - "First Task" - Complete your first task
+  - "Streak Master" - 7 days task completion streak
+  - "Point Champion" - Reach 1000 points
+
+--------------------------------------------------------------------------------
+
+EPIC 5: SHOPPING LISTS & PRODUCTS
+---------------------------------
+US-5.1: Create Shopping List
+  As a family member
+  I want to create a shopping list
+  So that I can track items to buy
+
+US-5.2: Add Items to List
+  As a user
+  I want to add items to shopping list
+  So that I remember what to buy
+
+  Acceptance Criteria:
+  - Add item name and quantity
+  - Optional: select from product catalog
+  - Mark items as checked when bought
+
+US-5.3: Share List with Family
+  As a user
+  I want to share shopping list with family
+  So that anyone can check/update it
+
+US-5.4: Product Catalog
+  As a user
+  I want to browse product catalog
+  So that I can quickly add common items
+
+--------------------------------------------------------------------------------
+
+EPIC 6: PROJECT MANAGEMENT
+--------------------------
+US-6.1: Create Project
+  As a parent
+  I want to create a project (e.g., "Spring Cleaning")
+  So that I can group related tasks
+
+US-6.2: Add Tasks to Project
+  As a user
+  I want to add tasks to a project
+  So that work is organized
+
+US-6.3: View Project Progress
+  As a user
+  I want to see project completion percentage
+  So that I know overall progress
+
+US-6.4: Project Deadline
+  As a user
+  I want to set project deadline
+  So that all tasks have a target date
+
+--------------------------------------------------------------------------------
+
+EPIC 7: NOTIFICATIONS & REMINDERS
+---------------------------------
+US-7.1: Push Notifications Setup
+  As a user
+  I want to enable/disable push notifications
+  So that I control what alerts I receive
+
+US-7.2: Task Assignment Notification
+  As a user
+  I want to be notified when assigned a task
+  So that I'm aware of new responsibilities
+
+US-7.3: Competition Updates
+  As a participant
+  I want notifications about competition progress
+  So that I stay engaged
+
+--------------------------------------------------------------------------------
+
+EPIC 8: REPORTING & ANALYTICS
+-----------------------------
+US-8.1: Personal Stats Dashboard
+  As a user
+  I want to see my task completion statistics
+  So that I can track my productivity
+
+US-8.2: Family Activity Report
+  As a parent
+  I want to see family activity summary
+  So that I understand household contribution
+
+US-8.3: Points History
+  As a user
+  I want to see my points earning history
+  So that I know how I accumulated points
+
+================================================================================
+SECTION 4: TECHNICAL TASKS (Architecture)
+================================================================================
+
+T-1: Implement Authentication Microservice [DONE 2026-02-04]
+     - [X] JWT token generation/validation (jjwt 0.12.6)
+     - [X] Password hashing (BCrypt strength 10)
+     - [X] Refresh token mechanism (7 day expiry)
+     - [X] Auth_microservice created on port 9020
+
+     Files Created:
+     - Auth_microservice/src/main/java/.../security/JwtUtil.java
+     - Auth_microservice/src/main/java/.../service/AuthService.java
+     - Auth_microservice/src/main/java/.../controller/AuthController.java
+     - Auth_microservice/src/main/java/.../DTOs/*.java
+     - Auth_microservice/src/main/java/.../config/SecurityConfig.java
+
+T-2: Add Family Entity to Database
+     - Create Family model: id, name, createdBy, createdAt
+     - Create FamilyMember join table: familyId, userId, role
+     - Update User model with familyId reference
+
+T-3: Implement Notification Service
+     - Firebase Cloud Messaging integration
+     - Create Notification_microservice on port 9017
+     - Store notification preferences
+
+T-4: Complete Competition Logic
+     - Uncomment status, startDate, endDate fields
+     - Add winner determination algorithm
+     - Add competition state machine (PENDING/ACTIVE/FINISHED)
+
+T-5: Add Recurring Task Engine
+     - Task recurrence pattern storage
+     - Scheduled job for task instance creation
+     - Spring Scheduler or Quartz integration
+
+T-6: Frontend: Authentication Screens
+     - Login screen with form validation
+     - Registration screen
+     - Forgot password flow
+     - Secure token storage (flutter_secure_storage)
+
+T-7: Frontend: Family Management Screens
+     - Family creation wizard
+     - Member invitation flow
+     - Family settings screen
+
+T-8: API Security [PARTIAL - 2026-02-04]
+     - [X] Add JWT filter to API Gateway (JwtAuthenticationFilter.java)
+     - [X] SecurityConfig with protected/public endpoints
+     - [X] Public: /api_gateway/auth/*, /swagger-ui/**
+     - [X] Protected: All other /api_gateway/* endpoints
+     - [ ] Role-based endpoint protection (future)
+     - [ ] Rate limiting (future)
+
+     Files Created:
+     - API_Gateway/src/main/java/.../filter/JwtAuthenticationFilter.java
+     - API_Gateway/src/main/java/.../security/JwtUtil.java
+     - API_Gateway/src/main/java/.../config/SecurityConfig.java
+     - API_Gateway/src/main/java/.../Controller/AuthController.java
+
+================================================================================
+SECTION 5: RECOMMENDED SPRINT PLAN
+================================================================================
+
+SPRINT 1 (2 weeks): Authentication Foundation [BACKEND COMPLETE]
+- US-1.1 [DONE], US-1.2 [DONE], US-1.4 [PARTIAL]
+- T-1 [DONE], T-6 [TODO-Frontend], T-8 [PARTIAL]
+- Deliverable: Users can register and login securely
+- Status: Backend API ready, Frontend integration pending
+
+  API Endpoints Available:
+  - POST /api_gateway/auth/register - Register new user
+  - POST /api_gateway/auth/login    - Login, get JWT token
+  - POST /api_gateway/auth/refresh  - Refresh expired token
+
+  Testing:
+  curl -X POST http://localhost:8099/api_gateway/auth/register \
+    -H "Content-Type: application/json" \
+    -d '{"username": "john", "password": "SecurePass123!"}'
+
+SPRINT 2 (2 weeks): Family & Assignment
+- US-2.1, US-2.2, US-2.4, US-3.1
+- T-2, T-7
+- Deliverable: Families can be created, tasks assigned
+
+SPRINT 3 (2 weeks): Gamification
+- US-3.3, US-4.1, US-4.2, US-4.3
+- T-4
+- Deliverable: Points system working, competitions functional
+
+SPRINT 4 (2 weeks): Notifications & Polish
+- US-3.2, US-7.1, US-7.2
+- T-3
+- Deliverable: Push notifications for task reminders
+
+SPRINT 5 (2 weeks): Advanced Features
+- US-3.4, US-4.6, US-8.1
+- T-5
+- Deliverable: Recurring tasks, badges, personal dashboard
+
+================================================================================
+SECTION 6: QUESTIONS FOR PRODUCT OWNER
+================================================================================
+
+I need clarification on the following to refine this plan:
+
+1. BUSINESS CONTEXT (from Курсовая.docx):
+   - What is the exact target audience? (Families with children? Roommates? Teams?)
+   - What is the primary value proposition?
+   - Are there any specific academic requirements to fulfill?
+
+2. COMPETITOR ANALYSIS (from Design others.docx):
+   - What apps were analyzed as competitors?
+   - What features do competitors have that we must match?
+   - What differentiates our app from competitors?
+
+3. AUTHENTICATION:
+   - Should we support social login (Google, Apple)?
+   - Is email verification required?
+   - What is the password policy?
+
+4. FAMILY STRUCTURE:
+   - Can a user belong to multiple families/households?
+   - What roles exist? (Admin/Parent/Child/Guest?)
+   - Can children create tasks or only complete them?
+
+5. GAMIFICATION:
+   - What is the points-to-real-rewards system? (Allowance? Privileges?)
+   - Are there any age-appropriate restrictions?
+   - Should points expire or reset periodically?
+
+6. MONETIZATION:
+   - Is this a free app or freemium model?
+   - What features would be premium?
+
+7. PLATFORM:
+   - iOS only, Android only, or both?
+   - Is web version planned?
+
+8. TIMELINE:
+   - What is the deadline for MVP?
+   - What is the deadline for final submission?
+
+================================================================================
+                              END OF DOCUMENT
+================================================================================

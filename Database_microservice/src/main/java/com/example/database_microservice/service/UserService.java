@@ -36,6 +36,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public Optional<UserDTO> getUserByUsername(String username) {
+        return userRepository.findByUsername(username).map(this::toDTO);
+    }
+
     public UserDTO createUser(UserDTO UserDTO) {
         User user = new User(UserDTO);
         return toDTO(userRepository.save(user));
