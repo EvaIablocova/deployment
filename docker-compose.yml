@@ -103,6 +103,15 @@ services:
       - "5013:5013"
     networks:
       - my_custom_microservices_network
+  productmicroservice:
+    build: ./Product_microservice
+    container_name: productmicroservice
+    restart: always
+    ports:
+      - "9019:9019"
+      - "5014:5014"
+    networks:
+      - my_custom_microservices_network
 
 volumes:
   mysql_data:

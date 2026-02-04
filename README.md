@@ -17,6 +17,8 @@ Each microservice uses Maven wrapper. Run from the repository root:
 ./Reporting_microservice/mvnw -f Reporting_microservice/pom.xml clean package -DskipTests
 ./Feedback_microservice/mvnw -f Feedback_microservice/pom.xml clean package -DskipTests
 ./Competition_microservice/mvnw -f Competition_microservice/pom.xml clean package -DskipTests
+./Project_microservice/mvnw -f Project_microservice/pom.xml clean package -DskipTests
+./Product_microservice/mvnw -f Product_microservice/pom.xml clean package -DskipTests
 ./Database_microservice/mvnw -f Database_microservice/pom.xml clean package -DskipTests
 ./API_Gateway/mvnw -f API_Gateway/pom.xml clean package -DskipTests
 
@@ -53,7 +55,7 @@ This is a Spring Boot 3 microservices project (Java 21) called **HouseMate**.
 ```
 Client → API_Gateway (8099)
               ↓ RestTemplate
-         Microservices (9010-9017)
+         Microservices (9010-9019)
               ↓ RestTemplate
          Database_microservice (9009)
               ↓ JPA/Hibernate
@@ -72,6 +74,8 @@ Client → API_Gateway (8099)
 | User_microservice | 9015 | 5010 | usermicroservice |
 | Feedback_microservice | 9016 | 5011 | feedbackmicroservice |
 | Reporting_microservice | 9017 | 5012 | reportingmicroservice |
+| Project_microservice | 9018 | 5013 | projectmicroservice |
+| Product_microservice | 9019 | 5014 | productmicroservice |
 | MySQL | 3336 | - | my_mysql |
 
 ### Inter-Service Communication
