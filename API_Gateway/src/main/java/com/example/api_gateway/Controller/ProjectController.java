@@ -1,6 +1,7 @@
 package com.example.api_gateway.Controller;
 
 import com.example.api_gateway.DTOs.ProjectDTO;
+import com.example.api_gateway.config.ServiceUrlsConfig;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,11 @@ import java.util.Optional;
 public class ProjectController {
 
     private final RestTemplate restTemplate;
-    private final String externalBase = "http://projectmicroservice:9018/api/projects";
+    private final String externalBase;
 
-    public ProjectController(RestTemplateBuilder builder) {
+    public ProjectController(RestTemplateBuilder builder, ServiceUrlsConfig serviceUrls) {
         this.restTemplate = builder.build();
+        this.externalBase = serviceUrls.getProjectServiceUrl() + "/api/projects";
     }
 
     // --- CRUD ---

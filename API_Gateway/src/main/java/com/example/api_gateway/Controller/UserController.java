@@ -1,6 +1,7 @@
 package com.example.api_gateway.Controller;
 
 import com.example.api_gateway.DTOs.UserDTO;
+import com.example.api_gateway.config.ServiceUrlsConfig;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,11 @@ import java.util.Optional;
 public class UserController {
 
     private final RestTemplate restTemplate;
-    private final String externalBase = "http://usermicroservice:9015/api/users";
+    private final String externalBase;
 
-    public UserController(RestTemplateBuilder builder) {
+    public UserController(RestTemplateBuilder builder, ServiceUrlsConfig serviceUrls) {
         this.restTemplate = builder.build();
+        this.externalBase = serviceUrls.getUserServiceUrl() + "/api/users";
     }
 
     @GetMapping

@@ -4,7 +4,7 @@ import com.example.api_gateway.DTOs.AuthResponse;
 import com.example.api_gateway.DTOs.LoginRequest;
 import com.example.api_gateway.DTOs.RefreshTokenRequest;
 import com.example.api_gateway.DTOs.RegisterRequest;
-import org.springframework.beans.factory.annotation.Value;
+import com.example.api_gateway.config.ServiceUrlsConfig;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +20,9 @@ public class AuthController {
     private final RestTemplate restTemplate;
     private final String authServiceBase;
 
-    public AuthController(RestTemplateBuilder builder, @Value("${auth.service.url}") String authServiceUrl) {
+    public AuthController(RestTemplateBuilder builder, ServiceUrlsConfig serviceUrls) {
         this.restTemplate = builder.build();
-        this.authServiceBase = authServiceUrl + "/api/auth";
+        this.authServiceBase = serviceUrls.getAuthServiceUrl() + "/api/auth";
     }
 
     @PostMapping("/register")

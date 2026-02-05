@@ -19,6 +19,8 @@ public class TaskDTO {
     private String assignedToUsername;
     private Long userId;
 
+    private Long projectId;
+
     public TaskDTO(TaskDTOfrom taskDTOfrom, String assignedToUsername) {
         this.id = taskDTOfrom.getId();
         this.title = taskDTOfrom.getTitle();
@@ -28,6 +30,7 @@ public class TaskDTO {
         this.pointsForCompletion = taskDTOfrom.getPointsForCompletion();
         this.userId = taskDTOfrom.getUserId();
         this.assignedToUsername = assignedToUsername;
+        this.projectId = taskDTOfrom.getProjectId();
     }
 
 }

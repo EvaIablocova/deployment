@@ -1,6 +1,7 @@
 package com.example.api_gateway.Controller;
 
 import com.example.api_gateway.DTOs.ListDTO;
+import com.example.api_gateway.config.ServiceUrlsConfig;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,18 +13,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/api_gateway/lists")
 public class ListController {
 
     private final RestTemplate restTemplate;
-    private final String externalBase = "http://listmicroservice:9014/api/lists";
+    private final String externalBase;
 
-    public ListController(RestTemplateBuilder builder) {
+    public ListController(RestTemplateBuilder builder, ServiceUrlsConfig serviceUrls) {
         this.restTemplate = builder.build();
+        this.externalBase = serviceUrls.getListServiceUrl() + "/api/lists";
     }
 
     // --- CRUD ---

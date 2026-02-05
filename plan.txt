@@ -433,11 +433,17 @@ T-5: Add Recurring Task Engine
      - Scheduled job for task instance creation
      - Spring Scheduler or Quartz integration
 
-T-6: Frontend: Authentication Screens
+T-6: Frontend: Authentication Screens [TASK CREATED]
      - Login screen with form validation
      - Registration screen
      - Forgot password flow
      - Secure token storage (flutter_secure_storage)
+     - HTTP interceptor for auto-attach token
+     - Auth state management with Riverpod
+
+     Detailed Task: docs/TASK-Frontend-Auth-Implementation.md
+     Estimated Effort: 17 hours
+     Status: Ready for Development
 
 T-7: Frontend: Family Management Screens
      - Family creation wizard

@@ -1,6 +1,7 @@
 package com.example.api_gateway.Controller;
 
 import com.example.api_gateway.DTOs.CompetitionDTO;
+import com.example.api_gateway.config.ServiceUrlsConfig;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,11 @@ import java.util.Optional;
 public class CompetitionController {
 
     private final RestTemplate restTemplate;
-    private final String externalBase = "http://competitionmicroservice:9011/api/competitions";
+    private final String externalBase;
 
-    public CompetitionController(RestTemplateBuilder builder) {
+    public CompetitionController(RestTemplateBuilder builder, ServiceUrlsConfig serviceUrls) {
         this.restTemplate = builder.build();
+        this.externalBase = serviceUrls.getCompetitionServiceUrl() + "/api/competitions";
     }
 
     @GetMapping

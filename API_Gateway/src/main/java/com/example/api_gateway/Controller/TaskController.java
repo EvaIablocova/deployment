@@ -3,6 +3,7 @@ package com.example.api_gateway.Controller;
 import com.example.api_gateway.DTOs.TaskDTO;
 import com.example.api_gateway.DTOs.UserDTO;
 import com.example.api_gateway.DTOs.TaskDTOfrom;
+import com.example.api_gateway.config.ServiceUrlsConfig;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +20,14 @@ import java.util.ArrayList;
 public class TaskController {
 
     private final RestTemplate restTemplate;
-    private final String externalBase = "http://taskmicroservice:9010/api/tasks";
+    private final String externalBase;
 
     private final UserController userController;
 
-    public TaskController(RestTemplateBuilder builder, UserController userController) {
+    public TaskController(RestTemplateBuilder builder, UserController userController, ServiceUrlsConfig serviceUrls) {
         this.userController = userController;
         this.restTemplate = builder.build();
+        this.externalBase = serviceUrls.getTaskServiceUrl() + "/api/tasks";
     }
 
     private String getUsernameById(Long id) {

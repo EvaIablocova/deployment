@@ -14,6 +14,6 @@ public class TaskDTO {
     private int pointsForCompletion;
 
     private Long userId;
-
+    private Long projectId;
 
 }

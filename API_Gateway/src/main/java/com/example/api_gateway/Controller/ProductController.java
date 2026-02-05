@@ -1,6 +1,7 @@
 package com.example.api_gateway.Controller;
 
 import com.example.api_gateway.DTOs.ProductDTO;
+import com.example.api_gateway.config.ServiceUrlsConfig;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,11 @@ import java.util.Optional;
 public class ProductController {
 
     private final RestTemplate restTemplate;
-    private final String externalBase = "http://productmicroservice:9019/api/products";
+    private final String externalBase;
 
-    public ProductController(RestTemplateBuilder builder) {
+    public ProductController(RestTemplateBuilder builder, ServiceUrlsConfig serviceUrls) {
         this.restTemplate = builder.build();
+        this.externalBase = serviceUrls.getProductServiceUrl() + "/api/products";
     }
 
     // --- CRUD ---

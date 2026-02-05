@@ -1,6 +1,7 @@
 package com.example.api_gateway.Controller;
 
 import com.example.api_gateway.DTOs.ReportDTO;
+import com.example.api_gateway.config.ServiceUrlsConfig;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,11 @@ import java.util.Optional;
 public class ReportingController {
 
     private final RestTemplate restTemplate;
-    private final String externalBase = "http://reportingmicroservice:9017/api/reports/reports/users";
+    private final String externalBase;
 
-    public ReportingController(RestTemplateBuilder builder) {
+    public ReportingController(RestTemplateBuilder builder, ServiceUrlsConfig serviceUrls) {
         this.restTemplate = builder.build();
+        this.externalBase = serviceUrls.getReportingServiceUrl() + "/api/reports/reports/users";
     }
 
     @GetMapping
