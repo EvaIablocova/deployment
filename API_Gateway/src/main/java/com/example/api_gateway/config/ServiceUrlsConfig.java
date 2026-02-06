@@ -36,6 +36,9 @@ public class ServiceUrlsConfig {
     @Value("${service.product.url:http://productmicroservice:9019}")
     private String productServiceUrl;
 
+    @Value("${service.group.url:http://groupmicroservice:9021}")
+    private String groupServiceUrl;
+
     public String getAuthServiceUrl() {
         return authServiceUrl;
     }
@@ -74,5 +77,9 @@ public class ServiceUrlsConfig {
 
     public String getProductServiceUrl() {
         return productServiceUrl;
+    }
+
+    public String getGroupServiceUrl() {
+        return groupServiceUrl;
     }
 }

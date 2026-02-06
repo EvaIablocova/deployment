@@ -4,23 +4,25 @@ import com.example.database_microservice.model.User;
 import lombok.Data;
 
 @Data
-public class UserDTO {
+public class GroupMemberDTO {
 
     private Long id;
     private String username;
-    private String password;
     private int pointsScore;
     private String role;      // USER or PREMIUM_USER
-    private Long groupId;
+    private boolean isOwner;  // true if this user created the group
 
-    public UserDTO() { }
+    public GroupMemberDTO() { }
 
-    public UserDTO(User user) {
+    public GroupMemberDTO(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
-        this.password = user.getPassword();
         this.pointsScore = user.getPointsScore();
         this.role = user.getRole() != null ? user.getRole().name() : "USER";
-        this.groupId = user.getGroupId();
+    }
+
+    public GroupMemberDTO(User user, Long groupCreatedBy) {
+        this(user);
+        this.isOwner = user.getId().equals(groupCreatedBy);
     }
 }

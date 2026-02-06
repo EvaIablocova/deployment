@@ -1,6 +1,6 @@
 ================================================================================
                     PRODUCT DEVELOPMENT PLAN & USER STORIES
-                    Family Task Management & Gamification App
+                    Group Task Management & Gamification App
 ================================================================================
                     Date: 2026-02-04
                     Role: Product Manager / Solution Architect
@@ -55,7 +55,9 @@ Security Stack:
 -----------------------------------
 | Entity          | Fields                                          | Relations              |
 |-----------------|-------------------------------------------------|------------------------|
-| User            | id, username, password (BCrypt hash), pointsScore| -                     |
+| User            | id, username, password (BCrypt), pointsScore,   | ManyToOne: UserGroup   |
+|                 | groupId, role (USER/PREMIUM_USER)               |                        |
+| UserGroup       | id, name, inviteCode, createdAt, createdBy      | OneToMany: Users       |
 | Task            | id, title, description, dateToExecute, done,    | ManyToOne: User,       |
 |                 | pointsForCompletion                             | ManyToOne: Project     |
 | Project         | id, projectName, description                    | OneToMany: Tasks       |
@@ -184,27 +186,77 @@ US-1.4: Logout [PARTIAL - Stateless]
 
 --------------------------------------------------------------------------------
 
-EPIC 2: FAMILY/HOUSEHOLD MANAGEMENT
------------------------------------
-US-2.1: Create Family Group
-  As a parent/admin
-  I want to create a family group
-  So that I can invite my family members
+EPIC 2: GROUP/HOUSEHOLD MANAGEMENT [BACKEND COMPLETE]
+------------------------------------------------------
+Note: Renamed from "Family" to "Group" to support broader use cases
+(roommates, shared households, not just families).
 
-US-2.2: Invite Family Members
-  As a family admin
-  I want to invite members via email or code
-  So that they can join my family group
+Role System Changed:
+- USER: Free user - can join groups, complete tasks
+- PREMIUM_USER: Can create groups, add participants, full features
+- Only PREMIUM_USER can create groups and add members directly
 
-US-2.3: Assign Roles
-  As a family admin
-  I want to assign roles (Parent/Child/Admin)
-  So that permissions are properly managed
+US-2.1: Create Group [DONE - Backend]
+  As a premium user
+  I want to create a group
+  So that I can invite people I live with
 
-US-2.4: View Family Members
-  As a family member
-  I want to see all members of my family
-  So that I know who is part of my household
+  Acceptance Criteria:
+  - [X] Create group with name
+  - [X] Auto-generate 8-character invite code
+  - [X] Only PREMIUM_USER can create groups
+  - [X] Creator is marked as group owner (createdBy)
+
+  Implementation:
+  - POST /api_gateway/groups
+  - Request: {"name": "Apartment 4B", "createdBy": 1}
+  - Returns: group with inviteCode
+  - Returns 403 if user is not PREMIUM_USER
+
+US-2.2: Invite Group Members [DONE - Backend]
+  As a group owner
+  I want to invite members via code
+  So that they can join my group
+
+  Acceptance Criteria:
+  - [X] Generate unique invite code
+  - [X] Join group by invite code (anyone can use code)
+  - [X] Add member directly (only group owner/PREMIUM_USER)
+  - [X] Regenerate invite code
+
+  Implementation:
+  - GET /api_gateway/groups/invite/{code} - Preview group
+  - POST /api_gateway/groups/join - {"inviteCode": "ABC12345", "userId": 2}
+  - POST /api_gateway/groups/{groupId}/members/{userId} - Add member directly
+    Request: {"requesterId": 1} (must be PREMIUM_USER & group owner)
+  - POST /api_gateway/groups/{id}/regenerate-invite
+
+US-2.3: User Roles [CHANGED]
+  Roles are now account-level, not group-level:
+  - USER: Free tier - can join groups, complete tasks
+  - PREMIUM_USER: Paid tier - can create groups, add participants
+
+  Note: Role update endpoint removed. Roles are managed at
+  account level (e.g., through payment/upgrade flow).
+
+US-2.4: View Group Members [DONE - Backend]
+  As a group member
+  I want to see all members of my group
+  So that I know who I'm sharing tasks with
+
+  Acceptance Criteria:
+  - [X] List all group members
+  - [X] Show username, points, role
+  - [X] Indicate group owner (isOwner flag)
+
+  Implementation:
+  - GET /api_gateway/groups/{id}/members
+  - Returns: list of GroupMemberDTO
+
+Database Changes:
+  - UserGroup entity: id, name, inviteCode, createdAt, createdBy
+  - User entity: groupId, role (USER/PREMIUM_USER)
+  - UserRole enum: USER, PREMIUM_USER
 
 --------------------------------------------------------------------------------
 
@@ -413,10 +465,11 @@ T-1: Implement Authentication Microservice [DONE 2026-02-04]
      - Auth_microservice/src/main/java/.../DTOs/*.java
      - Auth_microservice/src/main/java/.../config/SecurityConfig.java
 
-T-2: Add Family Entity to Database
-     - Create Family model: id, name, createdBy, createdAt
-     - Create FamilyMember join table: familyId, userId, role
-     - Update User model with familyId reference
+T-2: Add Group Entity to Database [DONE 2026-02-06]
+     - [X] Create UserGroup model: id, name, inviteCode, createdBy, createdAt
+     - [X] Update User model with groupId, role (USER/PREMIUM_USER)
+     - [X] UserRole enum: USER, PREMIUM_USER
+     - [X] Only PREMIUM_USER can create groups and add participants
 
 T-3: Implement Notification Service
      - Firebase Cloud Messaging integration
@@ -445,10 +498,10 @@ T-6: Frontend: Authentication Screens [TASK CREATED]
      Estimated Effort: 17 hours
      Status: Ready for Development
 
-T-7: Frontend: Family Management Screens
-     - Family creation wizard
-     - Member invitation flow
-     - Family settings screen
+T-7: Frontend: Group Management Screens
+     - Group creation wizard (premium users only)
+     - Member invitation flow (invite code sharing)
+     - Group settings screen
 
 T-8: API Security [PARTIAL - 2026-02-04]
      - [X] Add JWT filter to API Gateway (JwtAuthenticationFilter.java)
@@ -484,10 +537,19 @@ SPRINT 1 (2 weeks): Authentication Foundation [BACKEND COMPLETE]
     -H "Content-Type: application/json" \
     -d '{"username": "john", "password": "SecurePass123!"}'
 
-SPRINT 2 (2 weeks): Family & Assignment
-- US-2.1, US-2.2, US-2.4, US-3.1
-- T-2, T-7
-- Deliverable: Families can be created, tasks assigned
+SPRINT 2 (2 weeks): Group & Assignment [BACKEND COMPLETE]
+- US-2.1 [DONE], US-2.2 [DONE], US-2.4 [DONE], US-3.1
+- T-2 [DONE], T-7 [TODO-Frontend]
+- Deliverable: Groups can be created, members invited
+- Status: Backend API ready, Frontend integration pending
+
+  API Endpoints Available:
+  - POST /api_gateway/groups - Create group (PREMIUM_USER only)
+  - GET /api_gateway/groups/{id} - Get group details
+  - GET /api_gateway/groups/{id}/members - List members
+  - POST /api_gateway/groups/join - Join by invite code
+  - POST /api_gateway/groups/{id}/members/{userId} - Add member directly
+  - POST /api_gateway/groups/{id}/regenerate-invite - New invite code
 
 SPRINT 3 (2 weeks): Gamification
 - US-3.3, US-4.1, US-4.2, US-4.3
@@ -525,10 +587,10 @@ I need clarification on the following to refine this plan:
    - Is email verification required?
    - What is the password policy?
 
-4. FAMILY STRUCTURE:
-   - Can a user belong to multiple families/households?
-   - What roles exist? (Admin/Parent/Child/Guest?)
-   - Can children create tasks or only complete them?
+4. GROUP STRUCTURE: [RESOLVED]
+   - User can belong to one group at a time
+   - Roles: USER (free), PREMIUM_USER (paid - can create groups)
+   - All users can create/complete tasks within their group
 
 5. GAMIFICATION:
    - What is the points-to-real-rewards system? (Allowance? Privileges?)
