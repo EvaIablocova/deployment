@@ -139,6 +139,15 @@ services:
       - "5017:5017"
     networks:
       - my_custom_microservices_network
+  mealplanmicroservice:
+    build: ./MealPlan_microservice
+    container_name: mealplanmicroservice
+    restart: always
+    ports:
+      - "9023:9023"
+      - "5018:5018"
+    networks:
+      - my_custom_microservices_network
 
 volumes:
   mysql_data:
