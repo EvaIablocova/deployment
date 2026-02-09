@@ -1,4 +1,4 @@
-package com.example.product_microservice.DTOs;
+package com.example.recipes_microservice.DTOs;
 
 import lombok.Data;
 

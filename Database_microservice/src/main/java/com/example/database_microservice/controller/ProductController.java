@@ -1,16 +1,15 @@
-package com.example.product_microservice.controller;
+package com.example.database_microservice.controller;
 
-import com.example.product_microservice.DTOs.ProductDTO;
-import com.example.product_microservice.service.ProductService;
+import com.example.database_microservice.DTOs.ProductDTO;
+import com.example.database_microservice.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/db/products")
 public class ProductController {
-
     private final ProductService productService;
 
     public ProductController(ProductService productService) {
@@ -38,7 +37,10 @@ public class ProductController {
     public List<ProductDTO> searchProducts(
             @RequestParam String name,
             @RequestParam(required = false) Long categoryId) {
-        return productService.searchProducts(name, categoryId);
+        if (categoryId != null) {
+            return productService.searchProductsByCategory(categoryId, name);
+        }
+        return productService.searchProducts(name);
     }
 
     @PostMapping
@@ -48,11 +50,15 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO updatedProductDTO) {
-        return productService.updateProduct(id, updatedProductDTO);
+        return productService.updateProduct(id, updatedProductDTO)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        return productService.deleteProduct(id);
+        return productService.deleteProduct(id)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 }

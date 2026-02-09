@@ -6,10 +6,18 @@ import lombok.Data;
 public class RecipeIngredientDTO {
     private Long id;
     private Long recipeId;
-    private Long groceryProductId;
-    private String groceryProductName;
+    private Long productId;
+    private String productName;
     private String customIngredientName;
     private Double quantity;
     private String unit;
     private String notes;
+    private boolean isCustom;
+
+    public String getIngredientDisplayName() {
+        if (productName != null) {
+            return productName;
+        }
+        return customIngredientName;
+    }
 }

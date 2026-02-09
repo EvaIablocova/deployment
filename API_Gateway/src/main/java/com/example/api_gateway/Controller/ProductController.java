@@ -49,6 +49,35 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/category/{categoryId}")
+    public List<ProductDTO> getProductsByCategory(@PathVariable Long categoryId) {
+        try {
+            ResponseEntity<ProductDTO[]> response = restTemplate.getForEntity(
+                    externalBase + "/category/" + categoryId, ProductDTO[].class);
+            ProductDTO[] body = response.getBody();
+            return Arrays.asList(Optional.ofNullable(body).orElse(new ProductDTO[0]));
+        } catch (RestClientException e) {
+            return List.of();
+        }
+    }
+
+    @GetMapping("/search")
+    public List<ProductDTO> searchProducts(
+            @RequestParam String name,
+            @RequestParam(required = false) Long categoryId) {
+        try {
+            String url = externalBase + "/search?name=" + name;
+            if (categoryId != null) {
+                url += "&categoryId=" + categoryId;
+            }
+            ResponseEntity<ProductDTO[]> response = restTemplate.getForEntity(url, ProductDTO[].class);
+            ProductDTO[] body = response.getBody();
+            return Arrays.asList(Optional.ofNullable(body).orElse(new ProductDTO[0]));
+        } catch (RestClientException e) {
+            return List.of();
+        }
+    }
+
     @PostMapping
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {
         try {

@@ -16,7 +16,7 @@ import java.util.Optional;
 public class ProductRepository {
 
     private final RestTemplate restTemplate;
-    private final String externalBase = "http://dbmicroservice:9009/db/groceryProduct";
+    private final String externalBase = "http://dbmicroservice:9009/db/products";
 
     public ProductRepository(RestTemplateBuilder builder) {
         this.restTemplate = builder.build();
@@ -39,6 +39,31 @@ public class ProductRepository {
             return ResponseEntity.ok(response.getBody());
         } catch (RestClientException e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    public List<ProductDTO> getProductsByCategory(Long categoryId) {
+        try {
+            ResponseEntity<ProductDTO[]> response = restTemplate.getForEntity(
+                    externalBase + "/category/" + categoryId, ProductDTO[].class);
+            ProductDTO[] body = response.getBody();
+            return Arrays.asList(Optional.ofNullable(body).orElse(new ProductDTO[0]));
+        } catch (RestClientException e) {
+            return List.of();
+        }
+    }
+
+    public List<ProductDTO> searchProducts(String name, Long categoryId) {
+        try {
+            String url = externalBase + "/search?name=" + name;
+            if (categoryId != null) {
+                url += "&categoryId=" + categoryId;
+            }
+            ResponseEntity<ProductDTO[]> response = restTemplate.getForEntity(url, ProductDTO[].class);
+            ProductDTO[] body = response.getBody();
+            return Arrays.asList(Optional.ofNullable(body).orElse(new ProductDTO[0]));
+        } catch (RestClientException e) {
+            return List.of();
         }
     }
 

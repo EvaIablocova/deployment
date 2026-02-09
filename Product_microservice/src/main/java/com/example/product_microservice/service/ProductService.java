@@ -26,6 +26,14 @@ public class ProductService {
                 .map(ResponseEntity::getBody);
     }
 
+    public List<ProductDTO> getProductsByCategory(Long categoryId) {
+        return productRepository.getProductsByCategory(categoryId);
+    }
+
+    public List<ProductDTO> searchProducts(String name, Long categoryId) {
+        return productRepository.searchProducts(name, categoryId);
+    }
+
     public ProductDTO createProduct(ProductDTO productDTO) {
         return productRepository.createProduct(productDTO).getBody();
     }

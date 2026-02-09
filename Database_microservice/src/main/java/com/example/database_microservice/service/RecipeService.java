@@ -3,11 +3,10 @@ package com.example.database_microservice.service;
 import com.example.database_microservice.DTOs.RecipeDTO;
 import com.example.database_microservice.DTOs.RecipeIngredientDTO;
 import com.example.database_microservice.DTOs.RecipeStepDTO;
-import com.example.database_microservice.model.GroceryProduct;
 import com.example.database_microservice.model.Recipe;
 import com.example.database_microservice.model.RecipeIngredient;
 import com.example.database_microservice.model.RecipeStep;
-import com.example.database_microservice.repository.GroceryProductRepository;
+import com.example.database_microservice.repository.ProductRepository;
 import com.example.database_microservice.repository.RecipeIngredientRepository;
 import com.example.database_microservice.repository.RecipeRepository;
 import com.example.database_microservice.repository.RecipeStepRepository;
@@ -22,16 +21,16 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeIngredientRepository ingredientRepository;
     private final RecipeStepRepository stepRepository;
-    private final GroceryProductRepository groceryProductRepository;
+    private final ProductRepository productRepository;
 
     public RecipeService(RecipeRepository recipeRepository,
                          RecipeIngredientRepository ingredientRepository,
                          RecipeStepRepository stepRepository,
-                         GroceryProductRepository groceryProductRepository) {
+                         ProductRepository productRepository) {
         this.recipeRepository = recipeRepository;
         this.ingredientRepository = ingredientRepository;
         this.stepRepository = stepRepository;
-        this.groceryProductRepository = groceryProductRepository;
+        this.productRepository = productRepository;
     }
 
     private RecipeDTO toDTO(Recipe recipe) {
@@ -63,9 +62,9 @@ public class RecipeService {
             for (RecipeIngredientDTO ingredientDTO : recipeDTO.getIngredients()) {
                 RecipeIngredient ingredient = new RecipeIngredient(ingredientDTO);
                 ingredient.setRecipe(savedRecipe);
-                if (ingredientDTO.getGroceryProductId() != null) {
-                    groceryProductRepository.findById(ingredientDTO.getGroceryProductId())
-                            .ifPresent(ingredient::setGroceryProduct);
+                if (ingredientDTO.getProductId() != null) {
+                    productRepository.findById(ingredientDTO.getProductId())
+                            .ifPresent(ingredient::setProduct);
                 }
                 ingredientRepository.save(ingredient);
             }
@@ -100,9 +99,9 @@ public class RecipeService {
                 for (RecipeIngredientDTO ingredientDTO : recipeDTO.getIngredients()) {
                     RecipeIngredient ingredient = new RecipeIngredient(ingredientDTO);
                     ingredient.setRecipe(recipe);
-                    if (ingredientDTO.getGroceryProductId() != null) {
-                        groceryProductRepository.findById(ingredientDTO.getGroceryProductId())
-                                .ifPresent(ingredient::setGroceryProduct);
+                    if (ingredientDTO.getProductId() != null) {
+                        productRepository.findById(ingredientDTO.getProductId())
+                                .ifPresent(ingredient::setProduct);
                     }
                     recipe.getIngredients().add(ingredient);
                 }
@@ -142,9 +141,9 @@ public class RecipeService {
         return recipeRepository.findById(recipeId).map(recipe -> {
             RecipeIngredient ingredient = new RecipeIngredient(ingredientDTO);
             ingredient.setRecipe(recipe);
-            if (ingredientDTO.getGroceryProductId() != null) {
-                groceryProductRepository.findById(ingredientDTO.getGroceryProductId())
-                        .ifPresent(ingredient::setGroceryProduct);
+            if (ingredientDTO.getProductId() != null) {
+                productRepository.findById(ingredientDTO.getProductId())
+                        .ifPresent(ingredient::setProduct);
             }
             return new RecipeIngredientDTO(ingredientRepository.save(ingredient));
         });
@@ -157,11 +156,11 @@ public class RecipeService {
             ingredient.setUnit(ingredientDTO.getUnit());
             ingredient.setNotes(ingredientDTO.getNotes());
             ingredient.setCustomIngredientName(ingredientDTO.getCustomIngredientName());
-            if (ingredientDTO.getGroceryProductId() != null) {
-                groceryProductRepository.findById(ingredientDTO.getGroceryProductId())
-                        .ifPresent(ingredient::setGroceryProduct);
+            if (ingredientDTO.getProductId() != null) {
+                productRepository.findById(ingredientDTO.getProductId())
+                        .ifPresent(ingredient::setProduct);
             } else {
-                ingredient.setGroceryProduct(null);
+                ingredient.setProduct(null);
             }
             return new RecipeIngredientDTO(ingredientRepository.save(ingredient));
         });

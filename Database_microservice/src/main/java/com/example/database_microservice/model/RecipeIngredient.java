@@ -19,8 +19,8 @@ public class RecipeIngredient {
     private Recipe recipe;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "grocery_product_id")
-    private GroceryProduct groceryProduct;
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @Column(length = 150)
     private String customIngredientName;
@@ -42,5 +42,16 @@ public class RecipeIngredient {
         this.unit = dto.getUnit();
         this.notes = dto.getNotes();
         this.customIngredientName = dto.getCustomIngredientName();
+    }
+
+    public String getIngredientName() {
+        if (product != null) {
+            return product.getNameOfProduct();
+        }
+        return customIngredientName;
+    }
+
+    public boolean isCustomIngredient() {
+        return product == null && customIngredientName != null;
     }
 }
