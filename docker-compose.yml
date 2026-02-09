@@ -130,6 +130,15 @@ services:
       - "5016:5016"
     networks:
       - my_custom_microservices_network
+  recipesmicroservice:
+    build: ./Recipes_microservice
+    container_name: recipesmicroservice
+    restart: always
+    ports:
+      - "9022:9022"
+      - "5017:5017"
+    networks:
+      - my_custom_microservices_network
 
 volumes:
   mysql_data:
