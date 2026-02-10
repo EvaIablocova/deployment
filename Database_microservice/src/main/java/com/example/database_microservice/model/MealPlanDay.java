@@ -28,7 +28,7 @@ public class MealPlanDay {
     @Column(name = "day_of_week")
     private Integer dayOfWeek;
 
-    @OneToMany(mappedBy = "mealPlanDay", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "mealPlanDay", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @OrderBy("mealType ASC, sortOrder ASC")
     private List<MealPlanItem> items = new ArrayList<>();
 

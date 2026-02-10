@@ -5,6 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HouseMate Database Schema</title>
     <link rel="stylesheet" href="db-schema.css">
+    <style>
+        /* Additional styles for expanded schema */
+        .diagram {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+        .section-header {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #00d9ff;
+            margin: 20px 0 10px 0;
+        }
+        .section-header h2 {
+            margin: 0;
+            color: #00d9ff;
+            font-size: 1.2em;
+        }
+        .section-header p {
+            margin: 5px 0 0 0;
+            color: #888;
+            font-size: 0.9em;
+        }
+        .table-card {
+            background: linear-gradient(135deg, #1e1e2e 0%, #252536 100%);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid #333;
+        }
+        .table-card.highlight {
+            border-color: #00d9ff;
+        }
+        .table-header {
+            background: linear-gradient(135deg, #2d2d44 0%, #3d3d5c 100%);
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .table-icon {
+            font-size: 1.3em;
+        }
+        .table-name {
+            font-weight: bold;
+            color: #fff;
+        }
+        .table-body {
+            padding: 10px;
+        }
+        .column {
+            display: grid;
+            grid-template-columns: 50px 1fr auto;
+            gap: 8px;
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+        .column:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .column.pk {
+            background: rgba(0, 217, 255, 0.1);
+        }
+        .column.fk {
+            background: rgba(155, 89, 182, 0.1);
+        }
+        .column-key {
+            font-size: 0.7em;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 3px;
+            text-align: center;
+        }
+        .column.pk .column-key {
+            background: #00d9ff;
+            color: #000;
+        }
+        .column.fk .column-key {
+            background: #9b59b6;
+            color: #fff;
+        }
+        .column-name {
+            color: #fff;
+        }
+        .column-type {
+            color: #888;
+            font-size: 0.85em;
+        }
+        .enum-badge {
+            display: inline-block;
+            background: #e74c3c;
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.7em;
+            margin-left: 5px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -13,37 +115,15 @@
 
         <div class="diagram-wrapper">
             <div class="diagram">
-                <!-- SVG for relationship lines -->
-                <svg class="relationships" id="relationshipsSvg">
-                    <!-- Task -> User (Many-to-One) -->
-                    <g class="relationship" data-from="task" data-to="user">
-                        <path class="relation-line" id="task-user-line"/>
-                        <polygon class="arrow-one" id="task-user-arrow"/>
-                        <text class="relation-label" id="task-user-label">N:1</text>
-                    </g>
 
-                    <!-- Task -> Project (Many-to-One) -->
-                    <g class="relationship" data-from="task" data-to="project">
-                        <path class="relation-line" id="task-project-line"/>
-                        <polygon class="arrow-one" id="task-project-arrow"/>
-                        <text class="relation-label" id="task-project-label">N:1</text>
-                    </g>
+                <!-- ==================== CORE SECTION ==================== -->
+                <div class="section-header">
+                    <h2>Core Entities</h2>
+                    <p>Users, Groups, Tasks, Projects, Competitions</p>
+                </div>
 
-                    <!-- Competition -> competition_participants -->
-                    <g class="relationship" data-from="competition" data-to="competition-participants">
-                        <path class="relation-line many" id="comp-participants-line"/>
-                        <text class="relation-label" id="comp-participants-label">1:N</text>
-                    </g>
-
-                    <!-- competition_participants -> User -->
-                    <g class="relationship" data-from="competition-participants" data-to="user">
-                        <path class="relation-line many" id="participants-user-line"/>
-                        <text class="relation-label" id="participants-user-label">N:1</text>
-                    </g>
-                </svg>
-
-                <!-- Row 1: User, Project, Competition -->
-                <div class="table-card" id="user" style="grid-area: user;">
+                <!-- Users Table -->
+                <div class="table-card highlight" id="user">
                     <div class="table-header">
                         <span class="table-icon">👤</span>
                         <span class="table-name">users</span>
@@ -70,11 +150,45 @@
                             <span class="column-type">INT</span>
                         </div>
                     </div>
-                    <div class="connector connector-right" id="user-connector-right"></div>
-                    <div class="connector connector-bottom" id="user-connector-bottom"></div>
                 </div>
 
-                <div class="table-card" id="project" style="grid-area: project;">
+                <!-- Groups Table -->
+                <div class="table-card highlight" id="groups">
+                    <div class="table-header">
+                        <span class="table-icon">👥</span>
+                        <span class="table-name">groups</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">name</span>
+                            <span class="column-type">VARCHAR(150)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">description</span>
+                            <span class="column-type">TEXT</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">created_by</span>
+                            <span class="column-type">BIGINT → users.id</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">created_at</span>
+                            <span class="column-type">DATETIME</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projects Table -->
+                <div class="table-card" id="project">
                     <div class="table-header">
                         <span class="table-icon">📁</span>
                         <span class="table-name">projects</span>
@@ -96,36 +210,10 @@
                             <span class="column-type">TEXT</span>
                         </div>
                     </div>
-                    <div class="connector connector-bottom" id="project-connector-bottom"></div>
                 </div>
 
-                <div class="table-card" id="competition" style="grid-area: competition;">
-                    <div class="table-header">
-                        <span class="table-icon">🏆</span>
-                        <span class="table-name">competition</span>
-                    </div>
-                    <div class="table-body">
-                        <div class="column pk">
-                            <span class="column-key">PK</span>
-                            <span class="column-name">id</span>
-                            <span class="column-type">BIGINT</span>
-                        </div>
-                        <div class="column">
-                            <span class="column-key"></span>
-                            <span class="column-name">goal</span>
-                            <span class="column-type">VARCHAR(255)</span>
-                        </div>
-                        <div class="column">
-                            <span class="column-key"></span>
-                            <span class="column-name">type</span>
-                            <span class="column-type">VARCHAR(255)</span>
-                        </div>
-                    </div>
-                    <div class="connector connector-bottom" id="competition-connector-bottom"></div>
-                </div>
-
-                <!-- Row 2: Task, Competition Participants -->
-                <div class="table-card" id="task" style="grid-area: task;">
+                <!-- Task Table -->
+                <div class="table-card" id="task">
                     <div class="table-header">
                         <span class="table-icon">✅</span>
                         <span class="table-name">task</span>
@@ -172,11 +260,35 @@
                             <span class="column-type">BIGINT → projects.id</span>
                         </div>
                     </div>
-                    <div class="connector connector-top" id="task-connector-top"></div>
-                    <div class="connector connector-left" id="task-connector-left"></div>
                 </div>
 
-                <div class="table-card join-table" id="competition-participants" style="grid-area: join;">
+                <!-- Competition Table -->
+                <div class="table-card" id="competition">
+                    <div class="table-header">
+                        <span class="table-icon">🏆</span>
+                        <span class="table-name">competition</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">goal</span>
+                            <span class="column-type">VARCHAR(255)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">type</span>
+                            <span class="column-type">VARCHAR(255)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Competition Participants (Join Table) -->
+                <div class="table-card" id="competition-participants">
                     <div class="table-header">
                         <span class="table-icon">🔗</span>
                         <span class="table-name">competition_participants</span>
@@ -193,60 +305,10 @@
                             <span class="column-type">BIGINT → users.id</span>
                         </div>
                     </div>
-                    <div class="connector connector-top" id="join-connector-top"></div>
-                    <div class="connector connector-left" id="join-connector-left"></div>
                 </div>
 
-                <!-- Row 3: Lists, ListItem, Feedback, GroceryProduct -->
-                <div class="table-card standalone" id="lists" style="grid-area: lists;">
-                    <div class="table-header">
-                        <span class="table-icon">📋</span>
-                        <span class="table-name">lists</span>
-                    </div>
-                    <div class="table-body">
-                        <div class="column pk">
-                            <span class="column-key">PK</span>
-                            <span class="column-name">id</span>
-                            <span class="column-type">BIGINT</span>
-                        </div>
-                        <div class="column">
-                            <span class="column-key"></span>
-                            <span class="column-name">title</span>
-                            <span class="column-type">VARCHAR(150)</span>
-                        </div>
-                        <div class="column">
-                            <span class="column-key"></span>
-                            <span class="column-name">description</span>
-                            <span class="column-type">TEXT</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="table-card standalone" id="list-item" style="grid-area: listitem;">
-                    <div class="table-header">
-                        <span class="table-icon">📝</span>
-                        <span class="table-name">list_item</span>
-                    </div>
-                    <div class="table-body">
-                        <div class="column pk">
-                            <span class="column-key">PK</span>
-                            <span class="column-name">id</span>
-                            <span class="column-type">BIGINT</span>
-                        </div>
-                        <div class="column">
-                            <span class="column-key"></span>
-                            <span class="column-name">text_of_item</span>
-                            <span class="column-type">VARCHAR(150)</span>
-                        </div>
-                        <div class="column">
-                            <span class="column-key"></span>
-                            <span class="column-name">done</span>
-                            <span class="column-type">BOOLEAN</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="table-card standalone" id="feedback" style="grid-area: feedback;">
+                <!-- Feedback Table -->
+                <div class="table-card" id="feedback">
                     <div class="table-header">
                         <span class="table-icon">💬</span>
                         <span class="table-name">feedback</span>
@@ -270,10 +332,55 @@
                     </div>
                 </div>
 
-                <div class="table-card standalone" id="grocery-product" style="grid-area: grocery;">
+                <!-- Empty placeholder for alignment -->
+                <div></div>
+
+                <!-- ==================== PRODUCTS SECTION ==================== -->
+                <div class="section-header">
+                    <h2>Products & Categories</h2>
+                    <p>Product catalog with category management</p>
+                </div>
+
+                <!-- Product Category Table -->
+                <div class="table-card highlight" id="product-category">
+                    <div class="table-header">
+                        <span class="table-icon">📂</span>
+                        <span class="table-name">product_category</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">name</span>
+                            <span class="column-type">VARCHAR(100) UNIQUE</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">description</span>
+                            <span class="column-type">TEXT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">icon</span>
+                            <span class="column-type">VARCHAR(50)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">display_order</span>
+                            <span class="column-type">INT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Table -->
+                <div class="table-card highlight" id="product">
                     <div class="table-header">
                         <span class="table-icon">🛒</span>
-                        <span class="table-name">grocery_product</span>
+                        <span class="table-name">product</span>
                     </div>
                     <div class="table-body">
                         <div class="column pk">
@@ -291,37 +398,462 @@
                             <span class="column-name">description</span>
                             <span class="column-type">TEXT</span>
                         </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">category_id</span>
+                            <span class="column-type">BIGINT → product_category.id</span>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Empty placeholders for alignment -->
+                <div></div>
+                <div></div>
+
+                <!-- ==================== RECIPES SECTION ==================== -->
+                <div class="section-header">
+                    <h2>Recipes</h2>
+                    <p>Recipes with ingredients and cooking steps</p>
+                </div>
+
+                <!-- Recipe Table -->
+                <div class="table-card highlight" id="recipe">
+                    <div class="table-header">
+                        <span class="table-icon">🍳</span>
+                        <span class="table-name">recipe</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">title</span>
+                            <span class="column-type">VARCHAR(200)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">description</span>
+                            <span class="column-type">TEXT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">prep_time_minutes</span>
+                            <span class="column-type">INT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">cook_time_minutes</span>
+                            <span class="column-type">INT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">servings</span>
+                            <span class="column-type">INT</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">created_by</span>
+                            <span class="column-type">BIGINT → users.id</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">group_id</span>
+                            <span class="column-type">BIGINT → groups.id</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">created_at</span>
+                            <span class="column-type">DATETIME</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipe Ingredient Table -->
+                <div class="table-card" id="recipe-ingredient">
+                    <div class="table-header">
+                        <span class="table-icon">🥕</span>
+                        <span class="table-name">recipe_ingredient</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">recipe_id</span>
+                            <span class="column-type">BIGINT → recipe.id</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">product_id</span>
+                            <span class="column-type">BIGINT → product.id (nullable)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">custom_ingredient_name</span>
+                            <span class="column-type">VARCHAR(150)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">quantity</span>
+                            <span class="column-type">DOUBLE</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">unit</span>
+                            <span class="column-type">VARCHAR(50)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">notes</span>
+                            <span class="column-type">TEXT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipe Step Table -->
+                <div class="table-card" id="recipe-step">
+                    <div class="table-header">
+                        <span class="table-icon">📝</span>
+                        <span class="table-name">recipe_step</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">recipe_id</span>
+                            <span class="column-type">BIGINT → recipe.id</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">step_number</span>
+                            <span class="column-type">INT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">instruction</span>
+                            <span class="column-type">TEXT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">duration_minutes</span>
+                            <span class="column-type">INT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty placeholder for alignment -->
+                <div></div>
+
+                <!-- ==================== MEAL PLANS SECTION ==================== -->
+                <div class="section-header">
+                    <h2>Meal Plans</h2>
+                    <p>Weekly meal planning with breakfast, lunch, dinner</p>
+                </div>
+
+                <!-- Meal Plan Table -->
+                <div class="table-card highlight" id="meal-plan">
+                    <div class="table-header">
+                        <span class="table-icon">📅</span>
+                        <span class="table-name">meal_plan</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">name</span>
+                            <span class="column-type">VARCHAR(150)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">description</span>
+                            <span class="column-type">TEXT</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">group_id</span>
+                            <span class="column-type">BIGINT → groups.id</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">created_by</span>
+                            <span class="column-type">BIGINT → users.id</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">start_date</span>
+                            <span class="column-type">DATE</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">end_date</span>
+                            <span class="column-type">DATE</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">created_at</span>
+                            <span class="column-type">DATETIME</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meal Plan Day Table -->
+                <div class="table-card" id="meal-plan-day">
+                    <div class="table-header">
+                        <span class="table-icon">📆</span>
+                        <span class="table-name">meal_plan_day</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">meal_plan_id</span>
+                            <span class="column-type">BIGINT → meal_plan.id</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">date</span>
+                            <span class="column-type">DATE</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">day_of_week</span>
+                            <span class="column-type">INT (1-7)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meal Plan Item Table -->
+                <div class="table-card" id="meal-plan-item">
+                    <div class="table-header">
+                        <span class="table-icon">🍽️</span>
+                        <span class="table-name">meal_plan_item</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">meal_plan_day_id</span>
+                            <span class="column-type">BIGINT → meal_plan_day.id</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">meal_type</span>
+                            <span class="column-type">ENUM<span class="enum-badge">MealType</span></span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">recipe_id</span>
+                            <span class="column-type">BIGINT → recipe.id (nullable)</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">product_id</span>
+                            <span class="column-type">BIGINT → product.id (nullable)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">custom_meal</span>
+                            <span class="column-type">VARCHAR(200)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">notes</span>
+                            <span class="column-type">TEXT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">servings</span>
+                            <span class="column-type">INT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">sort_order</span>
+                            <span class="column-type">INT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty placeholder for alignment -->
+                <div></div>
+
+                <!-- ==================== SHOPPING LISTS SECTION ==================== -->
+                <div class="section-header">
+                    <h2>Shopping Lists</h2>
+                    <p>Shopping lists with items from products, recipes, or custom entries</p>
+                </div>
+
+                <!-- Lists Table -->
+                <div class="table-card highlight" id="lists">
+                    <div class="table-header">
+                        <span class="table-icon">📋</span>
+                        <span class="table-name">lists</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">title</span>
+                            <span class="column-type">VARCHAR(150)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">description</span>
+                            <span class="column-type">TEXT</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">group_id</span>
+                            <span class="column-type">BIGINT → groups.id</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">created_by</span>
+                            <span class="column-type">BIGINT → users.id</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">list_type</span>
+                            <span class="column-type">ENUM<span class="enum-badge">ListType</span></span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">created_at</span>
+                            <span class="column-type">DATETIME</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">updated_at</span>
+                            <span class="column-type">DATETIME</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- List Item Table -->
+                <div class="table-card" id="list-item">
+                    <div class="table-header">
+                        <span class="table-icon">🛍️</span>
+                        <span class="table-name">list_item</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="column pk">
+                            <span class="column-key">PK</span>
+                            <span class="column-name">id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">list_id</span>
+                            <span class="column-type">BIGINT → lists.id</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">text_of_item</span>
+                            <span class="column-type">VARCHAR(255)</span>
+                        </div>
+                        <div class="column fk">
+                            <span class="column-key">FK</span>
+                            <span class="column-name">product_id</span>
+                            <span class="column-type">BIGINT → product.id (nullable)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">quantity</span>
+                            <span class="column-type">DOUBLE</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">unit</span>
+                            <span class="column-type">VARCHAR(50)</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">source_meal_plan_id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">source_recipe_id</span>
+                            <span class="column-type">BIGINT</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">item_type</span>
+                            <span class="column-type">ENUM<span class="enum-badge">ListItemType</span></span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">done</span>
+                            <span class="column-type">BOOLEAN</span>
+                        </div>
+                        <div class="column">
+                            <span class="column-key"></span>
+                            <span class="column-name">sort_order</span>
+                            <span class="column-type">INT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty placeholders for alignment -->
+                <div></div>
+                <div></div>
+
             </div>
         </div>
 
-        <!-- Legend -->
+        <!-- Enums Reference -->
         <div class="legend">
-            <h3>Relationships</h3>
-            <div class="legend-items">
-                <div class="legend-item">
-                    <svg width="80" height="30">
-                        <line x1="5" y1="15" x2="50" y2="15" stroke="#00d9ff" stroke-width="2"/>
-                        <polygon points="50,10 60,15 50,20" fill="#00d9ff"/>
-                        <text x="62" y="19" fill="#888" font-size="10">1</text>
-                        <line x1="5" y1="10" x2="5" y2="20" stroke="#00d9ff" stroke-width="2"/>
-                        <line x1="5" y1="10" x2="12" y2="15" stroke="#00d9ff" stroke-width="2"/>
-                        <line x1="5" y1="20" x2="12" y2="15" stroke="#00d9ff" stroke-width="2"/>
-                    </svg>
-                    <span>Many-to-One (N:1)</span>
+            <h3>Enum Types</h3>
+            <div class="legend-items" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                <div class="legend-item" style="flex-direction: column; align-items: flex-start;">
+                    <strong style="color: #e74c3c;">MealType</strong>
+                    <ul style="margin: 5px 0; padding-left: 20px; color: #888;">
+                        <li>BREAKFAST</li>
+                        <li>LUNCH</li>
+                        <li>DINNER</li>
+                        <li>SNACK</li>
+                    </ul>
                 </div>
-                <div class="legend-item">
-                    <svg width="80" height="30">
-                        <line x1="5" y1="15" x2="55" y2="15" stroke="#9b59b6" stroke-width="2"/>
-                        <line x1="5" y1="10" x2="5" y2="20" stroke="#9b59b6" stroke-width="2"/>
-                        <line x1="5" y1="10" x2="12" y2="15" stroke="#9b59b6" stroke-width="2"/>
-                        <line x1="5" y1="20" x2="12" y2="15" stroke="#9b59b6" stroke-width="2"/>
-                        <line x1="55" y1="10" x2="55" y2="20" stroke="#9b59b6" stroke-width="2"/>
-                        <line x1="55" y1="10" x2="48" y2="15" stroke="#9b59b6" stroke-width="2"/>
-                        <line x1="55" y1="20" x2="48" y2="15" stroke="#9b59b6" stroke-width="2"/>
-                    </svg>
-                    <span>Many-to-Many (M:N)</span>
+                <div class="legend-item" style="flex-direction: column; align-items: flex-start;">
+                    <strong style="color: #e74c3c;">ListType</strong>
+                    <ul style="margin: 5px 0; padding-left: 20px; color: #888;">
+                        <li>SHOPPING</li>
+                        <li>TODO</li>
+                        <li>CUSTOM</li>
+                    </ul>
+                </div>
+                <div class="legend-item" style="flex-direction: column; align-items: flex-start;">
+                    <strong style="color: #e74c3c;">ListItemType</strong>
+                    <ul style="margin: 5px 0; padding-left: 20px; color: #888;">
+                        <li>PRODUCT</li>
+                        <li>CUSTOM</li>
+                        <li>RECIPE_INGREDIENT</li>
+                    </ul>
                 </div>
             </div>
 
@@ -340,6 +872,16 @@
                     <span>Composite Key</span>
                 </div>
             </div>
+
+            <h3 style="margin-top: 20px;">Relationships Summary</h3>
+            <div style="color: #888; font-size: 0.9em; line-height: 1.8;">
+                <p><strong>Users</strong> → Groups (creator), Tasks (assigned), Recipes (creator), MealPlans (creator), Lists (creator)</p>
+                <p><strong>Groups</strong> → Recipes, MealPlans, Lists</p>
+                <p><strong>Products</strong> → Categories, RecipeIngredients, MealPlanItems, ListItems</p>
+                <p><strong>Recipes</strong> → RecipeIngredients (1:N), RecipeSteps (1:N), MealPlanItems</p>
+                <p><strong>MealPlans</strong> → MealPlanDays (1:N) → MealPlanItems (1:N)</p>
+                <p><strong>Lists</strong> → ListItems (1:N)</p>
+            </div>
         </div>
 
         <footer>
@@ -347,91 +889,5 @@
             <p>MySQL 8.0 | Spring Data JPA | Hibernate</p>
         </footer>
     </div>
-
-    <script>
-        // Draw relationship lines
-        function drawRelationships() {
-            const svg = document.getElementById('relationshipsSvg');
-            const diagram = document.querySelector('.diagram');
-
-            // Get bounding rect of diagram for offset calculation
-            const diagramRect = diagram.getBoundingClientRect();
-
-            // Helper function to get element center
-            function getElementPos(id, side) {
-                const el = document.getElementById(id);
-                if (!el) return null;
-                const rect = el.getBoundingClientRect();
-                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-                switch(side) {
-                    case 'top':
-                        return { x: rect.left + rect.width/2 - diagramRect.left, y: rect.top - diagramRect.top };
-                    case 'bottom':
-                        return { x: rect.left + rect.width/2 - diagramRect.left, y: rect.bottom - diagramRect.top };
-                    case 'left':
-                        return { x: rect.left - diagramRect.left, y: rect.top + rect.height/2 - diagramRect.top };
-                    case 'right':
-                        return { x: rect.right - diagramRect.left, y: rect.top + rect.height/2 - diagramRect.top };
-                    default:
-                        return { x: rect.left + rect.width/2 - diagramRect.left, y: rect.top + rect.height/2 - diagramRect.top };
-                }
-            }
-
-            // Draw Task -> User relationship
-            const taskPos = getElementPos('task', 'left');
-            const userPos = getElementPos('user', 'bottom');
-            if (taskPos && userPos) {
-                const path = document.getElementById('task-user-line');
-                const midY = (taskPos.y + userPos.y) / 2;
-                path.setAttribute('d', `M ${taskPos.x} ${taskPos.y} L ${userPos.x} ${taskPos.y} L ${userPos.x} ${userPos.y}`);
-
-                const label = document.getElementById('task-user-label');
-                label.setAttribute('x', userPos.x + 10);
-                label.setAttribute('y', midY);
-            }
-
-            // Draw Task -> Project relationship
-            const taskTopPos = getElementPos('task', 'top');
-            const projectPos = getElementPos('project', 'bottom');
-            if (taskTopPos && projectPos) {
-                const path = document.getElementById('task-project-line');
-                path.setAttribute('d', `M ${taskTopPos.x} ${taskTopPos.y} L ${taskTopPos.x} ${projectPos.y + 20} L ${projectPos.x} ${projectPos.y + 20} L ${projectPos.x} ${projectPos.y}`);
-
-                const label = document.getElementById('task-project-label');
-                label.setAttribute('x', (taskTopPos.x + projectPos.x) / 2);
-                label.setAttribute('y', projectPos.y + 15);
-            }
-
-            // Draw Competition -> competition_participants relationship
-            const compPos = getElementPos('competition', 'bottom');
-            const joinTopPos = getElementPos('competition-participants', 'top');
-            if (compPos && joinTopPos) {
-                const path = document.getElementById('comp-participants-line');
-                path.setAttribute('d', `M ${compPos.x} ${compPos.y} L ${compPos.x} ${joinTopPos.y - 20} L ${joinTopPos.x} ${joinTopPos.y - 20} L ${joinTopPos.x} ${joinTopPos.y}`);
-
-                const label = document.getElementById('comp-participants-label');
-                label.setAttribute('x', (compPos.x + joinTopPos.x) / 2);
-                label.setAttribute('y', joinTopPos.y - 25);
-            }
-
-            // Draw competition_participants -> User relationship
-            const joinLeftPos = getElementPos('competition-participants', 'left');
-            const userRightPos = getElementPos('user', 'right');
-            if (joinLeftPos && userRightPos) {
-                const path = document.getElementById('participants-user-line');
-                path.setAttribute('d', `M ${joinLeftPos.x} ${joinLeftPos.y} L ${userRightPos.x + 40} ${joinLeftPos.y} L ${userRightPos.x + 40} ${userRightPos.y} L ${userRightPos.x} ${userRightPos.y}`);
-
-                const label = document.getElementById('participants-user-label');
-                label.setAttribute('x', userRightPos.x + 45);
-                label.setAttribute('y', (joinLeftPos.y + userRightPos.y) / 2);
-            }
-        }
-
-        // Redraw on load and resize
-        window.addEventListener('load', drawRelationships);
-        window.addEventListener('resize', drawRelationships);
-    </script>
 </body>
 </html>

@@ -26,7 +26,7 @@ class ListControllerTest {
     private ListController listController;
 
     @Test
-    void getAllLists_returnsList_andCallsServiceTwice() {
+    void getAllLists_returnsList() {
         ListDTO dto1 = mock(ListDTO.class);
         ListDTO dto2 = mock(ListDTO.class);
         List<ListDTO> expected = Arrays.asList(dto1, dto2);
@@ -37,8 +37,7 @@ class ListControllerTest {
 
         assertNotNull(result);
         assertEquals(expected, result);
-        // controller currently calls listService.getAllLists() twice (assigns then returns service call)
-        verify(listService, times(2)).getAllLists();
+        verify(listService, times(1)).getAllLists();
     }
 
     @Test

@@ -103,5 +103,16 @@ public class UserController {
         }
     }
 
+    @PutMapping("/{id}/upgrade-to-premium")
+    public ResponseEntity<UserDTO> upgradeToPremium(@PathVariable Long id) {
+        try {
+            restTemplate.put(externalBase + "/" + id + "/upgrade-to-premium", null);
+            ResponseEntity<UserDTO> response =
+                    restTemplate.getForEntity(externalBase + "/" + id, UserDTO.class);
+            return ResponseEntity.ok(response.getBody());
+        } catch (RestClientException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }

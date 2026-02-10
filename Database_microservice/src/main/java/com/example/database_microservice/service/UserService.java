@@ -2,6 +2,7 @@ package com.example.database_microservice.service;
 
 import com.example.database_microservice.DTOs.UserDTO;
 import com.example.database_microservice.model.User;
+import com.example.database_microservice.model.UserRole;
 import com.example.database_microservice.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -84,6 +85,13 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public Optional<UserDTO> upgradeToPremium(Long userId) {
+        return userRepository.findById(userId).map(user -> {
+            user.setRole(UserRole.PREMIUM_USER);
+            return toDTO(userRepository.save(user));
+        });
     }
 
 }

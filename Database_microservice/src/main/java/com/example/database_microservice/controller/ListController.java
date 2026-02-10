@@ -1,13 +1,13 @@
 package com.example.database_microservice.controller;
 
+import com.example.database_microservice.DTOs.AddFromMealPlanDTO;
 import com.example.database_microservice.DTOs.ListDTO;
+import com.example.database_microservice.model.ListType;
 import com.example.database_microservice.service.ListService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequestMapping("/db/lists")
@@ -20,7 +20,6 @@ public class ListController {
 
     @GetMapping
     public List<ListDTO> getAllLists() {
-        List<ListDTO> lists = listService.getAllLists();
         return listService.getAllLists();
     }
 
@@ -29,6 +28,22 @@ public class ListController {
         return listService.getListById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/group/{groupId}")
+    public List<ListDTO> getListsByGroupId(@PathVariable Long groupId) {
+        return listService.getListsByGroupId(groupId);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<ListDTO> getListsByCreatedBy(@PathVariable Long userId) {
+        return listService.getListsByCreatedBy(userId);
+    }
+
+    @GetMapping("/group/{groupId}/type/{listType}")
+    public List<ListDTO> getListsByGroupIdAndType(@PathVariable Long groupId,
+                                                   @PathVariable ListType listType) {
+        return listService.getListsByGroupIdAndType(groupId, listType);
     }
 
     @PostMapping
@@ -48,6 +63,16 @@ public class ListController {
         return listService.deleteList(id)
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/add-from-mealplan")
+    public ResponseEntity<ListDTO> addIngredientsFromMealPlan(@RequestBody AddFromMealPlanDTO request) {
+        try {
+            ListDTO result = listService.addIngredientsFromMealPlan(request);
+            return ResponseEntity.ok(result);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

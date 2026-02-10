@@ -18,7 +18,6 @@ public class ListItemController {
 
     @GetMapping
     public List<ListItemDTO> getAllListItems() {
-        List<ListItemDTO> listItems = listItemService.getAllListItems();
         return listItemService.getAllListItems();
     }
 
@@ -29,9 +28,24 @@ public class ListItemController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/list/{listId}")
+    public List<ListItemDTO> getItemsByListId(@PathVariable Long listId) {
+        return listItemService.getItemsByListId(listId);
+    }
+
+    @GetMapping("/list/{listId}/pending")
+    public List<ListItemDTO> getPendingItemsByListId(@PathVariable Long listId) {
+        return listItemService.getItemsByListIdAndDone(listId, false);
+    }
+
+    @GetMapping("/list/{listId}/done")
+    public List<ListItemDTO> getDoneItemsByListId(@PathVariable Long listId) {
+        return listItemService.getItemsByListIdAndDone(listId, true);
+    }
+
     @PostMapping
-    public ListItemDTO createListItem(@RequestBody ListItemDTO ListItemDTO) {
-        return listItemService.createListItem(ListItemDTO);
+    public ListItemDTO createListItem(@RequestBody ListItemDTO listItemDTO) {
+        return listItemService.createListItem(listItemDTO);
     }
 
     @PutMapping("/{id}")
@@ -41,11 +55,24 @@ public class ListItemController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PatchMapping("/{id}/toggle")
+    public ResponseEntity<Void> toggleDone(@PathVariable Long id) {
+        return listItemService.toggleDone(id)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.notFound().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteListItem(@PathVariable Long id) {
         return listItemService.deleteListItem(id)
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/list/{listId}")
+    public ResponseEntity<Void> deleteItemsByListId(@PathVariable Long listId) {
+        listItemService.deleteItemsByListId(listId);
+        return ResponseEntity.noContent().build();
     }
 
 }
