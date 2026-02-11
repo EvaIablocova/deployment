@@ -30,6 +30,11 @@ public class UserService {
                 .map(response -> response.getBody());
     }
 
+    public Optional<Long> getGroupIdByUserId(Long userId) {
+        return getUserById(userId)
+                .map(UserDTO::getGroupId);
+    }
+
     public UserDTO createUser(UserDTO UserDTO) {
         return userRepository.createUser(UserDTO).getBody();
     }

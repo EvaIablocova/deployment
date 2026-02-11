@@ -61,6 +61,18 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{userId}/groupId")
+    public ResponseEntity<Long> getGroupIdByUserId(@PathVariable Long userId) {
+        try {
+            ResponseEntity<Long> response =
+                    restTemplate.getForEntity(externalBase + "/" + userId + "/groupId", Long.class);
+            return ResponseEntity.ok(response.getBody());
+        } catch (RestClientException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO taskDTO) {
         try {

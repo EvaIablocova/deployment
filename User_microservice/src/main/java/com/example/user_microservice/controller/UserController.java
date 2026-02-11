@@ -29,6 +29,13 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/{userId}/groupId")
+    public ResponseEntity<Long> getGroupIdByUserId(@PathVariable Long userId) {
+        return userService.getGroupIdByUserId(userId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public UserDTO createTask(@RequestBody UserDTO UserDTO) {
         return userService.createUser(UserDTO);
