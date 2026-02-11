@@ -51,5 +51,14 @@ public class UserController {
         return userService.deleteUser(id);
     }
 
+    @PutMapping("/{id}/upgrade-to-premium")
+    public ResponseEntity<UserDTO> upgradeToPremium(@PathVariable Long id) {
+         return userService.upgradeToPremium(id);
+    }
+
+    @PutMapping("/{id}/cancel-subscribtion")
+    public ResponseEntity<UserDTO> cancelSubscribtion(@PathVariable Long id) {
+        return userService.cancelSubscribtion(id);
+    }
 
 }

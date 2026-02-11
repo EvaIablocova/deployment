@@ -51,6 +51,8 @@ public class UserService {
         return userRepository.findById(id).map(user -> {
             user.setUsername(updateduser.getUsername());
             user.setPassword(updateduser.getPassword());
+            user.setPointsScore(updateduser.getPointsScore());
+            user.setRole(updateduser.getRole());
             return toDTO(userRepository.save(user));
         });
     }
@@ -85,13 +87,6 @@ public class UserService {
             return true;
         }
         return false;
-    }
-
-    public Optional<UserDTO> upgradeToPremium(Long userId) {
-        return userRepository.findById(userId).map(user -> {
-            user.setRole(UserRole.PREMIUM_USER);
-            return toDTO(userRepository.save(user));
-        });
     }
 
 }

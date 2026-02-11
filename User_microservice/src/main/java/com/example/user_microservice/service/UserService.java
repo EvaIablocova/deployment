@@ -46,5 +46,28 @@ public class UserService {
         return userRepository.deleteUser(id);
     }
 
+    public ResponseEntity<UserDTO> upgradeToPremium(Long id) {
+        Optional<UserDTO> userOptional = getUserById(id);
+
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        UserDTO oldUserDTO = userOptional.get();
+        oldUserDTO.setRole("PREMIUM_USER");
+        return updateUser(id, oldUserDTO);
+    }
+
+    public ResponseEntity<UserDTO> cancelSubscribtion (Long id) {
+        Optional<UserDTO> userOptional = getUserById(id);
+
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        UserDTO oldUserDTO = userOptional.get();
+        oldUserDTO.setRole("USER");
+        return updateUser(id, oldUserDTO);
+    }
 
 }

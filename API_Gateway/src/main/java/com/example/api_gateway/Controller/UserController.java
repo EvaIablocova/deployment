@@ -115,4 +115,16 @@ public class UserController {
         }
     }
 
+    @PutMapping("/{id}/cancel-subscribtion")
+    public ResponseEntity<UserDTO> cancelSubscribtion(@PathVariable Long id) {
+        try {
+            restTemplate.put(externalBase + "/" + id + "/cancel-subscribtion", null);
+            ResponseEntity<UserDTO> response =
+                    restTemplate.getForEntity(externalBase + "/" + id, UserDTO.class);
+            return ResponseEntity.ok(response.getBody());
+        } catch (RestClientException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

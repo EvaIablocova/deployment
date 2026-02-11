@@ -62,12 +62,5 @@ public class UserController {
                 : ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/{id}/upgrade-to-premium")
-    public ResponseEntity<UserDTO> upgradeToPremium(@PathVariable Long id) {
-        return userService.upgradeToPremium(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
 }
 
