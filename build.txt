@@ -30,3 +30,4 @@ cd Auth_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; 
 cd Group_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d
 cd Recipes_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d
 cd MealPlan_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d
+cd Image_microservice ; .\mvnw.cmd clean package ; cd .. ; docker-compose down ; docker-compose up --build -d

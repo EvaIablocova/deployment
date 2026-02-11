@@ -45,6 +45,9 @@ public class ServiceUrlsConfig {
     @Value("${service.mealplan.url:http://mealplanmicroservice:9023}")
     private String mealPlanServiceUrl;
 
+    @Value("${service.image.url:http://imagemicroservice:9024}")
+    private String imageServiceUrl;
+
     public String getAuthServiceUrl() {
         return authServiceUrl;
     }
@@ -95,5 +98,9 @@ public class ServiceUrlsConfig {
 
     public String getMealPlanServiceUrl() {
         return mealPlanServiceUrl;
+    }
+
+    public String getImageServiceUrl() {
+        return imageServiceUrl;
     }
 }
