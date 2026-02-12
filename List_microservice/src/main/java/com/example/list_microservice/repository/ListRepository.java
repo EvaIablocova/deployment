@@ -220,5 +220,44 @@ public class ListRepository {
         }
     }
 
+    // ==================== Path-based List Item endpoints ====================
+
+    public ResponseEntity<ListItemDTO> createListItemForList(Long listId, ListItemDTO itemDTO) {
+        try {
+            ResponseEntity<ListItemDTO> response =
+                    restTemplate.postForEntity(itemsBase + "/list/" + listId, itemDTO, ListItemDTO.class);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response.getBody());
+        } catch (RestClientException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    public ResponseEntity<ListItemDTO> updateListItemInList(Long listId, Long itemId, ListItemDTO updatedItemDTO) {
+        try {
+            restTemplate.put(itemsBase + "/list/" + listId + "/item/" + itemId, updatedItemDTO);
+            return getListItemById(itemId);
+        } catch (RestClientException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public ResponseEntity<Void> toggleItemDoneInList(Long listId, Long itemId) {
+        try {
+            restTemplate.patchForObject(itemsBase + "/list/" + listId + "/item/" + itemId + "/toggle", null, Void.class);
+            return ResponseEntity.ok().build();
+        } catch (RestClientException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public ResponseEntity<Void> deleteListItemFromList(Long listId, Long itemId) {
+        try {
+            restTemplate.delete(itemsBase + "/list/" + listId + "/item/" + itemId);
+            return ResponseEntity.noContent().build();
+        } catch (RestClientException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
 

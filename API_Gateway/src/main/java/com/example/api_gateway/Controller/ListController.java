@@ -240,4 +240,51 @@ public class ListController {
         }
     }
 
+    // ==================== Path-based List Item endpoints ====================
+    // These match the frontend's expected URL patterns: /lists/{listId}/items/{itemId}
+
+    @PostMapping("/{listId}/items")
+    public ResponseEntity<ListItemDTO> createListItemForList(@PathVariable Long listId,
+                                                              @RequestBody ListItemDTO itemDTO) {
+        try {
+            ResponseEntity<ListItemDTO> response =
+                    restTemplate.postForEntity(externalBase + "/" + listId + "/items", itemDTO, ListItemDTO.class);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response.getBody());
+        } catch (RestClientException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PutMapping("/{listId}/items/{itemId}")
+    public ResponseEntity<ListItemDTO> updateListItemInList(@PathVariable Long listId,
+                                                             @PathVariable Long itemId,
+                                                             @RequestBody ListItemDTO updatedItemDTO) {
+        try {
+            restTemplate.put(externalBase + "/" + listId + "/items/" + itemId, updatedItemDTO);
+            return getListItemById(itemId);
+        } catch (RestClientException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PatchMapping("/{listId}/items/{itemId}/toggle")
+    public ResponseEntity<Void> toggleItemDoneInList(@PathVariable Long listId, @PathVariable Long itemId) {
+        try {
+            restTemplate.patchForObject(externalBase + "/" + listId + "/items/" + itemId + "/toggle", null, Void.class);
+            return ResponseEntity.ok().build();
+        } catch (RestClientException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{listId}/items/{itemId}")
+    public ResponseEntity<Void> deleteListItemFromList(@PathVariable Long listId, @PathVariable Long itemId) {
+        try {
+            restTemplate.delete(externalBase + "/" + listId + "/items/" + itemId);
+            return ResponseEntity.noContent().build();
+        } catch (RestClientException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

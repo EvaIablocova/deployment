@@ -99,4 +99,22 @@ public class ListService {
         return listRepository.deleteItemsByListId(listId);
     }
 
+    // ==================== Path-based List Item methods ====================
+
+    public ResponseEntity<ListItemDTO> createListItemForList(Long listId, ListItemDTO itemDTO) {
+        return listRepository.createListItemForList(listId, itemDTO);
+    }
+
+    public ResponseEntity<ListItemDTO> updateListItemInList(Long listId, Long itemId, ListItemDTO updatedItemDTO) {
+        return listRepository.updateListItemInList(listId, itemId, updatedItemDTO);
+    }
+
+    public ResponseEntity<Void> toggleItemDoneInList(Long listId, Long itemId) {
+        return listRepository.toggleItemDoneInList(listId, itemId);
+    }
+
+    public ResponseEntity<Void> deleteListItemFromList(Long listId, Long itemId) {
+        return listRepository.deleteListItemFromList(listId, itemId);
+    }
+
 }

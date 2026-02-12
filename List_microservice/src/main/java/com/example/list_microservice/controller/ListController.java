@@ -121,4 +121,29 @@ public class ListController {
         return listService.deleteItemsByListId(listId);
     }
 
+    // ==================== Path-based List Item endpoints ====================
+
+    @PostMapping("/{listId}/items")
+    public ResponseEntity<ListItemDTO> createListItemForList(@PathVariable Long listId,
+                                                              @RequestBody ListItemDTO itemDTO) {
+        return listService.createListItemForList(listId, itemDTO);
+    }
+
+    @PutMapping("/{listId}/items/{itemId}")
+    public ResponseEntity<ListItemDTO> updateListItemInList(@PathVariable Long listId,
+                                                             @PathVariable Long itemId,
+                                                             @RequestBody ListItemDTO updatedItemDTO) {
+        return listService.updateListItemInList(listId, itemId, updatedItemDTO);
+    }
+
+    @PatchMapping("/{listId}/items/{itemId}/toggle")
+    public ResponseEntity<Void> toggleItemDoneInList(@PathVariable Long listId, @PathVariable Long itemId) {
+        return listService.toggleItemDoneInList(listId, itemId);
+    }
+
+    @DeleteMapping("/{listId}/items/{itemId}")
+    public ResponseEntity<Void> deleteListItemFromList(@PathVariable Long listId, @PathVariable Long itemId) {
+        return listService.deleteListItemFromList(listId, itemId);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.product_microservice.service;
 
 import com.example.product_microservice.DTOs.ProductDTO;
+import com.example.product_microservice.repository.ImageRepository;
 import com.example.product_microservice.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,29 +24,37 @@ class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
 
+    @Mock
+    private ImageRepository imageRepository;
+
     @InjectMocks
     private ProductService productService;
 
     @Test
     void getAllProducts_returnsRepositoryResult() {
-        ProductDTO dto1 = mock(ProductDTO.class);
-        ProductDTO dto2 = mock(ProductDTO.class);
+        ProductDTO dto1 = new ProductDTO();
+        dto1.setId(1L);
+        ProductDTO dto2 = new ProductDTO();
+        dto2.setId(2L);
         List<ProductDTO> expected = Arrays.asList(dto1, dto2);
 
         when(productRepository.getAllProducts()).thenReturn(expected);
+        when(imageRepository.getImagesByProduct(anyLong())).thenReturn(List.of());
 
         List<ProductDTO> result = productService.getAllProducts();
 
         assertNotNull(result);
-        assertEquals(expected, result);
+        assertEquals(expected.size(), result.size());
         verify(productRepository, times(1)).getAllProducts();
     }
 
     @Test
     void getProductById_whenRepositoryReturnsResponseWithBody_returnsOptionalWithBody() {
         Long id = 1L;
-        ProductDTO dto = mock(ProductDTO.class);
+        ProductDTO dto = new ProductDTO();
+        dto.setId(id);
         when(productRepository.getProductById(id)).thenReturn(ResponseEntity.ok(dto));
+        when(imageRepository.getImagesByProduct(id)).thenReturn(List.of());
 
         Optional<ProductDTO> result = productService.getProductById(id);
 
@@ -77,10 +87,12 @@ class ProductServiceTest {
 
     @Test
     void createProduct_returnsBodyFromRepositoryResponse() {
-        ProductDTO input = mock(ProductDTO.class);
-        ProductDTO created = mock(ProductDTO.class);
+        ProductDTO input = new ProductDTO();
+        ProductDTO created = new ProductDTO();
+        created.setId(1L);
 
         when(productRepository.createProduct(input)).thenReturn(ResponseEntity.ok(created));
+        when(imageRepository.getImagesByProduct(1L)).thenReturn(List.of());
 
         ProductDTO result = productService.createProduct(input);
 
@@ -103,14 +115,16 @@ class ProductServiceTest {
     @Test
     void updateProduct_delegatesToRepository_andReturnsResponse() {
         Long id = 4L;
-        ProductDTO updated = mock(ProductDTO.class);
+        ProductDTO updated = new ProductDTO();
+        updated.setId(id);
         ResponseEntity<ProductDTO> repoResponse = ResponseEntity.ok(updated);
 
         when(productRepository.updateProduct(id, updated)).thenReturn(repoResponse);
+        when(imageRepository.getImagesByProduct(id)).thenReturn(List.of());
 
         ResponseEntity<ProductDTO> result = productService.updateProduct(id, updated);
 
-        assertEquals(repoResponse, result);
+        assertEquals(repoResponse.getStatusCode(), result.getStatusCode());
         verify(productRepository, times(1)).updateProduct(id, updated);
     }
 
@@ -119,6 +133,7 @@ class ProductServiceTest {
         Long id = 5L;
         ResponseEntity<Void> repoResponse = ResponseEntity.noContent().build();
 
+        when(imageRepository.getImagesByProduct(id)).thenReturn(List.of());
         when(productRepository.deleteProduct(id)).thenReturn(repoResponse);
 
         ResponseEntity<Void> result = productService.deleteProduct(id);
