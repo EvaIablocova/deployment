@@ -1,11 +1,10 @@
 ================================================================================
-                    HOUSEMATE SYSTEM - UML DIAGRAMS DOCUMENTATION
+                    HOUSEMATE SYSTEM - UML DIAGRAMS (CONDENSED)
                          Enterprise Architecture Diagrams
 ================================================================================
 
-This document describes UML diagrams that represent the HouseMate System - a
-household management application with gamification features. The system includes
-a Flutter mobile application and a microservices backend architecture.
+This document contains the most important UML diagrams for the HouseMate System.
+Maximum 3 diagrams per type, selected for core functionality coverage.
 
 ================================================================================
                            PART I: BEHAVIORAL DIAGRAMS
@@ -158,16 +157,18 @@ DIAGRAM NOTATION:
 
 
 ================================================================================
-2. ACTIVITY DIAGRAM
+2. ACTIVITY DIAGRAMS (3 Most Important)
 ================================================================================
 
-Description: Shows the workflow and business processes in the HouseMate system.
-
 --------------------------------------------------------------------------------
-ACTIVITY DIAGRAM 1: User Authentication Flow
+ACTIVITY DIAGRAM 1. User Authentication Flow
 --------------------------------------------------------------------------------
 
 @startuml Authentication_Flow
+skinparam defaultFontSize 11
+skinparam activityFontSize 11
+skinparam arrowFontSize 10
+scale 1400 width
 start
 :User opens app;
 
@@ -230,10 +231,14 @@ FLOW DESCRIPTION:
 8. Tokens stored securely, user navigated to Home
 
 --------------------------------------------------------------------------------
-ACTIVITY DIAGRAM 2: Task Completion and Points Earning
+ACTIVITY DIAGRAM 2. Task Completion and Points Earning
 --------------------------------------------------------------------------------
 
 @startuml Task_Completion_Flow
+skinparam defaultFontSize 11
+skinparam activityFontSize 11
+skinparam arrowFontSize 10
+scale 1400 width
 start
 :User views task list;
 :User selects task to complete;
@@ -275,12 +280,17 @@ FLOW DESCRIPTION:
 7. UI reflects completed task and shows points notification
 
 --------------------------------------------------------------------------------
-ACTIVITY DIAGRAM 3: Competition Lifecycle
+ACTIVITY DIAGRAM 3. Competition Lifecycle
 --------------------------------------------------------------------------------
 
 @startuml Competition_Lifecycle_Flow
+skinparam defaultFontSize 11
+skinparam activityFontSize 11
+skinparam arrowFontSize 10
+scale 1400 width
+|#LightBlue|Premium User Actions
 start
-:Premium User creates competition;
+:Create competition;
 
 :Enter competition details;
 note right
@@ -296,8 +306,7 @@ end note
 :Set status to PENDING;
 :Return to competition list;
 
-|#LightBlue|Premium User Actions
-:Premium User starts competition;
+:Start competition;
 :Set status to ACTIVE;
 :Notify group members;
 
@@ -306,10 +315,10 @@ end note
 
 while (Competition active?) is (yes)
   fork
-    :User completes tasks;
+    :Complete tasks;
     :Update participant progress;
   fork again
-    :User earns points;
+    :Earn points;
     :Update participant score;
   fork again
     :View leaderboard;
@@ -317,7 +326,7 @@ while (Competition active?) is (yes)
 endwhile (no - end date reached or manually ended)
 
 |#LightBlue|Premium User Actions
-:Premium User completes competition;
+:Complete competition;
 :Set status to COMPLETED;
 :Calculate final rankings;
 :Announce winner;
@@ -335,129 +344,21 @@ FLOW DESCRIPTION:
 7. Competition ends (date or manual)
 8. Final rankings calculated, winner announced
 
---------------------------------------------------------------------------------
-ACTIVITY DIAGRAM 4: Meal Planning and Shopping List Generation
---------------------------------------------------------------------------------
-
-@startuml MealPlan_Shopping_Flow
-start
-:User creates meal plan;
-:Set date range for plan;
-
-repeat
-  :Select date within range;
-  :Add meals for the day;
-
-  fork
-    :Select meal type (Breakfast/Lunch/Dinner/Snack);
-  fork again
-    :Choose recipe or custom meal;
-  fork end
-
-  if (Recipe selected?) then (yes)
-    :Link recipe to meal slot;
-  else (no)
-    :Enter custom meal name;
-  endif
-
-repeat while (More days to plan?) is (yes)
-
-:Save meal plan;
-:MealPlan Service stores in Database;
-
-if (Generate shopping list?) then (yes)
-  :Extract ingredients from all recipes;
-  :Aggregate quantities by product;
-  :Create new shopping list;
-
-  repeat
-    :Add ingredient as list item;
-    :Set quantity and unit;
-    :Link to source recipe;
-  repeat while (More ingredients?) is (yes)
-
-  :Save shopping list;
-  :Navigate to shopping list;
-else (no)
-  :Return to meal plan view;
-endif
-
-stop
-@enduml
-
-FLOW DESCRIPTION:
-1. User creates meal plan with date range
-2. For each day, user assigns meals to slots
-3. Meals can be recipes or custom entries
-4. Plan saved to database
-5. Optionally generates shopping list
-6. Extracts and aggregates ingredients from recipes
-7. Creates shopping list with linked items
-
---------------------------------------------------------------------------------
-ACTIVITY DIAGRAM 5: Group Collaboration Flow
---------------------------------------------------------------------------------
-
-@startuml Group_Collaboration_Flow
-|Premium User|
-start
-:Create new group;
-:Enter group name;
-:System generates invite code;
-:Group created with Premium User as owner;
-
-:Share invite code with household members;
-
-|Regular User|
-:Receive invite code;
-:Enter invite code in app;
-:Preview group details;
-
-if (Confirm join?) then (yes)
-  :Join group;
-  :System adds user to group;
-  :User gains access to shared resources;
-else (no)
-  :Cancel;
-  stop
-endif
-
-|Shared Activities|
-fork
-  :View shared tasks;
-fork again
-  :View shared shopping lists;
-fork again
-  :View shared meal plans;
-fork again
-  :Participate in group competitions;
-fork again
-  :View group leaderboard;
-fork end
-
-|Premium User|
-if (Need new invite code?) then (yes)
-  :Regenerate invite code;
-  :Old code invalidated;
-  :New code generated;
-endif
-
-stop
-@enduml
-
 
 ================================================================================
-3. STATE MACHINE DIAGRAM
+3. STATE MACHINE DIAGRAMS (3 Most Important)
 ================================================================================
-
-Description: Shows the different states of key entities in the system and
-transitions between states.
 
 --------------------------------------------------------------------------------
 STATE DIAGRAM 1. Competition States
 --------------------------------------------------------------------------------
 
 @startuml Competition_States
+left to right direction
+skinparam defaultFontSize 14
+skinparam stateFontSize 14
+skinparam arrowFontSize 14
+scale 1400 width
 [*] --> PENDING : Competition Created
 
 PENDING --> ACTIVE : start()
@@ -518,6 +419,11 @@ STATE DIAGRAM 2. Task States
 --------------------------------------------------------------------------------
 
 @startuml Task_States
+left to right direction
+skinparam defaultFontSize 11
+skinparam stateFontSize 11
+skinparam arrowFontSize 10
+scale 1400 width
 [*] --> Created : Task created
 
 Created --> Pending : assigned to user
@@ -563,10 +469,15 @@ STATE DESCRIPTIONS:
 - Completed: Task marked as done
 
 --------------------------------------------------------------------------------
-STATE DIAGRAM 3: User Session States
+STATE DIAGRAM 3. User Session States
 --------------------------------------------------------------------------------
 
 @startuml User_Session_States
+left to right direction
+skinparam defaultFontSize 11
+skinparam stateFontSize 11
+skinparam arrowFontSize 10
+scale 1400 width
 [*] --> Unauthenticated : App launched
 
 Unauthenticated --> Authenticating : login attempt
@@ -606,74 +517,21 @@ STATE DESCRIPTIONS:
 - TokenExpiring: JWT token approaching expiration
 - RefreshingToken: Attempting to refresh token
 
---------------------------------------------------------------------------------
-STATE DIAGRAM 4: Shopping List Item States
---------------------------------------------------------------------------------
-
-@startuml ListItem_States
-[*] --> Pending : Item added to list
-
-Pending --> Checked : user checks item
-Checked --> Pending : user unchecks item
-
-Pending --> [*] : item deleted
-Checked --> [*] : item deleted
-
-state Pending {
-  [*] --> NotPurchased
-  NotPurchased : Item needs to be bought
-  NotPurchased : Visible in active items
-}
-
-state Checked {
-  [*] --> Purchased
-  Purchased : Item has been bought
-  Purchased : Shown with strikethrough
-  Purchased : Contributes to list progress
-}
-@enduml
-
---------------------------------------------------------------------------------
-STATE DIAGRAM 5: User Role States
---------------------------------------------------------------------------------
-
-@startuml User_Role_States
-[*] --> USER : Account created
-
-USER --> PREMIUM_USER : upgrade subscription
-PREMIUM_USER --> USER : subscription cancelled/expired
-
-state USER {
-  [*] --> StandardFeatures
-  StandardFeatures : Basic task management
-  StandardFeatures : Join groups
-  StandardFeatures : Participate in competitions
-  StandardFeatures : Cannot create groups
-}
-
-state PREMIUM_USER {
-  [*] --> PremiumFeatures
-  PremiumFeatures : All standard features
-  PremiumFeatures : Create groups
-  PremiumFeatures : Create competitions
-  PremiumFeatures : Manage group members
-  PremiumFeatures : Advanced analytics
-}
-@enduml
-
 
 ================================================================================
-4. SEQUENCE DIAGRAM
+4. SEQUENCE DIAGRAMS (3 Most Important)
 ================================================================================
 
-Description: Shows the interactions between objects/components over time for
-specific use cases.
-
 --------------------------------------------------------------------------------
-SEQUENCE DIAGRAM 1: User Login Process
+SEQUENCE DIAGRAM 1. User Login Process
 --------------------------------------------------------------------------------
 
 @startuml Login_Sequence
+skinparam defaultFontSize 11
+skinparam sequenceTitleFontSize 14
+skinparam arrowFontSize 10
+skinparam participantFontSize 11
+scale 1400 width
 actor User
 participant "Flutter App" as App
 participant "API Gateway\n:8099" as Gateway
@@ -709,10 +567,15 @@ end
 @enduml
 
 --------------------------------------------------------------------------------
-SEQUENCE DIAGRAM 2: Task Completion with Points
+SEQUENCE DIAGRAM 2. Task Completion with Points
 --------------------------------------------------------------------------------
 
 @startuml Task_Completion_Sequence
+skinparam defaultFontSize 11
+skinparam sequenceTitleFontSize 14
+skinparam arrowFontSize 10
+skinparam participantFontSize 11
+scale 1400 width
 actor User
 participant "Flutter App" as App
 participant "API Gateway\n:8099" as Gateway
@@ -756,10 +619,15 @@ App --> User : Show success &\npoints notification
 @enduml
 
 --------------------------------------------------------------------------------
-SEQUENCE DIAGRAM 3: Create and Join Competition
+SEQUENCE DIAGRAM 3. Create and Join Competition
 --------------------------------------------------------------------------------
 
 @startuml Competition_Create_Join_Sequence
+skinparam defaultFontSize 11
+skinparam sequenceTitleFontSize 14
+skinparam arrowFontSize 10
+skinparam participantFontSize 11
+scale 1400 width
 actor "Premium User" as Premium
 actor "Regular User" as RegUser
 participant "Flutter App" as App
@@ -818,159 +686,26 @@ Gateway --> App : Participant rankings
 App --> RegUser : Display leaderboard
 @enduml
 
---------------------------------------------------------------------------------
-SEQUENCE DIAGRAM 4: Image Upload for Product
---------------------------------------------------------------------------------
-
-@startuml Image_Upload_Sequence
-actor User
-participant "Flutter App" as App
-participant "API Gateway\n:8099" as Gateway
-participant "Image Service\n:9024" as Image
-participant "MinIO Storage" as MinIO
-participant "Database Service\n:9009" as DB
-
-User -> App : Select image from gallery
-App -> App : ImagePicker.pickImage()
-App -> App : Convert to multipart form
-
-App -> Gateway : POST /api_gateway/images\n(multipart: file, entityType, entityId)
-Gateway -> Image : POST /api/images
-
-Image -> Image : Generate unique filename\n(UUID + original extension)
-Image -> Image : Determine content type
-
-Image -> MinIO : putObject(bucket, key, file)
-MinIO --> Image : Upload success
-
-Image -> DB : POST /db/images\n{filename, originalFilename,\ncontentType, fileSize,\nstorageKey, entityType, entityId}
-DB --> Image : ImageDTO
-
-Image --> Gateway : ImageDTO
-Gateway --> App : ImageDTO with id
-App -> App : Update product images list
-App --> User : Show uploaded image
-
-== Download Image ==
-User -> App : View product with images
-App -> Gateway : GET /api_gateway/images/{id}/download
-Gateway -> Image : GET /api/images/{id}/download
-Image -> DB : GET /db/images/{id}
-DB --> Image : ImageDTO
-Image -> MinIO : getObject(bucket, storageKey)
-MinIO --> Image : Binary data
-Image --> Gateway : Image bytes + content-type
-Gateway --> App : Image data
-App --> User : Display image
-@enduml
-
---------------------------------------------------------------------------------
-SEQUENCE DIAGRAM 5: Group Join via Invite Code
---------------------------------------------------------------------------------
-
-@startuml Group_Join_Sequence
-actor "New User" as User
-actor "Premium Owner" as Owner
-participant "Flutter App" as App
-participant "API Gateway\n:8099" as Gateway
-participant "Group Service\n:9021" as Group
-participant "Database Service\n:9009" as DB
-
-== Owner Shares Invite Code ==
-Owner -> App : View group settings
-App -> Gateway : GET /api_gateway/groups/{groupId}
-Gateway -> Group : GET /api/groups/{groupId}
-Group -> DB : GET /db/groups/{groupId}
-DB --> Group : GroupDTO (with inviteCode)
-Group --> Gateway : GroupDTO
-Gateway --> App : GroupDTO
-App --> Owner : Display invite code
-
-Owner -> User : Share invite code\n(text/QR)
-
-== User Joins Group ==
-User -> App : Enter invite code
-App -> Gateway : GET /api_gateway/groups/invite/{inviteCode}
-Gateway -> Group : GET /api/groups/invite/{inviteCode}
-Group -> DB : GET /db/groups/invite/{inviteCode}
-DB --> Group : GroupDTO (preview)
-Group --> Gateway : GroupDTO
-Gateway --> App : Group preview
-App --> User : Show group details\n(name, member count)
-
-User -> App : Confirm join
-App -> Gateway : POST /api_gateway/groups/join\n{inviteCode, userId}
-Gateway -> Group : POST /api/groups/join
-Group -> DB : GET /db/groups/invite/{inviteCode}
-DB --> Group : GroupDTO
-
-Group -> Group : Validate user not\nalready member
-
-Group -> DB : POST /db/groups/{groupId}/members\n{userId}
-DB -> DB : Add user to group
-DB -> DB : Update user.groupId
-DB --> Group : Success
-
-Group --> Gateway : Join successful
-Gateway --> App : Success response
-App -> App : Update user's groupIds
-App --> User : Welcome to group!\nNavigate to group view
-@enduml
-
---------------------------------------------------------------------------------
-SEQUENCE DIAGRAM 6: JWT Token Refresh
---------------------------------------------------------------------------------
-
-@startuml Token_Refresh_Sequence
-participant "Flutter App" as App
-participant "SecureStorage" as Storage
-participant "API Gateway\n:8099" as Gateway
-participant "Auth Service\n:9020" as Auth
-
-App -> App : API call interceptor\ndetects token expiring
-
-App -> Storage : getRefreshToken()
-Storage --> App : refreshToken
-
-App -> Gateway : POST /api_gateway/auth/refresh\n{refreshToken}
-Gateway -> Auth : POST /api/auth/refresh
-
-Auth -> Auth : Validate refresh token\n(signature, expiry)
-
-alt Refresh Token Valid
-    Auth -> Auth : Extract userId from token
-    Auth -> Auth : Generate new access token
-    Auth -> Auth : Generate new refresh token
-    Auth --> Gateway : AuthResponse\n{newToken, newRefreshToken}
-    Gateway --> App : AuthResponse
-    App -> Storage : saveAuthData(newTokens)
-    App -> App : Retry original request\nwith new token
-else Refresh Token Invalid/Expired
-    Auth --> Gateway : 401 Unauthorized
-    Gateway --> App : Error
-    App -> Storage : clearAll()
-    App -> App : Set AuthState to\nunauthenticated
-    App -> App : Navigate to Login
-end
-@enduml
-
 
 ================================================================================
                           PART II: STRUCTURAL DIAGRAMS
 ================================================================================
 
 ================================================================================
-5. CLASS DIAGRAM
+5. CLASS DIAGRAMS (3 Total)
 ================================================================================
 
-Description: Shows the static structure of the system including classes,
-attributes, methods, and relationships.
-
 --------------------------------------------------------------------------------
-CLASS DIAGRAM 1: Core Domain Models (Database Microservice)
+CLASS DIAGRAM 1. Core Domain Models (Database Microservice)
 --------------------------------------------------------------------------------
 
 @startuml Domain_Classes
+left to right direction
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeFontSize 10
+skinparam arrowFontSize 10
+scale 1400 width
 
 enum UserRole {
     USER
@@ -998,27 +733,11 @@ enum ListType {
     TODO
 }
 
-enum ListItemType {
-    PRODUCT
-    RECIPE_INGREDIENT
-    CUSTOM
-}
-
 enum MealType {
     BREAKFAST
     LUNCH
     DINNER
     SNACK
-}
-
-enum EntityType {
-    PRODUCT
-    RECIPE
-    MEAL_PLAN
-    COMPETITION
-    GROUP
-    PROJECT
-    USER
 }
 
 class User {
@@ -1098,41 +817,9 @@ class Lists {
     -Long groupId
     -Long createdBy
     -ListType listType
-    -LocalDateTime createdAt
-    -LocalDateTime updatedAt
     -List<ListItem> items
     +addItem(ListItem item): void
     +getProgress(): double
-}
-
-class ListItem {
-    -Long id
-    -Long listId
-    -String itemName
-    -Long productId
-    -double quantity
-    -String unit
-    -ListItemType itemType
-    -boolean completed
-    -int sortOrder
-    +markCompleted(): void
-}
-
-class Product {
-    -Long id
-    -String nameOfProduct
-    -String description
-    -Long categoryId
-    +getId(): Long
-    +getName(): String
-}
-
-class ProductCategory {
-    -Long id
-    -String categoryName
-    -String description
-    +getId(): Long
-    +getName(): String
 }
 
 class Recipe {
@@ -1147,156 +834,57 @@ class Recipe {
     -List<RecipeIngredient> ingredients
     -List<RecipeStep> steps
     +getTotalTime(): int
-    +addIngredient(RecipeIngredient): void
-    +addStep(RecipeStep): void
-}
-
-class RecipeIngredient {
-    -Long id
-    -Long recipeId
-    -Long productId
-    -double quantity
-    -String unit
-    -String ingredientName
-    +getDisplayString(): String
-}
-
-class RecipeStep {
-    -Long id
-    -Long recipeId
-    -int stepNumber
-    -String instruction
 }
 
 class MealPlan {
     -Long id
     -String name
-    -String description
     -Long groupId
     -Long createdBy
     -LocalDate startDate
     -LocalDate endDate
     -List<MealPlanDay> days
-    +addDay(MealPlanDay): void
     +getMealsForDate(LocalDate): List<MealPlanItem>
-}
-
-class MealPlanDay {
-    -Long id
-    -Long mealPlanId
-    -LocalDate date
-    -List<MealPlanItem> items
-}
-
-class MealPlanItem {
-    -Long id
-    -Long dayId
-    -Long recipeId
-    -MealType mealType
-    -String customMealName
-}
-
-class Image {
-    -Long id
-    -String fileName
-    -String originalFileName
-    -String contentType
-    -long fileSize
-    -String storageKey
-    -EntityType entityType
-    -Long entityId
-    -LocalDateTime uploadedAt
-    -Long uploadedBy
-}
-
-class Project {
-    -Long id
-    -String name
-    -String description
-    -Long groupId
-    -Long createdBy
-    -List<Long> taskIds
-}
-
-class Feedback {
-    -Long id
-    -String aspect
-    -String suggestion
-    -Long createdBy
-    -LocalDateTime createdAt
 }
 
 ' Relationships
 User "1" -- "0..1" UserGroup : belongs to
 User "1" -- "*" Task : assigned to
 User "1" -- "*" CompetitionParticipant : participates
-UserGroup "1" -- "*" User : has members
 UserGroup "1" -- "*" Competition : hosts
 UserGroup "1" -- "*" Lists : owns
-UserGroup "1" -- "*" Recipe : shares
-UserGroup "1" -- "*" MealPlan : shares
-
 Competition "1" -- "*" CompetitionParticipant : has
-Competition -- CompetitionStatus
-Competition -- CompetitionType
-
-Lists "1" -- "*" ListItem : contains
-Lists -- ListType
-ListItem -- ListItemType
-
-Product "*" -- "1" ProductCategory : categorized by
-
-Recipe "1" -- "*" RecipeIngredient : has
-Recipe "1" -- "*" RecipeStep : has
-RecipeIngredient "*" -- "0..1" Product : references
-
-MealPlan "1" -- "*" MealPlanDay : has
-MealPlanDay "1" -- "*" MealPlanItem : contains
-MealPlanItem "*" -- "0..1" Recipe : references
-MealPlanItem -- MealType
-
-Image -- EntityType
-Task "*" -- "0..1" Project : belongs to
 
 @enduml
 
 --------------------------------------------------------------------------------
-CLASS DIAGRAM 2: Service Layer Architecture
+CLASS DIAGRAM 2. Service Layer Architecture
 --------------------------------------------------------------------------------
 
 @startuml Service_Layer_Classes
-
-interface BaseService<T, ID> {
-    +findAll(): List<T>
-    +findById(ID id): Optional<T>
-    +save(T entity): T
-    +deleteById(ID id): void
-}
+left to right direction
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeFontSize 10
+skinparam arrowFontSize 10
+scale 1400 width
 
 abstract class AbstractRestService<T, ID> {
     #RestTemplate restTemplate
     #String baseUrl
-    +AbstractRestService(String baseUrl)
     +findAll(): List<T>
     +findById(ID id): Optional<T>
     +save(T entity): T
     +deleteById(ID id): void
-    #getForList(String url): List<T>
-    #getForObject(String url): T
-    #postForObject(String url, T body): T
-    #put(String url, T body): void
-    #delete(String url): void
 }
 
 class UserService {
-    -String dbServiceUrl
     +findByUsername(String username): Optional<User>
     +updatePoints(Long userId, int points): void
     +getUsersByGroup(Long groupId): List<User>
 }
 
 class TaskService {
-    -String dbServiceUrl
     +findByUserId(Long userId): List<Task>
     +findByDate(LocalDate date): List<Task>
     +findOverdue(Long userId): List<Task>
@@ -1304,71 +892,21 @@ class TaskService {
 }
 
 class CompetitionService {
-    -String dbServiceUrl
     +findByGroupId(Long groupId): List<Competition>
-    +findByStatus(CompetitionStatus status): List<Competition>
     +start(Long competitionId): Competition
     +complete(Long competitionId): Competition
     +join(Long competitionId, Long userId): void
-    +leave(Long competitionId, Long userId): void
-    +updateProgress(Long competitionId, Long userId, int value): void
     +getLeaderboard(Long competitionId): List<CompetitionParticipant>
 }
 
 class GroupService {
-    -String dbServiceUrl
     +findByInviteCode(String inviteCode): Optional<UserGroup>
     +addMember(Long groupId, Long userId): void
     +removeMember(Long groupId, Long userId): void
-    +getMembers(Long groupId): List<User>
     +regenerateInviteCode(Long groupId): UserGroup
 }
 
-class ListService {
-    -String dbServiceUrl
-    +findByGroupId(Long groupId): List<Lists>
-    +addItem(Long listId, ListItem item): ListItem
-    +updateItem(Long itemId, ListItem item): ListItem
-    +removeItem(Long itemId): void
-}
-
-class RecipeService {
-    -String dbServiceUrl
-    +findByGroupId(Long groupId): List<Recipe>
-    +search(String query): List<Recipe>
-}
-
-class MealPlanService {
-    -String dbServiceUrl
-    +findByGroupId(Long groupId): List<MealPlan>
-    +findActiveForDate(Long groupId, LocalDate date): Optional<MealPlan>
-}
-
-class ProductService {
-    -String dbServiceUrl
-    +findByCategory(Long categoryId): List<Product>
-    +search(String name, Long categoryId): List<Product>
-}
-
-class ImageService {
-    -String dbServiceUrl
-    -MinioService minioService
-    +upload(MultipartFile file, EntityType type, Long entityId): Image
-    +download(Long imageId): byte[]
-    +delete(Long imageId): void
-    +findByEntity(EntityType type, Long entityId): List<Image>
-}
-
-class MinioService {
-    -MinioClient minioClient
-    -String bucketName
-    +putObject(String key, InputStream data): void
-    +getObject(String key): InputStream
-    +deleteObject(String key): void
-}
-
 class AuthService {
-    -String dbServiceUrl
     -JwtUtil jwtUtil
     -PasswordEncoder passwordEncoder
     +register(RegisterRequest request): AuthResponse
@@ -1380,11 +918,9 @@ class AuthService {
 class JwtUtil {
     -String secretKey
     -long accessTokenExpiration
-    -long refreshTokenExpiration
     +generateAccessToken(User user): String
     +generateRefreshToken(User user): String
     +validateToken(String token): boolean
-    +extractUsername(String token): String
     +extractUserId(String token): Long
 }
 
@@ -1392,31 +928,29 @@ AbstractRestService <|-- UserService
 AbstractRestService <|-- TaskService
 AbstractRestService <|-- CompetitionService
 AbstractRestService <|-- GroupService
-AbstractRestService <|-- ListService
-AbstractRestService <|-- RecipeService
-AbstractRestService <|-- MealPlanService
-AbstractRestService <|-- ProductService
 
-ImageService --> MinioService : uses
 AuthService --> JwtUtil : uses
 
 @enduml
 
 --------------------------------------------------------------------------------
-CLASS DIAGRAM 3: Flutter App Architecture (Simplified)
+CLASS DIAGRAM 3. Flutter App Architecture (Simplified)
 --------------------------------------------------------------------------------
 
 @startuml Flutter_Architecture
+left to right direction
+skinparam defaultFontSize 11
+skinparam classFontSize 12
+skinparam classAttributeFontSize 10
+skinparam arrowFontSize 10
+scale 1400 width
 
 abstract class BaseService {
     #Dio dio
     #String baseUrl
-    +BaseService()
     #get<T>(String path): Future<Either<String, T>>
     #post<T>(String path, dynamic data): Future<Either<String, T>>
     #put<T>(String path, dynamic data): Future<Either<String, T>>
-    #delete(String path): Future<Either<String, bool>>
-    #uploadFile(String path, File file): Future<Either<String, Map>>
 }
 
 class AuthService {
@@ -1425,36 +959,27 @@ class AuthService {
     +refreshToken(String refreshToken): Future<Either<String, AuthResponse>>
 }
 
-class TokenStorageService {
-    -FlutterSecureStorage storage
-    +saveAuthData(AuthResponse response): Future<void>
-    +getToken(): Future<String?>
-    +getRefreshToken(): Future<String?>
-    +getUserId(): Future<int?>
-    +clearAll(): Future<void>
-}
-
 class TaskService {
     +list(): Future<Either<String, List<Task>>>
     +retrieve(int id): Future<Either<String, Task>>
     +save(Task task): Future<Either<String, Task>>
-    +remove(int id): Future<Either<String, bool>>
 }
 
 class CompetitionService {
     +list(): Future<Either<String, List<Competition>>>
-    +listByGroup(int groupId): Future<Either<String, List<Competition>>>
-    +retrieve(int id): Future<Either<String, Competition>>
-    +save(Competition comp): Future<Either<String, Competition>>
-    +start(int id): Future<Either<String, Competition>>
     +join(int compId, int userId): Future<Either<String, bool>>
     +getLeaderboard(int compId): Future<Either<String, List<Participant>>>
 }
 
+class TokenStorageService {
+    -FlutterSecureStorage storage
+    +saveAuthData(AuthResponse response): Future<void>
+    +getToken(): Future<String?>
+    +clearAll(): Future<void>
+}
+
 abstract class StateNotifier<T> {
     #T state
-    +StateNotifier(T initialState)
-    #state: T
 }
 
 class AuthNotifier {
@@ -1462,21 +987,7 @@ class AuthNotifier {
     -TokenStorageService tokenStorage
     +checkAuthStatus(): Future<void>
     +login(String username, String password): Future<void>
-    +register(String username, String email, String password): Future<void>
     +logout(): Future<void>
-    +loadUserProfile(): Future<void>
-}
-
-class HomeNotifier {
-    -TaskService taskService
-    -ListService listService
-    -MealPlanService mealPlanService
-    -GroupService groupService
-    +loadDashboardData(): Future<void>
-    +getTodaysTasks(): List<Task>
-    +getOverdueTasks(): List<Task>
-    +getShoppingLists(): List<ShoppingList>
-    +getTodaysMeals(): List<MealPlanItem>
 }
 
 class AuthState {
@@ -1484,8 +995,6 @@ class AuthState {
     +String? username
     +int? userId
     +String? role
-    +List<int> groupIds
-    +String? error
 }
 
 enum AuthStatus {
@@ -1500,8 +1009,6 @@ BaseService <|-- TaskService
 BaseService <|-- CompetitionService
 
 StateNotifier <|-- AuthNotifier
-StateNotifier <|-- HomeNotifier
-
 AuthNotifier --> AuthService : uses
 AuthNotifier --> TokenStorageService : uses
 AuthNotifier --> AuthState : manages
@@ -1510,36 +1017,27 @@ AuthNotifier --> AuthState : manages
 
 
 ================================================================================
-6. COMPONENT DIAGRAM
+6. COMPONENT DIAGRAMS (3 Total)
 ================================================================================
 
-Description: Shows the organization and dependencies among software components.
-
 --------------------------------------------------------------------------------
-COMPONENT DIAGRAM 1: System Components Overview
+COMPONENT DIAGRAM 1. System Components Overview
 --------------------------------------------------------------------------------
 
 @startuml System_Components
+left to right direction
+skinparam defaultFontSize 11
+skinparam componentFontSize 11
+skinparam packageFontSize 12
+skinparam arrowFontSize 10
+scale 1400 width
 
 package "Client Layer" {
     [Flutter Mobile App] as FlutterApp
-    component "Flutter Components" as FlutterComps {
-        [Screens/Pages]
-        [Services]
-        [Providers (Riverpod)]
-        [Models (Freezed)]
-        [Secure Storage]
-    }
 }
 
 package "API Layer" {
     [API Gateway :8099] as Gateway
-    component "Gateway Components" as GatewayComps {
-        [Controllers]
-        [JWT Filter]
-        [Service URLs Config]
-        [DTOs]
-    }
 }
 
 package "Business Services Layer" {
@@ -1553,9 +1051,6 @@ package "Business Services Layer" {
     [MealPlan Service :9023] as MealPlan
     [Product Service :9019] as Product
     [Image Service :9024] as Image
-    [Feedback Service :9016] as Feedback
-    [Reporting Service :9017] as Reporting
-    [Project Service :9018] as Project
 }
 
 package "Data Layer" {
@@ -1578,9 +1073,6 @@ Gateway --> Recipe : HTTP
 Gateway --> MealPlan : HTTP
 Gateway --> Product : HTTP
 Gateway --> Image : HTTP
-Gateway --> Feedback : HTTP
-Gateway --> Reporting : HTTP
-Gateway --> Project : HTTP
 
 ' Services to Database Service
 Auth --> DBService : HTTP
@@ -1592,9 +1084,6 @@ List --> DBService : HTTP
 Recipe --> DBService : HTTP
 MealPlan --> DBService : HTTP
 Product --> DBService : HTTP
-Feedback --> DBService : HTTP
-Reporting --> DBService : HTTP
-Project --> DBService : HTTP
 
 ' Image Service Special
 Image --> DBService : HTTP (metadata)
@@ -1606,10 +1095,16 @@ DBService --> MySQL : JDBC
 @enduml
 
 --------------------------------------------------------------------------------
-COMPONENT DIAGRAM 2: Detailed Microservice Internal Structure
+COMPONENT DIAGRAM 2. Microservice Internal Structure
 --------------------------------------------------------------------------------
 
 @startuml Microservice_Internal_Components
+left to right direction
+skinparam defaultFontSize 11
+skinparam componentFontSize 11
+skinparam packageFontSize 12
+skinparam arrowFontSize 10
+scale 1400 width
 
 package "Competition Microservice" {
     component "Controller Layer" as CompCtrl {
@@ -1627,20 +1122,11 @@ package "Competition Microservice" {
     component "DTOs" as CompDTO {
         [CompetitionDTO]
         [CompetitionParticipantDTO]
-        [JoinCompetitionDTO]
-        [UpdateProgressDTO]
-    }
-
-    component "Enums" as CompEnum {
-        [CompetitionStatus]
-        [CompetitionType]
     }
 
     CompCtrl --> CompSvc
     CompSvc --> CompRepo
     CompCtrl --> CompDTO
-    CompSvc --> CompDTO
-    CompDTO --> CompEnum
 }
 
 package "Database Microservice" {
@@ -1648,33 +1134,22 @@ package "Database Microservice" {
         [CompetitionController]
         [UserController]
         [TaskController]
-        [...]
     }
 
     component "DB Service Layer" as DBSvc {
         [CompetitionService]
         [UserService]
         [TaskService]
-        [...]
     }
 
     component "JPA Repository Layer" as DBRepo {
-        [CompetitionRepository\n<<JpaRepository>>]
-        [UserRepository\n<<JpaRepository>>]
-        [TaskRepository\n<<JpaRepository>>]
-        [...]
-    }
-
-    component "Entity Models" as DBEntities {
-        [Competition]
-        [User]
-        [Task]
-        [...]
+        [CompetitionRepository<<JpaRepository>>]
+        [UserRepository<<JpaRepository>>]
+        [TaskRepository<<JpaRepository>>]
     }
 
     DBCtrl --> DBSvc
     DBSvc --> DBRepo
-    DBRepo --> DBEntities
 }
 
 package "External" {
@@ -1687,120 +1162,75 @@ DBRepo --> MySQL : JPA/Hibernate
 @enduml
 
 --------------------------------------------------------------------------------
-COMPONENT DIAGRAM 3: Flutter App Component Structure
+COMPONENT DIAGRAM 3. Flutter App Component Structure
 --------------------------------------------------------------------------------
 
 @startuml Flutter_App_Components
+left to right direction
+skinparam defaultFontSize 11
+skinparam componentFontSize 11
+skinparam packageFontSize 12
+skinparam arrowFontSize 10
+scale 1400 width
 
 package "Flutter Application" {
 
-    component "Presentation Layer" as Presentation {
-        package "Screens" {
-            [HomeScreen]
-            [TaskListScreen]
-            [CompetitionListScreen]
-            [ShoppingListScreen]
-            [RecipeListScreen]
-            [MealPlanScreen]
-            [ProfileScreen]
-            [LoginScreen]
-            [RegisterScreen]
-        }
-
-        package "Widgets" {
-            [TaskCard]
-            [CompetitionCard]
-            [ShoppingListItem]
-            [MealCard]
-            [LeaderboardWidget]
-        }
+    component "Presentation Layer" {
+        [HomeScreen]
+        [TaskListScreen]
+        [CompetitionListScreen]
+        [LoginScreen]
     }
 
-    component "State Management" as State {
-        package "Providers" {
-            [authProvider]
-            [homeProvider]
-            [taskProvider]
-            [competitionProvider]
-            [shoppingListProvider]
-            [recipeProvider]
-            [mealPlanProvider]
-        }
-
-        package "Notifiers" {
-            [AuthNotifier]
-            [HomeNotifier]
-            [TaskFilterNotifier]
-        }
+    component "State Management" {
+        [authProvider]
+        [taskProvider]
+        [competitionProvider]
+        [AuthNotifier]
     }
 
-    component "Data Layer" as Data {
-        package "Services" {
-            [AuthService]
-            [TaskService]
-            [CompetitionService]
-            [ShoppingListService]
-            [RecipeService]
-            [MealPlanService]
-            [GroupService]
-            [ProductService]
-            [ImageService]
-        }
-
-        package "Models" {
-            [User]
-            [Task]
-            [Competition]
-            [ShoppingList]
-            [Recipe]
-            [MealPlan]
-            [Group]
-            [Product]
-        }
+    component "Data Layer" {
+        [AuthService]
+        [TaskService]
+        [CompetitionService]
+        [Models]
     }
 
-    component "Core" as Core {
+    component "Core" {
         [BaseService]
         [TokenStorageService]
         [DioClient]
     }
-
-    component "External Packages" as External {
-        [Riverpod]
-        [Dio]
-        [Freezed]
-        [FlutterSecureStorage]
-    }
 }
 
-Presentation --> State : uses
-State --> Data : uses
-Data --> Core : extends/uses
-Core --> External : depends on
+[Presentation Layer] --> [State Management] : uses
+[State Management] --> [Data Layer] : uses
+[Data Layer] --> [Core] : extends/uses
 
 @enduml
 
 
 ================================================================================
-7. DEPLOYMENT DIAGRAM
+7. DEPLOYMENT DIAGRAMS (3 Total)
 ================================================================================
 
-Description: Shows the physical deployment of software components to hardware nodes.
-
 --------------------------------------------------------------------------------
-DEPLOYMENT DIAGRAM 1: Production Environment
+DEPLOYMENT DIAGRAM 1. Production Environment
 --------------------------------------------------------------------------------
 
 @startuml Deployment_Diagram
+left to right direction
+skinparam defaultFontSize 11
+skinparam nodeFontSize 11
+skinparam componentFontSize 11
+skinparam arrowFontSize 10
+scale 1400 width
 
 node "User Devices" {
-    node "Android Phone" as Android {
-        artifact "HouseMate.apk" as APK
+    node "Android Phone" {
         component [Flutter App] as FlutterAndroid
     }
-
-    node "iOS Phone" as iOS {
-        artifact "HouseMate.ipa" as IPA
+    node "iOS Phone" {
         component [Flutter App] as FlutteriOS
     }
 }
@@ -1808,88 +1238,31 @@ node "User Devices" {
 cloud "Internet" as Internet
 
 node "Docker Host Server" {
-
-    node "Docker Network: my_custom_microservices_network" as DockerNetwork {
-
-        node "API Gateway Container" as GatewayContainer {
-            artifact "api-gateway.jar" as GatewayJar
+    node "Docker Network" {
+        node "API Gateway Container" {
             component [API Gateway :8099] as Gateway
         }
-
-        node "Auth Container" as AuthContainer {
-            artifact "auth-service.jar"
+        node "Auth Container" {
             component [Auth Service :9020] as Auth
         }
-
-        node "Task Container" as TaskContainer {
-            artifact "task-service.jar"
+        node "Task Container" {
             component [Task Service :9010] as Task
         }
-
-        node "Competition Container" as CompContainer {
-            artifact "competition-service.jar"
+        node "Competition Container" {
             component [Competition Service :9011] as Competition
         }
-
-        node "User Container" as UserContainer {
-            artifact "user-service.jar"
-            component [User Service :9015] as User
-        }
-
-        node "Group Container" as GroupContainer {
-            artifact "group-service.jar"
-            component [Group Service :9021] as Group
-        }
-
-        node "List Container" as ListContainer {
-            artifact "list-service.jar"
-            component [List Service :9014] as List
-        }
-
-        node "Recipe Container" as RecipeContainer {
-            artifact "recipe-service.jar"
-            component [Recipe Service :9022] as Recipe
-        }
-
-        node "MealPlan Container" as MealPlanContainer {
-            artifact "mealplan-service.jar"
-            component [MealPlan Service :9023] as MealPlan
-        }
-
-        node "Product Container" as ProductContainer {
-            artifact "product-service.jar"
-            component [Product Service :9019] as Product
-        }
-
-        node "Image Container" as ImageContainer {
-            artifact "image-service.jar"
-            component [Image Service :9024] as Image
-        }
-
-        node "Database Service Container" as DBContainer {
-            artifact "database-service.jar"
+        node "Database Service Container" {
             component [Database Service :9009] as DBService
         }
-
-        node "Other Service Containers" as OtherContainers {
-            component [Feedback :9016]
-            component [Reporting :9017]
-            component [Project :9018]
-        }
     }
-
-    node "MySQL Container" as MySQLContainer {
-        database "MySQL 8.0\n:3306 (internal)\n:3336 (external)" as MySQL
-        artifact "HouseMateMicroservicesDB" as DB
+    node "MySQL Container" {
+        database "MySQL 8.0 :3306" as MySQL
     }
-
-    node "MinIO Container" as MinIOContainer {
-        storage "MinIO S3\n:9000 (API)\n:9001 (Console)" as MinIO
-        artifact "images bucket" as ImageBucket
+    node "MinIO Container" {
+        storage "MinIO S3 :9000" as MinIO
     }
 }
 
-' Connections
 FlutterAndroid --> Internet
 FlutteriOS --> Internet
 Internet --> Gateway : "HTTPS :8099"
@@ -1897,35 +1270,27 @@ Internet --> Gateway : "HTTPS :8099"
 Gateway --> Auth
 Gateway --> Task
 Gateway --> Competition
-Gateway --> User
-Gateway --> Group
-Gateway --> List
-Gateway --> Recipe
-Gateway --> MealPlan
-Gateway --> Product
-Gateway --> Image
 
 Auth --> DBService
 Task --> DBService
 Competition --> DBService
-User --> DBService
-Group --> DBService
-List --> DBService
-Recipe --> DBService
-MealPlan --> DBService
-Product --> DBService
-Image --> DBService
 
-DBService --> MySQL : "JDBC :3306"
-Image --> MinIO : "S3 API :9000"
+DBService --> MySQL : "JDBC"
+[Image Service :9024] --> MinIO : "S3 API"
 
 @enduml
 
 --------------------------------------------------------------------------------
-DEPLOYMENT DIAGRAM 2: Docker Compose Configuration
+DEPLOYMENT DIAGRAM 2. Docker Compose Configuration
 --------------------------------------------------------------------------------
 
 @startuml Docker_Compose_Deployment
+left to right direction
+skinparam defaultFontSize 11
+skinparam nodeFontSize 11
+skinparam componentFontSize 11
+skinparam arrowFontSize 10
+scale 1400 width
 
 title Docker Compose Deployment Configuration
 
@@ -1935,129 +1300,63 @@ node "Docker Host" {
 
         node "my_mysql" <<container>> {
             component [MySQL 8.0]
-            note right
-                Port: 3336:3306
-                Volume: mysql_data
-                Network: my_custom_microservices_network
-            end note
+            note right: Port: 3336:3306
         }
 
         node "minio" <<container>> {
             component [MinIO]
-            note right
-                Port: 9000:9000, 9001:9001
-                Volume: minio_data
-                Credentials: minioadmin
-            end note
+            note right: Port: 9000, 9001
         }
 
         node "dbmicroservice" <<container>> {
             component [Database Service]
-            note right
-                Port: 9009:9009
-                Depends: my_mysql
-                Spring Profile: docker
-            end note
+            note right: Port: 9009
         }
 
         node "authmicroservice" <<container>> {
             component [Auth Service]
-            note right
-                Port: 9020:9020
-                Depends: dbmicroservice
-            end note
+            note right: Port: 9020
         }
 
         node "api_gateway" <<container>> {
             component [API Gateway]
-            note right
-                Port: 8099:8099
-                Depends: all services
-                Entry point for clients
-            end note
-        }
-
-        node "competitionmicroservice" <<container>> {
-            component [Competition Service]
-            note right: Port: 9011:9011
+            note right: Port: 8099 (Entry point)
         }
 
         node "taskmicroservice" <<container>> {
             component [Task Service]
-            note right: Port: 9010:9010
+            note right: Port: 9010
         }
 
-        node "usermicroservice" <<container>> {
-            component [User Service]
-            note right: Port: 9015:9015
-        }
-
-        node "groupmicroservice" <<container>> {
-            component [Group Service]
-            note right: Port: 9021:9021
-        }
-
-        node "listmicroservice" <<container>> {
-            component [List Service]
-            note right: Port: 9014:9014
-        }
-
-        node "recipesmicroservice" <<container>> {
-            component [Recipe Service]
-            note right: Port: 9022:9022
-        }
-
-        node "mealplanmicroservice" <<container>> {
-            component [MealPlan Service]
-            note right: Port: 9023:9023
-        }
-
-        node "productmicroservice" <<container>> {
-            component [Product Service]
-            note right: Port: 9019:9019
-        }
-
-        node "imagemicroservice" <<container>> {
-            component [Image Service]
-            note right
-                Port: 9024:9024
-                Depends: minio
-            end note
-        }
-
-        node "feedbackmicroservice" <<container>> {
-            component [Feedback Service]
-            note right: Port: 9016:9016
-        }
-
-        node "reportingmicroservice" <<container>> {
-            component [Reporting Service]
-            note right: Port: 9017:9017
-        }
-
-        node "projectmicroservice" <<container>> {
-            component [Project Service]
-            note right: Port: 9018:9018
+        node "competitionmicroservice" <<container>> {
+            component [Competition Service]
+            note right: Port: 9011
         }
     }
 
     package "Docker Volumes" {
-        storage "mysql_data" as MySQLVol
-        storage "minio_data" as MinIOVol
+        storage "mysql_data"
+        storage "minio_data"
     }
 
     package "Docker Network" {
-        cloud "my_custom_microservices_network\n(bridge)" as Network
+        cloud "my_custom_microservices_network (bridge)"
     }
 }
 
 @enduml
 
 --------------------------------------------------------------------------------
-DEPLOYMENT DIAGRAM 3: Network Communication
+DEPLOYMENT DIAGRAM 3. Network Communication
 --------------------------------------------------------------------------------
 
 @startuml Network_Communication
+left to right direction
+skinparam defaultFontSize 11
+skinparam nodeFontSize 11
+skinparam componentFontSize 11
+skinparam arrowFontSize 10
+scale 1400 width
 
 title Network Communication Architecture
 
@@ -2076,30 +1375,16 @@ frame "Docker Network: my_custom_microservices_network" {
     }
 
     rectangle "Core Business Services" {
-        node "Task\n:9010" as Task
-        node "Competition\n:9011" as Comp
-        node "User\n:9015" as UserSvc
-        node "Group\n:9021" as Group
-        node "List\n:9014" as List
-    }
-
-    rectangle "Content Services" {
-        node "Recipe\n:9022" as Recipe
-        node "MealPlan\n:9023" as MealPlan
-        node "Product\n:9019" as Product
-        node "Image\n:9024" as Image
-    }
-
-    rectangle "Support Services" {
-        node "Feedback\n:9016" as Feedback
-        node "Reporting\n:9017" as Reporting
-        node "Project\n:9018" as Project
+        node "Task :9010" as Task
+        node "Competition :9011" as Comp
+        node "User :9015" as UserSvc
+        node "Group :9021" as Group
     }
 
     rectangle "Data Persistence" {
         node "Database Service\n:9009" as DBSvc
-        database "MySQL\n:3306" as MySQL
-        storage "MinIO\n:9000" as MinIO
+        database "MySQL :3306" as MySQL
+        storage "MinIO :9000" as MinIO
     }
 }
 
@@ -2110,104 +1395,24 @@ Gateway --> Task : "HTTP (internal)"
 Gateway --> Comp : "HTTP (internal)"
 Gateway --> UserSvc : "HTTP (internal)"
 Gateway --> Group : "HTTP (internal)"
-Gateway --> List : "HTTP (internal)"
-Gateway --> Recipe : "HTTP (internal)"
-Gateway --> MealPlan : "HTTP (internal)"
-Gateway --> Product : "HTTP (internal)"
-Gateway --> Image : "HTTP (internal)"
-Gateway --> Feedback : "HTTP (internal)"
-Gateway --> Reporting : "HTTP (internal)"
-Gateway --> Project : "HTTP (internal)"
 
 Auth --> DBSvc
 Task --> DBSvc
 Comp --> DBSvc
 UserSvc --> DBSvc
 Group --> DBSvc
-List --> DBSvc
-Recipe --> DBSvc
-MealPlan --> DBSvc
-Product --> DBSvc
-Image --> DBSvc
-Feedback --> DBSvc
-Reporting --> DBSvc
-Project --> DBSvc
 
 DBSvc --> MySQL : "JDBC"
-Image --> MinIO : "S3"
+[Image Service] --> MinIO : "S3"
 
 note bottom of Gateway
     JWT Authentication Filter
     validates all requests
-    except /auth/** endpoints
-end note
-
-note bottom of DBSvc
-    Central data access layer
-    All entities managed here
-    JPA/Hibernate ORM
 end note
 
 @enduml
 
 
 ================================================================================
-                              SUMMARY & NOTES
-================================================================================
-
-DIAGRAM USAGE RECOMMENDATIONS:
-------------------------------
-
-1. USE CASE DIAGRAM:
-   - Use for requirements documentation
-   - Stakeholder communication
-   - System scope definition
-   - Feature planning
-
-2. ACTIVITY DIAGRAMS:
-   - Document business processes
-   - User flow documentation
-   - System behavior specification
-   - Test case derivation
-
-3. STATE MACHINE DIAGRAMS:
-   - Entity lifecycle documentation
-   - Status transition rules
-   - Business rule validation
-   - State-based testing
-
-4. SEQUENCE DIAGRAMS:
-   - API documentation
-   - Integration specifications
-   - Debugging complex flows
-   - Performance analysis points
-
-5. CLASS DIAGRAMS:
-   - Code structure documentation
-   - Database schema design
-   - API contract definition
-   - Refactoring planning
-
-6. COMPONENT DIAGRAMS:
-   - Architecture documentation
-   - Dependency analysis
-   - Deployment planning
-   - Team responsibility mapping
-
-7. DEPLOYMENT DIAGRAMS:
-   - Infrastructure documentation
-   - DevOps configuration
-   - Scaling planning
-   - Network security design
-
-TOOL RECOMMENDATIONS:
----------------------
-- Enterprise Architect (EA): Full UML support, round-trip engineering
-- PlantUML: Text-based diagrams, version control friendly
-- Draw.io: Free, collaborative diagramming
-- Lucidchart: Cloud-based, team collaboration
-- Visual Paradigm: Comprehensive modeling tool
-
-================================================================================
-                               END OF DOCUMENT
+                              END OF DOCUMENT
 ================================================================================
